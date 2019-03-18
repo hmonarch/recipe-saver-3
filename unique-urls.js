@@ -1,5 +1,4 @@
 module.exports = [
-  "http://smittenkitchen.com/blog/2014/09/sunken-apple-and-honey-cake/",
   "http://www.thekitchn.com/recipe-spiced-carrot-oat-breakfast-cookies-recipes-from-the-kitchn-214478",
   "https://morgansfood.wordpress.com/2015/02/04/spiced-peanut-butter-choc-chip-cookies/",
   "http://www.foodnetwork.com/recipes/food-network-kitchens/honey-mustard-chicken-and-apples-recipe.html",
@@ -3986,6 +3985,7 @@ module.exports = [
   "http://www.fauziaskitchenfun.com/mitaisweet-diamonds",
   "https://fullplateliving.org/blog/weight-loss-soup-peruvian-vegetable",
   "https://acornscustard.wpengine.com/jack-o-lantern-pumpkin-hand-pies/",
+    "http://smittenkitchen.com/blog/2014/09/sunken-apple-and-honey-cake/",
   "https://www.spicesinc.com/p-7957-artichokes-al-ajillo.aspx",
   "https://www.bluezones.com/recipe/autumn-quinoa-salad/?utm_source=Blue+Zones+Newsletter&utm_campaign=801de83755-BLUEZONESPROJECTNEWS-APPLEBUTTER_COPY_01&utm_medium=email&utm_term=0_9642311849-801de83755-199413385&mc_cid=801de83755&mc_eid=58248af540",
   "https://www.tastecooking.com/recipes/classic-lemon-bars-2/?ref=PRH0F4DC6065E70&linkid=PRH0F4DC6065E70&cdi=2F46EC7E38760A3BE0534FD66B0ADF2F&template_id=10595&aid=randohouseinc8485-20&utm_campaign=taste&utm_source=Crown&utm_medium=Email&cid=80434&mid=1090571040",

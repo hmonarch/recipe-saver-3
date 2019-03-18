@@ -21,7 +21,7 @@ var $finalIngredients;
 
 // Find a list with at least 2 li items containing "ingredient" in the class
 var classMap = {};
-$('*[class*=ingredient], *[data*=ingredient]').each(function() {
+$('*[class*=ngredient], *[data*=ngredient]').each(function() {
   var $el = $(this);
   var className = $el[0].className;
   if (!classMap[className]) {
