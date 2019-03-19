@@ -1,10 +1,6 @@
-- [ ] http://allrecipes.com.au/
-- [ ] http://amazingribs.com/
-- [ ] http://chipotlefan.com/
-- [ ] https://communitytable.parade.com/dash-recipes/ (formerly dashrecipes.com)
-- [ ] https://cookieandkate.com/ (uses [tasty recipes WP plugin](https://www.wptasty.com/tasty-recipes/))
-- [ ] https://cooking.nytimes.com/
-- [ ] http://crockingirls.com/
+- [x] http://allrecipes.com.au/
+- [x] https://communitytable.parade.com/dash-recipes/ (formerly dashrecipes.com)
+- [x] https://cooking.nytimes.com/
 - [ ] http://emerils.com/
 - [ ] https://food52.com/
 - [ ] http://hugsandcookiesxoxo.com/
