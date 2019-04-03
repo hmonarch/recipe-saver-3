@@ -1,8 +1,8 @@
 - [x] http://allrecipes.com.au/
 - [x] https://communitytable.parade.com/dash-recipes/ (formerly dashrecipes.com)
 - [x] https://cooking.nytimes.com/
-- [ ] http://emerils.com/
-- [ ] https://food52.com/
+- [x] http://emerils.com/
+- [x] https://food52.com/
 - [ ] http://hugsandcookiesxoxo.com/
 - [ ] https://recipes.sparkpeople.com/
 - [ ] https://smittenkitchen.com/ (no structured markup)
@@ -68,7 +68,7 @@
 - [ ] https://www.williams-sonoma.com/
 - [ ] https://www.yummly.co/ (worst possible kind of site...)
 
-# Condé Nast/Food Innovation Group
+# Condï¿½ Nast/Food Innovation Group
 - [ ] https://www.bonappetit.com/
 - [ ] https://www.epicurious.com/
 

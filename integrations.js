@@ -27,6 +27,20 @@ var integrations = {
       desc: lisToArr($('.recipe-steps > li'))
     }
   },
+  'emerils.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.li-checklist-items.ingredients > li.checklist-item')),
+      desc: lisToArr($('.li-checklist-items.directions > li'))
+    }
+  },
+  'food52.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: formatIngSpaces($('ul.recipe-list > li'), '.recipe-list-quantity', '.recipe-list-item-name'),
+      desc: lisToArr($('.recipe-lists > ol > li'))
+    }
+  }
 };
 
 
@@ -49,5 +63,6 @@ function formatIngSpaces($lis, qtySel, ingSel) {
 
 
 function lisToArr($lis) {
+  window.x = $lis;
   return [...$lis].map(li => $(li).text().trim());
 }
