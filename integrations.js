@@ -23,7 +23,7 @@ var integrations = {
   'cooking.nytimes.com': () => {
     return {
       img: $('meta[property=og\\:image]').attr('content'),
-      ing: formatIngSpaces($('.recipe-ingredients > li'), '.quantity', '.ingredient-name'),
+      ing: lisToArr($('.recipe-ingredients > li')),
       desc: lisToArr($('.recipe-steps > li'))
     }
   },
@@ -37,32 +37,181 @@ var integrations = {
   'food52.com': () => {
     return {
       img: $('meta[property=og\\:image]').attr('content'),
-      ing: formatIngSpaces($('ul.recipe-list > li'), '.recipe-list-quantity', '.recipe-list-item-name'),
+      ing: lisToArr($('ul.recipe-list > li')),
       desc: lisToArr($('.recipe-lists > ol > li'))
     }
-  }
+  },
+  'hugsandcookiesxoxo.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.easyrecipe .ingredient')),
+      desc: lisToArr($('.easyrecipe .instruction'))
+    }
+  },
+  'recipes.sparkpeople.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('#ingredients span[itemprop="ingredients"]')),
+      desc: lisToArr($('div[itemprop="recipeInstructions"]'))
+    }
+  },
+  'smittenkitchen.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.jetpack-recipe-ingredient')),
+      desc: lisToArr($('.jetpack-recipe-directions'))
+    }
+  },
+  'tastykitchen.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('ul.ingredients > li')),
+      desc: lisToArr($('span[itemprop="instructions"] > p'))
+    }
+  },
+  'thepioneerwoman.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.list-ingredients:first > li')),
+      desc: lisToArr($('div[id*="recipe-instructions"] .panel-body:first'))
+    }
+  },
+  'jenelizabethsjournals.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.tasty-recipes-ingredients ul > li, .tasty-recipes-ingredients > p')),
+      desc: lisToArr($('.tasty-recipes-instructions ol > li'))
+    }
+  },
+  'whiteonricecouple.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.wprm-recipe-ingredient')),
+      desc: lisToArr($('.wprm-recipe-instruction'))
+    }
+  },
+  'aspicyperspective.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.wprm-recipe-ingredient, .ingredients > ul > .ingredient')),
+      desc: lisToArr($('.wprm-recipe-instruction, .instructions > ol > li'))
+    }
+  },
+  'budgetbytes.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.wprm-recipe-ingredient')),
+      desc: lisToArr($('.wprm-recipe-instruction'))
+    }
+  },
+  'chowhound.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.freyja_mainbody .gu3 .freyja_box > ul > li')),
+      desc: lisToArr($('.freyja_mainbody .gu9 .fr_instruction_rec ol > li'), true)
+    }
+  },
+  'cooks.com': () => {
+    return {
+      img: null, // This site has no images!
+      ing: lisToArr($('span.ingredient')),
+      desc: lisToArr($('.instructions'))
+    }
+  },
+  'deliaonline.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('*[itemprop="recipeIngredient"]')),
+      desc: lisToArr($('*[itemprop="recipeInstructions"] p'))
+    }
+  },
+  'finecooking.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.recipe__ingredients > ul > li')),
+      desc: lisToArr($('.recipe__preparation > ul > li'))
+    }
+  },
+  'foodrepublic.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredients-content ul > li[itemprop="recipeIngredient"]')),
+      desc: lisToArr($('*[itemprop="recipeInstructions"] > li, *[itemprop="recipeInstructions"] > ol > li'))
+    }
+  },
+  'geniuskitchen.com': () => {
+    return {
+      img: $('meta[name=og\\:image]').attr('content'),
+      ing: lisToArr($('.recipe-ingredients__ingredient')),
+      desc: lisToArr($('.recipe-directions__step'))
+    }
+  },
+  'forkly.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.recipe-ingredients > ul > li')),
+      desc: lisToArr($('.recipe-method > ul > li'))
+    }
+  },
+  'inspiredtaste.net': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('span.itr-ingredients > p')),
+      desc: lisToArr($('span.itr-directions > p'))
+    }
+  },
+  'jamieoliver.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingred-list > li:not(.ingred-heading)')),
+      desc: lisToArr($('.recipeSteps > li'))
+    }
+  },
+  'justataste.com': () => {
+    let ignoreLastInstruction = '';
+    const $lastInstruction = $('.wprm-recipe-instruction-text:last');
+    const isNotRealInstruction = $lastInstruction.text().indexOf('Did you make this recipe?') > 1;
+    if (isNotRealInstruction) ignoreLastInstruction = ':not(:last)';
+
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.wprm-recipe-ingredient')),
+      desc: lisToArr($(`.wprm-recipe-instruction-text${ignoreLastInstruction}`))
+    }
+  },
+  'kingarthurflour.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('*[itemprop="ingredients"]')),
+      desc: lisToArr($('[itemprop="recipeInstructions"] > li'))
+    }
+  },
 };
 
+
+
+
+/*
+
+copy(window.location.host.replace(/^www\./, ''));
+
+*/
 
 var result = integrations[window.location.host.replace(/^www\./, '')]();
 
 console.log(result.img);
-console.log(result.ing);
-console.log(result.desc);
+result.ing.forEach(ing => console.log(ing));
+console.log('---------');
+result.desc.forEach(desc => console.log(desc));
 
 
-function formatIngSpaces($lis, qtySel, ingSel) {
-  var arr = [];
-  $lis.each(function() {
-    var qty = $(this).find(qtySel).text().trim();
-    var delimeter = qty ? ' ' : ''
-    arr.push(qty + delimeter + $(this).find(ingSel).text().trim());
+function lisToArr($lis, removeStepNum) {
+
+  const ingArr = [...$lis].map(li => {
+    let text = $(li).text().trim().replace(/\s\s+/g, ' ');;
+    if (removeStepNum) text = text.replace(/^\d+/, '');
+    return text;
   });
-  return arr;
-}
 
-
-function lisToArr($lis) {
-  window.x = $lis;
-  return [...$lis].map(li => $(li).text().trim());
+  return ingArr.filter(item => item);
 }

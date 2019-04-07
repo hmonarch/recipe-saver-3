@@ -3,39 +3,27 @@
 - [x] https://cooking.nytimes.com/
 - [x] http://emerils.com/
 - [x] https://food52.com/
-- [ ] http://hugsandcookiesxoxo.com/
-- [ ] https://recipes.sparkpeople.com/
-- [ ] https://smittenkitchen.com/ (no structured markup)
-- [ ] http://spryliving.com/
-- [ ] http://tastykitchen.com/
-- [ ] http://thepioneerwoman.com/
-- [ ] http://thescrumptiouspumpkin.com/
-- [ ] https://whatscookingamerica.net/
-- [ ] http://whfoods.com/
-- [ ] http://whiteonricecouple.com/
-- [ ] http://www.aspicyperspective.com/
-- [ ] http://www.bakedperfection.com/
-- [ ] https://www.bbonline.com/ (very inconsistent markup)
-- [ ] https://www.budgetbytes.com/
-- [ ] https://www.chowhound.com/ (formerly chow.com)
-- [ ] http://www.cooks.com/
-- [ ] http://www.deliaonline.com/
-- [ ] http://www.epicurean.com/ (no structured markup)
-- [ ] https://www.farmflavor.com/
-- [ ] http://www.finecooking.com/
-- [ ] http://www.foodiewithfamily.com/
-- [ ] http://www.foodnetwork.ca/ (Corus Entertainment, not Scripps)
-- [ ] http://www.foodrepublic.com/
-- [ ] http://www.geniuskitchen.com/ (formerly www.food.com)
-- [ ] http://www.great-chicago-italian-recipes.com/ (malformed html, no structured markup)
-- [ ] http://www.halfhourmeals.com/
-- [ ] https://www.hillshirefarm.com/
-- [ ] https://www.humoroushomemaking.com/ (formerly stacymakescents.com)
-- [ ] http://www.inspiredtaste.net/
-- [ ] http://www.jamieoliver.com/
-- [ ] http://www.joyofbaking.com/ (no structured markup)
-- [ ] https://www.justataste.com/
-- [ ] http://www.kingarthurflour.com/
+- [x] http://hugsandcookiesxoxo.com/
+- [x] https://recipes.sparkpeople.com/ (Could be better)
+- [x] https://smittenkitchen.com/ (no structured markup) (Could be better)
+- [x] http://tastykitchen.com/
+- [x] http://thepioneerwoman.com/
+- [x] http://thescrumptiouspumpkin.com/ (Highly variable structure)
+- [x] http://whiteonricecouple.com/
+- [x] http://www.aspicyperspective.com/
+- [x] https://www.budgetbytes.com/
+- [x] https://www.chowhound.com/ (formerly chow.com)
+- [x] http://www.cooks.com/
+- [x] http://www.deliaonline.com/
+- [x] http://www.finecooking.com/
+- [x] http://www.foodiewithfamily.com/
+- [x] http://www.foodrepublic.com/
+- [x] http://www.geniuskitchen.com/ (formerly www.food.com)
+- [x] http://www.forkly.com/
+- [x] http://www.inspiredtaste.net/
+- [x] http://www.jamieoliver.com/
+- [x] https://www.justataste.com/
+- [x] http://www.kingarthurflour.com/
 - [ ] http://www.kraftrecipes.com/
 - [ ] http://www.laaloosh.com/
 - [ ] http://www.lyndasrecipebox.com/ (blogger site, no structured markup)
@@ -67,6 +55,11 @@
 - [ ] https://www.wholefoodsmarket.com/
 - [ ] https://www.williams-sonoma.com/
 - [ ] https://www.yummly.co/ (worst possible kind of site...)
+- [ ] http://www.foodnetwork.ca/ (Corus Entertainment, not Scripps)
+
+# Not doing
+http://www.joyofbaking.com/ (no structured markup)
+
 
 # Cond� Nast/Food Innovation Group
 - [ ] https://www.bonappetit.com/
