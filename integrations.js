@@ -186,14 +186,189 @@ var integrations = {
       desc: lisToArr($('[itemprop="recipeInstructions"] > li'))
     }
   },
+  'myfoodandfamily.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.krRDPIngreList')),
+      desc: lisToArr($('.krRecipeDirectionsDest'), true)
+    }
+  },
+  'laaloosh.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.wprm-recipe-ingredient')),
+      desc: lisToArr($('.wprm-recipe-instruction'))
+    }
+  },
+  'marthastewart.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.components-list > li label')),
+      desc: lisToArr($('.directions-item'), true)
+    }
+  },
+  'marthastewart.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.components-list > li label')),
+      desc: lisToArr($('.directions-item'), true)
+    }
+  },
+  'mrfood.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('ul.recipeIngredient > li, .recipeIngredients li')),
+      desc: lisToArr($('.articleInstructionsDiv ol > li, .stepByStepInstructionsDiv ol > li'))
+    }
+  },
+  'pauladeen.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('[itemprop="ingredients"]')),
+      desc: lisToArr($('.directions__content > p'))
+    }
+  },
+  'ricekrispies.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('[itemprop="ingredients"]')),
+      desc: lisToArr($('[itemprop="recipeInstructions"]'), true)
+    }
+  },
+  'seriouseats.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient')),
+      desc: lisToArr($('.recipe-procedure'), true)
+    }
+  },
+  'simplyrecipes.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient')),
+      desc: lisToArr($('.recipe-method p'), true)
+    }
+  },
+  'sixsistersstuff.com': () => {
+    return {
+      img: $('.wp-post-image:first').attr('src'),
+      ing: lisToArr($('.ingredient')),
+      desc: lisToArr($('.instruction'))
+    }
+  },
+  'skinnytaste.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient')),
+      desc: lisToArr($('.instructions li'))
+    }
+  },
+  'taste.com.au': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient-description')),
+      desc: lisToArr($('.recipe-method-section li'), true)
+    }
+  },
+  'tasteofhome.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.recipe-ingredients__list > li')),
+      desc: lisToArr($('.recipe-directions__item'))
+    }
+  },
+  'the-girl-who-ate-everything.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.mv-create-ingredients li, .wprm-recipe-ingredient')),
+      desc: lisToArr($('.mv-create-instructions p, .mv-create-instructions li, .wprm-recipe-instruction'))
+    }
+  },
+  'themediterraneandish.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.tasty-recipes-ingredients li')),
+      desc: lisToArr($('.tasty-recipes-instructions li'))
+    }
+  },
+  'thereciperebel.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.wprm-recipe-ingredient')),
+      desc: lisToArr($('.wprm-recipe-instruction'))
+    }
+  },
+  'thespruceeats.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient')),
+      desc: lisToArr($('.structured-project__steps li'))
+    }
+  },
+  'twopeasandtheirpod.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.wprm-recipe-ingredient')),
+      desc: lisToArr($('.wprm-recipe-instruction'))
+    }
+  },
+  'vegetariantimes.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('[itemprop="recipeIngredient"]')),
+      desc: lisToArr($('[itemprop="recipeInstructions"] p'), true)
+    }
+  },
+  'weightwatchers.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.food-details-ingredients__list-item')),
+      desc: lisToArr($('.food-details-instructions__text li, .food-details-notes__text'))
+    }
+  },
+  'wholefoodsmarket.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient_ul li')),
+      desc: lisToArr($('.field-name-field-recipe-directions .field-item'))
+    }
+  },
+  'williams-sonoma.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('h2:contains(Ingredients:)').nextAll('ul').find('li')),
+      desc: lisToArr($('.directions p'))
+    }
+  },
+  'foodnetwork.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.o-Ingredients__a-Ingredient')),
+      desc: lisToArr($('.o-Method__m-Step'))
+    }
+  },
+  'foodnetwork.ca': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.recipe-ingredients p')),
+      desc: lisToArr($('.recipeInstructions p'), true)
+    }
+  },
+  'yummly.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.IngredientLine')),
+      desc: null // Yummly doesn't show directions
+    }
+  }
+
+
 };
-
-
 
 
 /*
 
-copy(window.location.host.replace(/^www\./, ''));
+window.location.host.replace(/^www\./, '');
 
 */
 
@@ -209,7 +384,7 @@ function lisToArr($lis, removeStepNum) {
 
   const ingArr = [...$lis].map(li => {
     let text = $(li).text().trim().replace(/\s\s+/g, ' ');;
-    if (removeStepNum) text = text.replace(/^\d+/, '');
+    if (removeStepNum) text = text.replace(/^(Step )?\d+\.?\s/i, '');
     return text;
   });
 

@@ -12,6 +12,9 @@ if multiple ingredients lists then filter out duplicates
 
 
 https://github.com/ssnepenthe/recipe-scraper/blob/master/SITE-SUPPORT.md
+
+Terrible site:
+http://www.oprah.com/food/dried-cherry-and-sage-goat-cheese-recipe
  */
 
 

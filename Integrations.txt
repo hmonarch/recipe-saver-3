@@ -24,41 +24,36 @@
 - [x] http://www.jamieoliver.com/
 - [x] https://www.justataste.com/
 - [x] http://www.kingarthurflour.com/
-- [ ] http://www.kraftrecipes.com/
-- [ ] http://www.laaloosh.com/
-- [ ] http://www.lyndasrecipebox.com/ (blogger site, no structured markup)
-- [ ] https://www.marthastewart.com/
-- [ ] http://www.momswhothink.com/
-- [ ] https://www.mrfood.com/
-- [ ] http://www.mysanantonio.com/
-- [ ] http://www.noordinarymomentsblog.com/
-- [ ] http://www.oprah.com
-- [ ] http://www.pauladeen.com/
-- [ ] http://www.rachaelray.com/
-- [ ] http://www.recipe.com/
-- [ ] https://www.ricekrispies.com
-- [ ] http://www.seriouseats.com/
-- [ ] http://www.simplyrecipes.com/
-- [ ] http://www.sixsistersstuff.com/
-- [ ] http://www.skinnytaste.com/
-- [ ] http://www.taste.com.au/
-- [ ] https://www.tasteofhome.com/
-- [ ] http://www.the-girl-who-ate-everything.com/
-- [ ] http://www.thecheesecakefactory.com/
-- [ ] https://www.themediterraneandish.com/
-- [ ] http://www.thereciperebel.com/ (uses [simple recipe pro WP plugin](https://simplerecipepro.com/))
-- [ ] http://www.thesisterscafe.com/
-- [ ] https://www.thespruce.com/ (formerly about.com recipes)
-- [ ] https://www.twopeasandtheirpod.com/
-- [ ] https://www.vegetariantimes.com/
-- [ ] https://www.weightwatchers.com
-- [ ] https://www.wholefoodsmarket.com/
-- [ ] https://www.williams-sonoma.com/
-- [ ] https://www.yummly.co/ (worst possible kind of site...)
-- [ ] http://www.foodnetwork.ca/ (Corus Entertainment, not Scripps)
+- [x] http://www.myfoodandfamily.com/
+- [x] http://www.laaloosh.com/
+- [x] https://www.marthastewart.com/
+- [x] https://www.mrfood.com/ (wonky site)
+- [x] http://www.pauladeen.com/
+- [x] https://www.ricekrispies.com
+- [x] http://www.seriouseats.com/
+- [x] http://www.simplyrecipes.com/
+- [x] http://www.sixsistersstuff.com/
+- [x] http://www.skinnytaste.com/1
+- [x] http://www.taste.com.au/
+- [x] https://www.tasteofhome.com/
+- [x] http://www.the-girl-who-ate-everything.com/
+- [x] https://www.themediterraneandish.com/
+- [x] http://www.thereciperebel.com/
+- [x] https://www.thespruceeats.com/
+- [x] https://www.twopeasandtheirpod.com/
+- [x] https://www.vegetariantimes.com/
+- [x] https://www.weightwatchers.com
+- [x] https://www.wholefoodsmarket.com/
+- [x] https://www.williams-sonoma.com/
+- [x] http://www.foodnetwork.com/
+- [x] http://www.foodnetwork.ca/
+- [x] https://www.yummly.co/
 
-# Not doing
-http://www.joyofbaking.com/ (no structured markup)
+
+# Not doing - impossible markup
+http://www.joyofbaking.com/ 
+http://www.oprah.com 
+http://www.rachaelray.com/
 
 
 # Cond� Nast/Food Innovation Group
@@ -95,8 +90,3 @@ http://www.joyofbaking.com/ (no structured markup)
 - [ ] http://www.myrecipes.com/
 - [ ] https://www.realsimple.com/
 - [ ] http://www.southernliving.com
-
-# Notes
-- Livebetteramerica.com was a General Mills property but no longer exists.
-- Newworldpasta.com was a Riviana property but no longer exists.
-- Recipeshq.net seems to have been overtaken by some spammy recipe app.
