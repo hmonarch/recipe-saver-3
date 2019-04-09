@@ -54,6 +54,7 @@
 http://www.joyofbaking.com/ 
 http://www.oprah.com 
 http://www.rachaelray.com/
+http://www.redbookmag.com/
 
 
 # Cond� Nast/Food Innovation Group
@@ -66,12 +67,11 @@ http://www.rachaelray.com/
 - [x] https://www.tablespoon.com/
 
 # Hearst Digital Sites
-- [ ] http://www.countryliving.com/
-- [ ] http://www.delish.com/
-- [ ] http://www.esquire.com/
-- [ ] http://www.goodhousekeeping.com/
-- [ ] http://www.redbookmag.com/
-- [ ] http://www.womansday.com/
+- [x] http://www.countryliving.com/
+- [x] http://www.delish.com/
+- [x] http://www.esquire.com/
+- [x] http://www.goodhousekeeping.com/
+- [x] http://www.womansday.com/
 
 # Meredith Corp Sites
 - [ ] http://allrecipes.com/

@@ -388,9 +388,31 @@ var integrations = {
   },
   'tablespoon.com': () => {
     return integrations['bettycrocker.com']();
-  }
+  },
+  // countryliving, delish, esquire, goodhousekeeping, womans day use the same structure
+  'countryliving.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient-item')),
+      desc:lisToArr($('.direction-lists li'))
+    }
+  },
+  'delish.com': () => {
+    return integrations['countryliving.com']();
+  },
+  'esquire.com': () => {
+    return integrations['countryliving.com']();
+  },
+  'goodhousekeeping.com': () => {
+    return integrations['countryliving.com']();
+  },
+  'womansday.com': () => {
+    return integrations['countryliving.com']();
+  },
 
 
+
+  
 };
 
 
