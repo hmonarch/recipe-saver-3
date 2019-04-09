@@ -360,10 +360,41 @@ var integrations = {
       ing: lisToArr($('.IngredientLine')),
       desc: null // Yummly doesn't show directions
     }
+  },
+  'bonappetit.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient')),
+      desc:lisToArr($('.step'))
+    }
+  },
+  'epicurious.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredient')),
+      desc:lisToArr($('.preparation-step'))
+    }
+  },
+  // bettycrocker, pillsbury, and tablespoon use the same structure
+  'bettycrocker.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('[itemprop="recipeIngredient"]'), null, new RegExp(/\sSave \$$/, 'i')),
+      desc:lisToArr($('.recipePartStep'), true)
+    }
+  },
+  'pillsbury.com': () => {
+    return integrations['bettycrocker.com']();
+  },
+  'tablespoon.com': () => {
+    return integrations['bettycrocker.com']();
   }
 
 
 };
+
+
+
 
 
 /*
@@ -380,11 +411,12 @@ console.log('---------');
 result.desc.forEach(desc => console.log(desc));
 
 
-function lisToArr($lis, removeStepNum) {
+function lisToArr($lis, removeStepNum, rule) {
 
   const ingArr = [...$lis].map(li => {
-    let text = $(li).text().trim().replace(/\s\s+/g, ' ');;
+    let text = $(li).text().trim().replace(/\s\s+/g, ' ');
     if (removeStepNum) text = text.replace(/^(Step )?\d+\.?\s/i, '');
+    if (rule) text = text.replace(rule, '');
     return text;
   });
 

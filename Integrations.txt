@@ -57,13 +57,13 @@ http://www.rachaelray.com/
 
 
 # Cond� Nast/Food Innovation Group
-- [ ] https://www.bonappetit.com/
-- [ ] https://www.epicurious.com/
+- [x] https://www.bonappetit.com/
+- [x] https://www.epicurious.com/
 
 # General Mills Sites
-- [ ] https://www.bettycrocker.com/
-- [ ] https://www.pillsbury.com/
-- [ ] https://www.tablespoon.com/
+- [x] https://www.bettycrocker.com/
+- [x] https://www.pillsbury.com/
+- [x] https://www.tablespoon.com/
 
 # Hearst Digital Sites
 - [ ] http://www.countryliving.com/
