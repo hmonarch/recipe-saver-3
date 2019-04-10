@@ -48,6 +48,7 @@
 - [x] http://www.foodnetwork.com/
 - [x] http://www.foodnetwork.ca/
 - [x] https://www.yummly.co/
+- [x] https://www.tasty.co/
 
 
 # Not doing - impossible markup
@@ -79,13 +80,13 @@ http://www.rachaelray.com/
 - [x] https://www.rachaelraymag.com/
 
 # Scripps Networks Sites
-- [ ] http://www.cookingchanneltv.com/
-- [ ] http://www.foodnetwork.com/
+- [x] http://www.cookingchanneltv.com/
+- [x] http://www.foodnetwork.com/
 
 # Time Inc. Sites
-- [ ] http://www.cookinglight.com/
-- [ ] http://www.foodandwine.com/
-- [ ] http://www.health.com/
-- [ ] http://www.myrecipes.com/
-- [ ] https://www.realsimple.com/
-- [ ] http://www.southernliving.com
+- [x] http://www.cookinglight.com/ (Older recipes have bad markup)
+- [x] http://www.myrecipes.com/
+- [x] http://www.foodandwine.com/
+- [x] http://www.health.com/
+- [x] https://www.realsimple.com/
+- [x] http://www.southernliving.com

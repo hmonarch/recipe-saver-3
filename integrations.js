@@ -430,10 +430,43 @@ var integrations = {
       desc: lisToArr($('[itemprop="recipeInstructions"] p'), true)
     }
   },
-
-
-
-
+  'cookingchanneltv.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.o-Ingredients__a-ListItemText')),
+      desc: lisToArr($('.o-Method__m-Body p'))
+    }
+  },
+  // cookinglight, myrecipes, foodandwine, health, realsimple, and southernliving use the same structure
+  'cookinglight.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredients li')),
+      desc: lisToArr($('.step p'))
+    }
+  },
+  'myrecipes.com': () => {
+    return integrations['cookinglight.com']();
+  },
+  'foodandwine.com': () => {
+    return integrations['cookinglight.com']();
+  },
+  'health.com': () => {
+    return integrations['cookinglight.com']();
+  },
+  'realsimple.com': () => {
+    return integrations['cookinglight.com']();
+  },
+  'southernliving.com': () => {
+    return integrations['cookinglight.com']();
+  },
+  'tasty.co': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredients__section li')),
+      desc: lisToArr($('.prep-steps li'))
+    }
+  },
   
 };
 
