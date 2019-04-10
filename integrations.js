@@ -409,6 +409,28 @@ var integrations = {
   'womansday.com': () => {
     return integrations['countryliving.com']();
   },
+  'bhg.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.ingredients-item')),
+      desc:lisToArr($('.instructions-section p'))
+    }
+  },
+  'eatingwell.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('[itemprop="ingredients"]')),
+      desc: lisToArr($('ol[itemprop="recipeInstructions"] > li'))
+    }
+  },
+  'rachaelraymag.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('[itemprop="recipeIngredient"]')),
+      desc: lisToArr($('[itemprop="recipeInstructions"] p'), true)
+    }
+  },
+
 
 
 

@@ -74,10 +74,10 @@ http://www.redbookmag.com/
 - [x] http://www.womansday.com/
 
 # Meredith Corp Sites
-- [ ] http://allrecipes.com/
-- [ ] http://www.bhg.com/
-- [ ] http://www.eatingwell.com/ (same template as allrecipes.com?)
-- [ ] https://www.rachaelraymag.com/
+- [x] http://allrecipes.com/
+- [x] http://www.bhg.com/
+- [x] http://www.eatingwell.com/
+- [x] https://www.rachaelraymag.com/
 
 # Scripps Networks Sites
 - [ ] http://www.cookingchanneltv.com/
