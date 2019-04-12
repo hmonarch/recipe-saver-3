@@ -53,7 +53,8 @@
 - [x] https://www.thekitchn.com
 - [x] https://www.bbc.com
 - [x] https://www.wellplated.com
-
+- [x] https://pinchofyum.com
+- [x] https://traderjoes.com
 
 
 # Not doing - impossible markup
