@@ -467,11 +467,78 @@ var integrations = {
       desc: lisToArr($('.prep-steps li'))
     }
   },
+  'hellofresh.com': () => {
+    var recipeKey = Object.keys(window.rootInitialState.recipes)[0];
+    var recipe = window.rootInitialState.recipes[recipeKey];
+    var desc = recipe.steps.map(item => item.instructions.replace(/\n/g, ' '));
+
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: JSON.parse(document.querySelector('#schema-org').textContent).recipeIngredient,
+      desc
+    }
+  },
+  'thekitchn.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('[itemprop="recipeIngredient"]')),
+      desc: lisToArr($('[itemprop="recipeInstructions"]'))
+    }
+  },
+  'bbc.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.recipe-ingredients__list-item')),
+      desc: lisToArr($('.recipe-method__list-item'))
+    }
+  },
+  'wellplated.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.wprm-recipe-ingredient'), null, new RegExp(/\n/, 'g'), ' '),
+      desc: lisToArr($('.wprm-recipe-instruction-text'))
+    }
+  },
+  'pinchofyum.com': () => {
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('.tasty-recipes-ingredients li')),
+      desc: lisToArr($('.tasty-recipes-instructions li'))
+    }
+  },
+  'traderjoes.com': () => {
+
+    // Add text to DOM to convert characters like TJ&rsquo;s
+    var scriptEl = $('script[type="application/ld+json"]').first();
+    var data = JSON.parse(scriptEl[0].textContent);
+    var ingredientMarkup = '<ul id="rs-data-ing" style="display: none;">';
+    var instructionsMarkup = '<ul id="rs-data-ins" style="display: none;">';
+
+    data.recipeIngredient.forEach(item => {
+      ingredientMarkup += `<li>${item}</li>`;
+    });
+    ingredientMarkup += '</ul>';
+    if (!$('#rs-data-ing li').length) {
+      document.body.insertAdjacentHTML('afterbegin', ingredientMarkup);
+    }
+
+    data.recipeInstructions.split('\n').forEach(item => {
+      instructionsMarkup += `<li>${item}</li>`;
+    });
+    instructionsMarkup += '</ul>';
+    if (!$('#rs-data-ins li').length) {
+      document.body.insertAdjacentHTML('afterbegin', instructionsMarkup);
+    }
+
+    return {
+      img: $('meta[property=og\\:image]').attr('content'),
+      ing: lisToArr($('#rs-data-ing li')),
+      desc: lisToArr($('#rs-data-ins li')),
+    }
+  },
+
   
 };
-
-
-
 
 
 /*
@@ -488,12 +555,12 @@ console.log('---------');
 result.desc.forEach(desc => console.log(desc));
 
 
-function lisToArr($lis, removeStepNum, rule) {
+function lisToArr($lis, removeStepNum, rule, replaceStr = '') {
 
   const ingArr = [...$lis].map(li => {
     let text = $(li).text().trim().replace(/\s\s+/g, ' ');
     if (removeStepNum) text = text.replace(/^(Step )?\d+\.?\s/i, '');
-    if (rule) text = text.replace(rule, '');
+    if (rule) text = text.replace(rule, replaceStr);
     return text;
   });
 

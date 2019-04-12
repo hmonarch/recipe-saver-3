@@ -49,12 +49,18 @@
 - [x] http://www.foodnetwork.ca/
 - [x] https://www.yummly.co/
 - [x] https://www.tasty.co/
+- [x] https://www.hellofresh.com
+- [x] https://www.thekitchn.com
+- [x] https://www.bbc.com
+- [x] https://www.wellplated.com
+
 
 
 # Not doing - impossible markup
 http://www.joyofbaking.com/ 
 http://www.oprah.com 
 http://www.rachaelray.com/
+https://thetakeout.com
 
 
 # Cond� Nast/Food Innovation Group
