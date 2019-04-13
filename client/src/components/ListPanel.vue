@@ -9,18 +9,18 @@
       </div>
 
       <ul class="box" id="sort-options" v-show="sortVisible">
-        <li class="sort-option" @click="selectSort">Newest</li>
-        <li class="sort-option" @click="selectSort">Oldest</li>
-        <li class="sort-option" @click="selectSort">A - Z</li>
-        <li class="sort-option" @click="selectSort">Z - A</li>
-        <li class="sort-option" @click="selectSort">Color</li>
+        <li class="sort-option" @click="sortRecipes($event, 'creationDate', '1')">Newest</li>
+        <li class="sort-option" @click="sortRecipes($event, 'creationDate', '-1')">Oldest</li>
+        <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">A - Z</li>
+        <li class="sort-option" @click="sortRecipes($event, 'title', '1')">Z - A</li>
+        <li class="sort-option">Color</li>
       </ul>
 		</div>
 
     <ul id="recipe-list">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe.id)">
         <span class="recipe-entry-left">{{ recipe.title }}</span>
-        <span class="recipe-entry-right">4/16/19</span>
+        <span class="recipe-entry-right">{{ formatDate(recipe.creationDate) }}</span>
       </li>
     </ul>
   </div>
@@ -40,33 +40,54 @@ export default {
         {
           id: 1,
           title: 'Steak with Creamy Pan Sauce Recipe',
+          creationDate: 1519703648618
         },
         {
           id: 2,
-          title: 'Juicy Lucy Burger Recipe'
+          title: 'Juicy Lucy Burger Recipe',
+          creationDate: 1525733648618
         },
         {
           id: 3,
-          title: 'Figgy Balsamic Pork'
+          title: 'Figgy Balsamic Pork',
+          creationDate: 1500904648618
         },
         {
           id: 4,
-          title: 'Stealing Whiskey'
+          title: 'Stealing Whiskey',
+          creationDate: 1579703648618
         },
         {
           id: 5,
-          title: 'Skillet-Seared Tomatoes with Melted Gruyere'
+          title: 'Skillet-Seared Tomatoes with Melted Gruyere',
+          creationDate: 1523703548618
         },
       ]
     };
   },
   methods: {
-    selectSort(e) {
-      this.sortBy = e.target.innerText;
-      this.sortVisible = false;
-    },
     selectRecipe(id) {
       EventBus.$emit('RECIPE_SELECTED', id);
+    },
+    sortRecipes(e, critea, order) {
+      this.sortBy = e.target.innerText;
+      this.sortVisible = false;
+      return this.recipes.sort((a, b) => {
+        const oppositeOrder = (order == -1) ? 1 : -1;
+        let itemA = a[critea];
+        let itemB = b[critea];
+        if (critea === 'title') {
+          itemA = itemA.toLowerCase();
+          itemB = itemB.toLowerCase();
+        }
+        
+        if (itemA < itemB) return Number(order);
+        else if (itemA > itemB) return Number(oppositeOrder);
+        else return 0;
+      });
+    },
+    formatDate(data) {
+      return new Date(data).toLocaleDateString();
     }
   },
   mounted() {
