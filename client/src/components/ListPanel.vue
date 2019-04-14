@@ -40,29 +40,39 @@ export default {
         {
           id: 1,
           title: 'Steak with Creamy Pan Sauce Recipe',
-          creationDate: 1519703648618
+          creationDate: 1519703648618,
+          favorite: false,
+          tags: ['breakfast', 'lunch']
         },
         {
           id: 2,
           title: 'Juicy Lucy Burger Recipe',
-          creationDate: 1525733648618
+          creationDate: 1525733648618,
+          favorite: true,
+          tags: ['to do', 'hamburgers']
         },
         {
           id: 3,
           title: 'Figgy Balsamic Pork',
-          creationDate: 1500904648618
+          creationDate: 1500904648618,
+          favorite: false,
+          tags: ['breakfast', 'try again']
         },
         {
           id: 4,
           title: 'Stealing Whiskey',
-          creationDate: 1579703648618
+          creationDate: 1579703648618,
+          favorite: false,
+          tags: ['dessert']
         },
         {
           id: 5,
           title: 'Skillet-Seared Tomatoes with Melted Gruyere',
-          creationDate: 1523703548618
+          creationDate: 1523703548618,
+          favorite: true,
+          tags: ['lunch']
         },
-      ]
+      ],
     };
   },
   methods: {
