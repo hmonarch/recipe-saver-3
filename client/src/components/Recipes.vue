@@ -43,6 +43,7 @@ body {
     position: relative;
     margin-top: 15px;
     overflow-y: auto;
+    text-align: left;
   }
 }
 

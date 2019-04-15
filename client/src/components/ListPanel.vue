@@ -16,9 +16,14 @@
       </ul>
 		</div>
 
+    <div class="selected-tag">
+      <span class="tag-name">dinner</span>
+      <span class="tag-close">x</span>
+    </div>
+
     <ul v-if="view === 'tags'" id="tag-list" class="list-panel-body">
-      <li class="recipe-entry" v-for="tag in sortedTags" :key="tag.id">
-        <span class="recipe-entry-left">{{ tag.name }}</span>
+      <li class="recipe-entry" v-for="tag in sortedTags" :key="tag.id" @click="selectTag(tag.name)">
+        <span class="recipe-entry-left" :style="backgroundColor(tag.color)">{{ tag.name }}</span>
       </li>
     </ul>
 
@@ -62,6 +67,12 @@ export default {
     selectRecipe(id) {
       EventBus.$emit('RECIPE_SELECTED', id);
     },
+    async selectTag(tagName) {
+      const response = await RecipeService.getTaggedRecipes(tagName, this.sortBy);
+      this.recipes = response.data;
+      this.view = `${tagName} Recipes`;
+      console.log(response.data);
+    },
     sortRecipes(e, critea, order) {
       this.sortBy = e.target.innerText.toLowerCase();
       this.sortVisible = false;
@@ -69,6 +80,9 @@ export default {
     },
     formatDate(data) {
       return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
+    },
+    backgroundColor(color) {
+      return `background-color: ${color}`;
     },
     async retrieveRecipes(view) { 
       const response = await RecipeService.getRecipes(view, this.sortBy);
@@ -111,14 +125,12 @@ export default {
       margin: 0;
       font-size: 24px;
       margin-bottom: 20px;
-      display: inline-block;
       float: left;
       text-transform: capitalize;
     }
 
     #sort {
       margin-top: 10px;
-      display: inline-block;
       float: right;
       background-image: linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%);
       background-position: bottom;
@@ -156,6 +168,16 @@ export default {
       }
   }
 
+  .selected-tag {
+    border-radius: 15px;
+    color: white;
+    background-color: red;
+    display: inline-block;
+    padding: 8px;
+    font-size: 12px;
+    margin-bottom: 15px;
+  }
+
   .list-panel-body {
     .recipe-entry {
       clear: both;
@@ -187,6 +209,29 @@ export default {
         background: -o-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
         background: -moz-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
         background: linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
+      }
+    }
+
+    // Tag list
+    &#tag-list {
+      border-top: solid 1px #dadada;
+      padding-top: 14px;
+
+      .recipe-entry {
+        height: auto;
+        padding: 4px 0;
+        border: none;
+        clear: both;
+        float: left;
+
+        .recipe-entry-left {
+          border-radius: 15px;
+          height: 26px;
+          line-height: 26px;
+          padding: 0px 9px 0px 9px;
+          font-size: 12px;
+          color: white;
+        }
       }
     }
   }

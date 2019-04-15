@@ -75,6 +75,22 @@ app.get('/recipes/untagged', (req, res) => {
 });
 
 
+// Fetch tag
+app.get('/tag/:tagName', (req, res) => {
+  const { tagName } = req.params;
+  console.log(tagName);
+
+  Recipe.find({user_id, tags: { '$elemMatch': { 'name': tagName }}}, 'title creationDate', (err, recipes) => {
+      if (err) console.error(err);
+      res.send(recipes);
+  })
+  .collation({ locale: 'en' })
+  .sort(sortObj(req.query.sort));
+});
+
+
+
+
 function sortObj(sort) {
   console.log('sort', sort);
   switch(sort) {
