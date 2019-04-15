@@ -3,26 +3,32 @@
     <div id="heading-and-sort">
       <h1 id="list-panel-heading">{{ heading }}</h1>
 
-      <div id="sort" @click="sortVisible = !sortVisible">
+      <div v-if="view !== 'tags'" id="sort" @click="sortVisible = !sortVisible">
         <span>Sort by: </span><span id="sort-selection">{{ sortBy }}</span>
         <img src="../assets/down-arrow.png">
       </div>
 
       <ul class="box" id="sort-options" v-show="sortVisible">
-        <li class="sort-option" @click="sortRecipes($event, 'creationDate', '1')">Newest</li>
-        <li class="sort-option" @click="sortRecipes($event, 'creationDate', '-1')">Oldest</li>
-        <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">A - Z</li>
-        <li class="sort-option" @click="sortRecipes($event, 'title', '1')">Z - A</li>
-        <li class="sort-option">Color</li>
+        <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">a - z</li>
+        <li class="sort-option" @click="sortRecipes($event, 'title', '1')">z - a</li>
+        <li class="sort-option" @click="sortRecipes($event, 'creationDate', '1')">newest</li>
+        <li class="sort-option" @click="sortRecipes($event, 'creationDate', '-1')">oldest</li>
       </ul>
 		</div>
 
-    <ul id="recipe-list">
+    <ul v-if="view === 'tags'" id="tag-list" class="list-panel-body">
+      <li class="recipe-entry" v-for="tag in sortedTags" :key="tag.id">
+        <span class="recipe-entry-left">{{ tag.name }}</span>
+      </li>
+    </ul>
+
+    <ul v-else id="recipe-list" class="list-panel-body">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
         <span class="recipe-entry-left">{{ recipe.title }}</span>
         <span class="recipe-entry-right">{{ formatDate(recipe.creationDate) }}</span>
       </li>
     </ul>
+
   </div>
 </template>
 
@@ -33,48 +39,50 @@ import RecipeService from '@/services/RecipeService';
 export default {
   data() {
     return {
-      heading: 'All Recipes',
+      view: 'all',
       sortBy: null,
       sortVisible: false,
       recipes: [],
+      tags: []
     };
+  },
+  computed: {
+    heading() {
+      return this.view === 'all' ? 'all recipes': this.view;
+    },
+    sortedTags() {
+      return this.tags.sort((a, b) => {
+        if (a.name < b.name) return -1;
+        else if (a.name > b.name) return 1;
+        else return 0;
+      });
+    }
   },
   methods: {
     selectRecipe(id) {
       EventBus.$emit('RECIPE_SELECTED', id);
     },
     sortRecipes(e, critea, order) {
-      this.sortBy = e.target.innerText;
+      this.sortBy = e.target.innerText.toLowerCase();
       this.sortVisible = false;
-      return this.recipes.sort((a, b) => {
-        const oppositeOrder = (order == -1) ? 1 : -1;
-        let itemA = a[critea];
-        let itemB = b[critea];
-        if (critea === 'title') {
-          itemA = itemA.toLowerCase();
-          itemB = itemB.toLowerCase();
-        }
-        
-        if (itemA < itemB) return Number(order);
-        else if (itemA > itemB) return Number(oppositeOrder);
-        else return 0;
-      });
+      this.retrieveRecipes(this.view, this.sortBy);
     },
     formatDate(data) {
-      return new Date(data).toLocaleDateString();
+      return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
     },
-    async retrieveRecipes(criteria) { 
-      const response = await RecipeService.getRecipes(criteria);
-      this.recipes = response.data;
-      window.x = response.data;
+    async retrieveRecipes(view) { 
+      const response = await RecipeService.getRecipes(view, this.sortBy);
+      if (view === 'tags') {
+        this.tags = response.data;
+      } else this.recipes = response.data;
     },
   },
   created() {
-    this.retrieveRecipes();
+    this.retrieveRecipes('all');
   },
   mounted() {
     EventBus.$on('VIEW_SELECTED', view => {
-      this.heading = `${view ? view : 'all recipes'}`;
+      this.view = view;
       this.retrieveRecipes(view);
     });
   }
@@ -122,6 +130,7 @@ export default {
       #sort-selection {
         color: #089de3;
         font-weight: bold;
+        text-transform: capitalize;
       }
     }
 
@@ -137,6 +146,7 @@ export default {
           cursor: pointer;
           height: 20px;
           line-height: 20px;
+          text-transform: capitalize;
 
           &:hover {
             background-color: #008dff;
@@ -146,7 +156,7 @@ export default {
       }
   }
 
-  #recipe-list {
+  .list-panel-body {
     .recipe-entry {
       clear: both;
       position: relative;

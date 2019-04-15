@@ -20,11 +20,15 @@ console.log('user_id', user_id);
 const Recipe = require('./models/recipe');
 
 // Fetch all recipes
-app.get('/recipes', (req, res) => {
+app.get('/recipes/all', (req, res) => {
+
   Recipe.find({user_id}, 'title creationDate', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
-  }).sort({_id:-1});
+  })
+  .collation({ locale: 'en' })
+  .sort(sortObj(req.query.sort));
+
 });
 
 // Fetch favorites recipes
@@ -32,12 +36,14 @@ app.get('/recipes/favorites', (req, res) => {
   Recipe.find({user_id, favorite: true}, 'title creationDate', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
-  }).sort({_id:-1});
+  })
+  .collation({ locale: 'en' })
+  .sort(sortObj(req.query.sort));
 });
 
 // Fetch tags
 app.get('/recipes/tags', (req, res) => {
-  Recipe.find({user_id}, 'tags', (err, recipes) => {
+  Recipe.find({user_id}, (err, recipes) => {
     if (err) console.error(err);
 
     const tags = [];
@@ -63,8 +69,29 @@ app.get('/recipes/untagged', (req, res) => {
   Recipe.find({user_id, tags: {$size: 0}}, 'title creationDate', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
-  }).sort({_id:-1});
+  })
+  .collation({ locale: 'en' })
+  .sort(sortObj(req.query.sort));
 });
+
+
+function sortObj(sort) {
+  console.log('sort', sort);
+  switch(sort) {
+    case 'oldest':
+      return { creationDate: 1 };
+    case 'newest':
+      return { creationDate: -1 };
+    case 'a - z':
+      return { title: 1 };
+    case 'z - a':
+      return { title: -1 };
+    default:
+      return { creationDate: -1 };
+  }
+}
+
+
 
 
 

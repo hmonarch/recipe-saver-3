@@ -1,7 +1,7 @@
 import Api from '@/services/Api';
 
 export default {
-  getRecipes(criteria = '') {
-    return Api().get(`recipes/${criteria}`);
+  getRecipes(view = '', sort) {
+    return Api().get(`recipes/${view}?sort=${sort}`);
   },
 }

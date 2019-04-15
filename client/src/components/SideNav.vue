@@ -9,19 +9,19 @@
     <div id="add-recipe" class="btn">Add New Recipe</div>
 
     <ul id="side-nav-menu">
-			<li @click="selectView()">
+			<li @click="selectView('all')" :class="{ active : view === 'all' }">
         <img class="side-nav-menu-icon" src="../assets/icon-card.png">
         <span>All Recipes</span>
       </li>
-			<li @click="selectView('favorites')">
+			<li @click="selectView('favorites')" :class="{ active : view === 'favorites' }">
         <img class="side-nav-menu-icon" src="../assets/icon-star.png">
         <span>Favorites</span>
       </li>
-			<li @click="selectView('tags')">
+			<li @click="selectView('tags')" :class="{ active : view === 'tags' }">
         <img class="side-nav-menu-icon" src="../assets/icon-tag.png">
         <span>Tags</span>
       </li>
-			<li @click="selectView('untagged')">
+			<li @click="selectView('untagged')" :class="{ active : view === 'untagged' }">
         <img class="side-nav-menu-icon" src="../assets/icon-stack.png">
         <span>Untagged</span>
       </li>
@@ -35,8 +35,14 @@
 import EventBus from '@/EventBus';
 
 export default {
+  data() {
+    return {
+      view: 'all',
+    };
+  },
   methods: {
     selectView(view) {
+      this.view = view;
       EventBus.$emit('VIEW_SELECTED', view);
     }
   }
@@ -48,7 +54,7 @@ export default {
   border: solid 1px black;
   width: 225px;
   float: left;
-  background-color: rgba(22, 22, 22, 0.95);
+  background-color: rgba(22, 22, 22, 0.76);
   height: 100vh;
   box-sizing: border-box;
   position: relative;
@@ -67,19 +73,31 @@ export default {
 
   #add-recipe {
     margin: 62px auto 62px auto;
+    border-radius: 8px;
   }
 
   #side-nav-menu {
     text-align: left;
-    margin-left: 10px;
 
     li {
       cursor: pointer;
       color: white;
-      height: 38px;
-      line-height: 38px;
+      height: 32px;
+      line-height: 32px;
       font-size: 18px;
-      margin-bottom: 2px;
+      margin-bottom: 6px;
+      padding: 0 0 0 15px;
+      border-radius: 8px;
+        
+      &:hover {
+        //background-color: #b2c3d5;
+        background-color: rgba(228, 173, 62, 0.168);
+        transition: .4s;
+      }
+
+      &.active {
+        background-color: #e4ad3e;
+      }
 
       .side-nav-menu-icon {
         width: 20px;
