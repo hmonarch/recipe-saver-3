@@ -9,21 +9,21 @@
     <div id="add-recipe" class="btn">Add New Recipe</div>
 
     <ul id="side-nav-menu">
-			<li @click="selectView('All Recipes')">
+			<li @click="selectView()">
         <img class="side-nav-menu-icon" src="../assets/icon-card.png">
         <span>All Recipes</span>
       </li>
-			<li @click="selectView('Favorites')">
+			<li @click="selectView('favorites')">
         <img class="side-nav-menu-icon" src="../assets/icon-star.png">
         <span>Favorites</span>
       </li>
-			<li @click="selectView('Categories')">
+			<li @click="selectView('tags')">
         <img class="side-nav-menu-icon" src="../assets/icon-tag.png">
-        <span>Categories</span>
+        <span>Tags</span>
       </li>
-			<li @click="selectView('Uncategorized')">
+			<li @click="selectView('untagged')">
         <img class="side-nav-menu-icon" src="../assets/icon-stack.png">
-        <span>Uncategorized</span>
+        <span>Untagged</span>
       </li>
 		</ul>
 

@@ -18,7 +18,7 @@
 		</div>
 
     <ul id="recipe-list">
-      <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe.id)">
+      <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
         <span class="recipe-entry-left">{{ recipe.title }}</span>
         <span class="recipe-entry-right">{{ formatDate(recipe.creationDate) }}</span>
       </li>
@@ -27,8 +27,8 @@
 </template>
 
 <script>
-// Event Bus
 import EventBus from '@/EventBus';
+import RecipeService from '@/services/RecipeService';
 
 export default {
   data() {
@@ -36,43 +36,7 @@ export default {
       heading: 'All Recipes',
       sortBy: null,
       sortVisible: false,
-      recipes: [
-        {
-          id: 1,
-          title: 'Steak with Creamy Pan Sauce Recipe',
-          creationDate: 1519703648618,
-          favorite: false,
-          tags: ['breakfast', 'lunch']
-        },
-        {
-          id: 2,
-          title: 'Juicy Lucy Burger Recipe',
-          creationDate: 1525733648618,
-          favorite: true,
-          tags: ['to do', 'hamburgers']
-        },
-        {
-          id: 3,
-          title: 'Figgy Balsamic Pork',
-          creationDate: 1500904648618,
-          favorite: false,
-          tags: ['breakfast', 'try again']
-        },
-        {
-          id: 4,
-          title: 'Stealing Whiskey',
-          creationDate: 1579703648618,
-          favorite: false,
-          tags: ['dessert']
-        },
-        {
-          id: 5,
-          title: 'Skillet-Seared Tomatoes with Melted Gruyere',
-          creationDate: 1523703548618,
-          favorite: true,
-          tags: ['lunch']
-        },
-      ],
+      recipes: [],
     };
   },
   methods: {
@@ -98,12 +62,20 @@ export default {
     },
     formatDate(data) {
       return new Date(data).toLocaleDateString();
-    }
+    },
+    async retrieveRecipes(criteria) { 
+      const response = await RecipeService.getRecipes(criteria);
+      this.recipes = response.data;
+      window.x = response.data;
+    },
+  },
+  created() {
+    this.retrieveRecipes();
   },
   mounted() {
     EventBus.$on('VIEW_SELECTED', view => {
-      console.log('VIEW_SELECTED');
-      this.heading = view;
+      this.heading = `${view ? view : 'all recipes'}`;
+      this.retrieveRecipes(view);
     });
   }
 }
@@ -133,6 +105,7 @@ export default {
       margin-bottom: 20px;
       display: inline-block;
       float: left;
+      text-transform: capitalize;
     }
 
     #sort {
@@ -183,6 +156,7 @@ export default {
       line-height: 30px;
       cursor: pointer;
       overflow-y: hidden;
+      text-align: left;
 
       .recipe-entry-left {
         float: left;
