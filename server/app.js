@@ -95,7 +95,15 @@ app.get('/tags', (req, res) => {
   });
 });
 
+// Fetch single recipe
+app.get('/recipe/:recipeID', (req, res) => {
+  const { recipeID } = req.params;
 
+  Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
+    if (err) console.error(err);
+    res.send(recipe);
+  });
+});
 
 
 function sortObj(sort) {

@@ -6,5 +6,8 @@ export default {
   },
   getRecipes(sort) {
     return Api().get(`${window.location.pathname}?sort=${sort}`);
+  },
+  getRecipe(id) {
+    return Api().get(`recipe/${id}`);
   }
 }

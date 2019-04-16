@@ -23,8 +23,10 @@
 
     <ul id="recipe-list" class="list-panel-body">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
-        <span class="recipe-entry-left">{{ recipe.title }}</span>
-        <span class="recipe-entry-right">{{ formatDate(recipe.creationDate) }}</span>
+        <router-link :to="{ query: { id: recipe._id }}">
+          <span class="recipe-entry-left">{{ recipe.title }}</span>
+          <span class="recipe-entry-right">{{ formatDate(recipe.creationDate) }}</span>
+        </router-link>
       </li>
     </ul>
 
@@ -98,7 +100,6 @@ export default {
     });
   },
   created() {
-    this.retrieveRecipes();
     this.initTag();
   },
   watch: {
@@ -193,35 +194,45 @@ export default {
 
   .list-panel-body {
     .recipe-entry {
-      clear: both;
-      position: relative;
-      overflow: auto;
-      border-top: solid 1px #dadada;
-      height: 30px;
-      line-height: 30px;
-      cursor: pointer;
-      overflow-y: hidden;
-      text-align: left;
-
-      .recipe-entry-left {
-        float: left;
-      }
-
-      .recipe-entry-right {
-        float: right;
-        position: absolute;
-        right: 0;
-        z-index: 1;
-        padding-left: 3px;
-        color: #898e95;
-        font-size: 14px;
+      a {
+        color: #000;
+        overflow: auto;
+        display: block;
+        clear: both;
+        position: relative;
+        overflow: auto;
+        border-top: solid 1px #dadada;
+        height: 30px;
         line-height: 30px;
-        background-color: white;
-        padding-left: 46px;
-        background: -webkit-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
-        background: -o-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
-        background: -moz-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
-        background: linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
+        cursor: pointer;
+        overflow-y: hidden;
+        text-align: left;
+
+        &.router-link-exact-active {
+          color: #0093ff;
+          font-weight: 600;
+        }
+
+        .recipe-entry-left {
+          float: left;
+        }
+
+        .recipe-entry-right {
+          float: right;
+          position: absolute;
+          right: 0;
+          z-index: 1;
+          padding-left: 3px;
+          color: #898e95;
+          font-size: 14px;
+          line-height: 30px;
+          background-color: white;
+          padding-left: 46px;
+          background: -webkit-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
+          background: -o-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
+          background: -moz-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
+          background: linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
+        }
       }
     }
   }
