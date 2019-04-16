@@ -1,10 +1,10 @@
 import Api from '@/services/Api';
 
 export default {
-  getRecipes(view = '', sort) {
-    return Api().get(`recipes/${view}?sort=${sort}`);
+  getTags() {
+    return Api().get('tags');
   },
-  getTaggedRecipes(tag, sort) {
-    return Api().get(`tag/${tag}?sort=${sort}`);
+  getRecipes(sort) {
+    return Api().get(`${window.location.pathname}?sort=${sort}`);
   }
 }

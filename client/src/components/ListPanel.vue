@@ -1,9 +1,9 @@
 <template>
   <div id="list-panel" class="panel">
     <div id="heading-and-sort">
-      <h1 id="list-panel-heading">{{ heading }}</h1>
+      <h1 id="list-panel-heading">{{ view }}</h1>
 
-      <div v-if="view !== 'tags'" id="sort" @click="sortVisible = !sortVisible">
+      <div id="sort" @click="sortVisible = !sortVisible">
         <span>Sort by: </span><span id="sort-selection">{{ sortBy }}</span>
         <img src="../assets/down-arrow.png">
       </div>
@@ -16,18 +16,12 @@
       </ul>
 		</div>
 
-    <div class="selected-tag">
-      <span class="tag-name">dinner</span>
-      <span class="tag-close">x</span>
+    <div v-show="getTaggedView()" class="selected-tag" :style="backgroundColor(selectedTag.color)">
+      <span class="tag-name">{{ selectedTag.name }}</span>
+      <span class="tag-count">({{ selectedTag.count }})</span>
     </div>
 
-    <ul v-if="view === 'tags'" id="tag-list" class="list-panel-body">
-      <li class="recipe-entry" v-for="tag in sortedTags" :key="tag.id" @click="selectTag(tag.name)">
-        <span class="recipe-entry-left" :style="backgroundColor(tag.color)">{{ tag.name }}</span>
-      </li>
-    </ul>
-
-    <ul v-else id="recipe-list" class="list-panel-body">
+    <ul id="recipe-list" class="list-panel-body">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
         <span class="recipe-entry-left">{{ recipe.title }}</span>
         <span class="recipe-entry-right">{{ formatDate(recipe.creationDate) }}</span>
@@ -40,65 +34,80 @@
 <script>
 import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
+import utils from '@/mixins/utils';
 
 export default {
   data() {
     return {
-      view: 'all',
       sortBy: null,
       sortVisible: false,
       recipes: [],
-      tags: []
+      selectedTag: {}
     };
   },
+  mixins: [utils],
   computed: {
-    heading() {
-      return this.view === 'all' ? 'all recipes': this.view;
-    },
-    sortedTags() {
-      return this.tags.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        else if (a.name > b.name) return 1;
-        else return 0;
-      });
+    view() {
+      let view = this.getViewName();
+      view = (view === 'all') ? 'all recipes': view; 
+      return view;
     }
   },
   methods: {
+    initTag() {
+      const name = this.getTaggedView();
+      const selector = '#tag-list .tag';
+      let color = '';
+      let count = 0;
+      this.waitFor(() => document.querySelector(selector),
+      () => {
+        [...document.querySelectorAll(selector)].forEach(tag => {
+          if (tag.querySelector('.tag-name').innerText.trim() === name) {
+            color = tag.querySelector('a').style.backgroundColor;
+            count = tag.querySelector('.tag-count').innerText.trim().replace(/(\(|\))/g, '');
+          }
+        });
+        this.selectedTag = { name, color, count };
+      });
+    },
+    getViewName() {
+      return this.$route.path.replace('/recipes/', '');
+    },
     selectRecipe(id) {
       EventBus.$emit('RECIPE_SELECTED', id);
     },
-    async selectTag(tagName) {
-      const response = await RecipeService.getTaggedRecipes(tagName, this.sortBy);
-      this.recipes = response.data;
-      this.view = `${tagName} Recipes`;
-      console.log(response.data);
+    getTaggedView() {
+      return (this.$route.path.match(/\/recipes\/tag\/(.+)/) || [])[1];
     },
     sortRecipes(e, critea, order) {
       this.sortBy = e.target.innerText.toLowerCase();
       this.sortVisible = false;
-      this.retrieveRecipes(this.view, this.sortBy);
+      this.retrieveRecipes(this.sortBy);
     },
     formatDate(data) {
       return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
     },
-    backgroundColor(color) {
-      return `background-color: ${color}`;
+    async retrieveRecipes() {
+      const response = await RecipeService.getRecipes(this.sortBy);
+      this.recipes = response.data;
     },
-    async retrieveRecipes(view) { 
-      const response = await RecipeService.getRecipes(view, this.sortBy);
-      if (view === 'tags') {
-        this.tags = response.data;
-      } else this.recipes = response.data;
-    },
-  },
-  created() {
-    this.retrieveRecipes('all');
   },
   mounted() {
-    EventBus.$on('VIEW_SELECTED', view => {
-      this.view = view;
-      this.retrieveRecipes(view);
+    EventBus.$on('TAG_SELECTED', tag => {
+      this.selectedTag = tag;
     });
+  },
+  created() {
+    this.retrieveRecipes();
+    this.initTag();
+  },
+  watch: {
+    '$route.params': {
+      handler() {
+        this.retrieveRecipes();
+      },
+      immediate: true,
+    }
   }
 }
 </script>
@@ -171,11 +180,15 @@ export default {
   .selected-tag {
     border-radius: 15px;
     color: white;
-    background-color: red;
+    background-color: #fff;
     display: inline-block;
     padding: 8px;
     font-size: 12px;
     margin-bottom: 15px;
+
+    .tag-count {
+      margin-left: 4px;
+    }
   }
 
   .list-panel-body {
@@ -209,29 +222,6 @@ export default {
         background: -o-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
         background: -moz-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
         background: linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
-      }
-    }
-
-    // Tag list
-    &#tag-list {
-      border-top: solid 1px #dadada;
-      padding-top: 14px;
-
-      .recipe-entry {
-        height: auto;
-        padding: 4px 0;
-        border: none;
-        clear: both;
-        float: left;
-
-        .recipe-entry-left {
-          border-radius: 15px;
-          height: 26px;
-          line-height: 26px;
-          padding: 0px 9px 0px 9px;
-          font-size: 12px;
-          color: white;
-        }
       }
     }
   }

@@ -41,28 +41,6 @@ app.get('/recipes/favorites', (req, res) => {
   .sort(sortObj(req.query.sort));
 });
 
-// Fetch tags
-app.get('/recipes/tags', (req, res) => {
-  Recipe.find({user_id}, (err, recipes) => {
-    if (err) console.error(err);
-
-    const tags = [];
-    const tagTracker = [];
-
-    recipes.forEach(recipe => {
-      if (!recipe.tags.length) return;
-      recipe.tags.forEach(tag => {
-        if (tagTracker.indexOf(tag.name) === -1) {
-          tags.push(tag);
-          tagTracker.push(tag.name);
-        }
-      });
-    });
-
-    res.send(tags);
-  });
-});
-
 
 // Fetch untagged recipes
 app.get('/recipes/untagged', (req, res) => {
@@ -76,7 +54,7 @@ app.get('/recipes/untagged', (req, res) => {
 
 
 // Fetch tag
-app.get('/tag/:tagName', (req, res) => {
+app.get('/recipes/tag/:tagName', (req, res) => {
   const { tagName } = req.params;
   console.log(tagName);
 
@@ -86,6 +64,35 @@ app.get('/tag/:tagName', (req, res) => {
   })
   .collation({ locale: 'en' })
   .sort(sortObj(req.query.sort));
+});
+
+
+// Fetch tags
+app.get('/tags', (req, res) => {
+  Recipe.find({user_id}, (err, recipes) => {
+    if (err) console.error(err);
+
+    const tags = [];
+    const tagTracker = [];
+
+    recipes.forEach(recipe => {
+      if (!recipe.tags.length) return;
+      recipe.tags.forEach(tag => {
+        
+        // If the tag was not already in the tag tracker add it to our tags
+        const index = tagTracker.indexOf(tag.name);
+        if (index === -1) {
+          tag.count = 1;
+          tags.push(tag);
+          tagTracker.push(tag.name);
+        } else {
+          tags[index].count++;
+        }
+      });
+    });
+
+    res.send(tags);
+  });
 });
 
 
