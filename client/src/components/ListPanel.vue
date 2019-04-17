@@ -3,17 +3,25 @@
     <div id="heading-and-sort">
       <h1 id="list-panel-heading">{{ view }}</h1>
 
-      <div id="sort" @click="sortVisible = !sortVisible">
-        <span>Sort by: </span><span id="sort-selection">{{ sortBy }}</span>
-        <img src="../assets/arrow-down-small.png">
-      </div>
 
-      <ul class="box" id="sort-options" v-show="sortVisible">
-        <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">a - z</li>
-        <li class="sort-option" @click="sortRecipes($event, 'title', '1')">z - a</li>
-        <li class="sort-option" @click="sortRecipes($event, 'creationDate', '1')">newest</li>
-        <li class="sort-option" @click="sortRecipes($event, 'creationDate', '-1')">oldest</li>
-      </ul>
+      <div id="layout-sort">
+        <div id="sort" @click="sortVisible = !sortVisible">
+          <span>Sort by: </span><span id="sort-selection">{{ sortBy }}</span>
+          <img src="../assets/arrow-down-small.png">
+        </div>
+
+        <ul class="box" id="sort-options" v-show="sortVisible">
+          <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">a - z</li>
+          <li class="sort-option" @click="sortRecipes($event, 'title', '1')">z - a</li>
+          <li class="sort-option" @click="sortRecipes($event, 'creationDate', '1')">newest</li>
+          <li class="sort-option" @click="sortRecipes($event, 'creationDate', '-1')">oldest</li>
+        </ul>
+
+        <div id="layout-toggle">
+          <img v-show="imageLayout" class="layout-icon" src="../assets/layout-list-icon.svg" @click="imageLayout = !imageLayout">
+          <img v-show="!imageLayout" class="layout-icon" src="../assets/layout-image-icon.svg" @click="imageLayout = !imageLayout">
+        </div>
+      </div>
 		</div>
 
     <div v-show="getTaggedView()" class="selected-tag" :style="backgroundColor(selectedTag.color)">
@@ -21,7 +29,7 @@
       <span class="tag-count">({{ selectedTag.count }})</span>
     </div>
 
-    <ul id="recipe-list" class="list-panel-body image-view">
+    <ul id="recipe-list" class="list-panel-body" :class="{ 'image-layout' : imageLayout === true }">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
         <router-link :to="{ query: { id: recipe._id }}">
           <img class="recipe-image" src="https://res.cloudinary.com/dormh2fvt/image/upload/v1532827185/jukzqxgzmfe9adda3j2t.jpg">
@@ -45,6 +53,7 @@ export default {
     return {
       sortBy: null,
       sortVisible: false,
+      imageLayout: false,
       recipes: [],
       selectedTag: {}
     };
@@ -117,7 +126,7 @@ export default {
 
 <style lang="scss">
 #list-panel {
-  padding: 25px;
+  padding: 20px;
   width: 40%;
   max-width: 400px;
   min-width: 220px;
@@ -136,43 +145,60 @@ export default {
       text-transform: capitalize;
     }
 
-    #sort {
-      margin-top: 10px;
+    #layout-sort {
       float: right;
-      background-image: linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%);
-      background-position: bottom;
-      background-size: 3px 1px;
-      background-repeat: repeat-x;
-      cursor: pointer;
-      padding-bottom: 2px;
 
-      #sort-selection {
-        color: #089de3;
-        font-weight: bold;
-        text-transform: capitalize;
+      #sort {
+        display: inline-block;
+        margin-top: 10px;
+        background-image: linear-gradient(to right, black 33%, rgba(255,255,255,0) 0%);
+        background-position: bottom;
+        background-size: 3px 1px;
+        background-repeat: repeat-x;
+        cursor: pointer;
+        padding-bottom: 2px;
+
+        #sort-selection {
+          color: #089de3;
+          font-weight: bold;
+          text-transform: capitalize;
+        }
       }
     }
 
-      #sort-options {
-        z-index: 2;
-        position: absolute;
-        right: 24px;
-        top: 65px;
-        text-align: left;
+    #sort-options {
+      z-index: 2;
+      position: absolute;
+      right: 24px;
+      top: 54px;
+      text-align: left;
 
-        li {
-          padding: 3px 15px;
-          cursor: pointer;
-          height: 20px;
-          line-height: 20px;
-          text-transform: capitalize;
+      li {
+        padding: 3px 15px;
+        cursor: pointer;
+        height: 20px;
+        line-height: 20px;
+        text-transform: capitalize;
 
-          &:hover {
-            background-color: #008dff;
-            color: white;
-          }
+        &:hover {
+          background-color: #008dff;
+          color: white;
         }
       }
+    }
+
+    #layout-toggle {
+      display: inline-block;
+      margin-left: 12px;
+
+      .layout-icon {
+        width: 20px;
+        position: relative;
+        top: 4px;
+        cursor: pointer;
+        opacity: 0.7;
+      }
+    }
   }
 
   .selected-tag {
@@ -192,7 +218,7 @@ export default {
   .list-panel-body {
     box-sizing: border-box;
 
-    &.image-view {
+    &.image-layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
       grid-gap: 16px;
@@ -215,6 +241,7 @@ export default {
           }
 
           .recipe-image {
+            display: inline;
             width: 100%;
           }
 
@@ -258,6 +285,10 @@ export default {
         &.router-link-exact-active {
           color: #0093ff;
           font-weight: 600;
+        }
+
+        .recipe-image {
+          display: none;
         }
 
         .recipe-entry-left {
