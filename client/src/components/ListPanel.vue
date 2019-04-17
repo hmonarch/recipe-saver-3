@@ -21,9 +21,10 @@
       <span class="tag-count">({{ selectedTag.count }})</span>
     </div>
 
-    <ul id="recipe-list" class="list-panel-body">
+    <ul id="recipe-list" class="list-panel-body image-view">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
         <router-link :to="{ query: { id: recipe._id }}">
+          <img class="recipe-image" src="https://res.cloudinary.com/dormh2fvt/image/upload/v1532827185/jukzqxgzmfe9adda3j2t.jpg">
           <span class="recipe-entry-left">{{ recipe.title }}</span>
           <span class="recipe-entry-right">{{ formatDate(recipe.creationDate) }}</span>
         </router-link>
@@ -121,11 +122,6 @@ export default {
   min-width: 220px;
   margin-left: auto;
   margin-right: 20px;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 
   #heading-and-sort {
@@ -193,6 +189,56 @@ export default {
   }
 
   .list-panel-body {
+    box-sizing: border-box;
+
+    &.image-view {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-gap: 16px;
+      justify-items: center;
+      width: 100%;
+
+      .recipe-entry {
+        margin-bottom: 6px;
+
+        a {
+          height: auto;
+          border: none;
+
+          &.router-link-exact-active {
+
+            .recipe-entry-left,
+            .recipe-entry-right {
+              font-weight: 500;
+            }
+          }
+
+          .recipe-image {
+            width: 100%;
+          }
+
+          .recipe-entry-left {
+            line-height: 16px;
+            font-size: 14px;
+            max-height: 178px;
+          }
+
+          .recipe-entry-right {
+            background: rgba(0,164,228,.69);
+            border-radius: 0 0 0 80px;
+            padding-right: 3px;
+            padding-top: 2px;
+            color: white;
+            padding-left: 14px;
+            font-size: 12px;
+            line-height: 20px;
+            letter-spacing: 0.3px;
+          }
+        }
+      }
+    }
+
+
     .recipe-entry {
       a {
         color: #000;
