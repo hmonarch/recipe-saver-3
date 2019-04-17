@@ -5,7 +5,7 @@
 
       <div id="sort" @click="sortVisible = !sortVisible">
         <span>Sort by: </span><span id="sort-selection">{{ sortBy }}</span>
-        <img src="../assets/down-arrow.png">
+        <img src="../assets/arrow-down-small.png">
       </div>
 
       <ul class="box" id="sort-options" v-show="sortVisible">

@@ -27,10 +27,14 @@
           <span>Untagged</span>
         </router-link>
       </li>
-			<li>
-        <a :class="{ active : view === 'tags' }" href="#">
+			<li id="side-nav-menu-tags" :class="{ open : tagListOpen === true }">
+        <a @click.prevent.self="toggleTagList">
           <img class="side-nav-menu-icon" src="../assets/icon-tag.png">
           <span>Tags</span>
+          <svg viewBox="0 0 64 36.26">
+            <g><path d="M35,35,62.75,7.31a4.28,4.28,0,1,0-6-6.06L32,26,7.29,1.25a4.28,4.28,0,0,0-6,6.06L29,35a4.4,4.4,0,0,0,3,1.25A4.26,4.26,0,0,0,35,35Zm0,0">
+            </path></g>
+          </svg>
         </a>
 
         <ul id="tag-list">
@@ -57,6 +61,7 @@ export default {
   data() {
     return {
       tags: [],
+      tagListOpen: false,
     };
   },
   mixins: [utils],
@@ -73,6 +78,9 @@ export default {
     }
   },
   methods: {
+    toggleTagList() {
+      this.tagListOpen = !this.tagListOpen;
+    },
     async getTags() {
       const response = await RecipeService.getTags();
       this.tags = response.data;
@@ -99,7 +107,7 @@ export default {
   position: relative;
   color: white;
   padding: 20px;
-  overflow-y: scroll;
+  overflow-y: hidden;
 
   .side-nav-logo {
     display: flex;
@@ -150,14 +158,46 @@ export default {
           vertical-align: middle;
         }
       }
+
+      &#side-nav-menu-tags {
+        &.open {
+          border-radius: 14px;
+          background-color: rgba(0, 0, 0, 0.35);
+
+          > a svg {
+            transform: rotate(180deg);
+          }
+
+          #tag-list {
+            display: block;
+          }
+        }
+
+        > a {
+          display: block;
+
+          svg {
+            height: 8px;
+            position: relative;
+            top: 13px;
+            right: 11px;
+            float: right;
+
+            path {
+              fill: white;
+              
+            }
+          }
+        }
+      }
     }
   }
 
   #tag-list {
-    background-color: rgba(0, 0, 0, 0.35);
     overflow: auto;
-    padding: 20px 0 20px 26px;
-    border-radius: 14px;
+    padding: 5px 0 20px 26px;
+    height: calc(100vh - 431px);
+    display: none;
 
     li.tag {
       float: left;
@@ -169,11 +209,28 @@ export default {
         font-size: 13px;
         padding: 0px 9px 0px 9px;
 
+
+        &:hover {
+          animation: pulse 2s;
+        }
+
         .tag-count {
           margin-left: 4px;
         }
       }
     }
+  }
+}
+
+@keyframes pulse {
+  1% {
+    transform: scale(1);
+  }
+  5% { 
+    transform: scale(1.05);
+  }
+  10% { 
+    transform: scale(1);
   }
 }
 </style>
