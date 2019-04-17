@@ -234,6 +234,10 @@ export default {
 
           &.router-link-exact-active {
 
+            .recipe-image {
+              border: solid 1px #089de3
+            }
+
             .recipe-entry-left,
             .recipe-entry-right {
               font-weight: 500;
@@ -243,12 +247,16 @@ export default {
           .recipe-image {
             display: inline;
             width: 100%;
+            border: solid 1px transparent;
+            box-sizing: border-box;
           }
 
           .recipe-entry-left {
             line-height: 16px;
             font-size: 14px;
             max-height: 178px;
+            position: relative;
+            top: -2px;
           }
 
           .recipe-entry-right {
