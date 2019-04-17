@@ -37,15 +37,16 @@
           </svg>
         </a>
 
-        <ul id="tag-list">
-          <li class="tag" v-for="tag in sortedTags" :key="tag.id" @click="selectTag(tag)">
-            <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}" @click="selectTag()">
-              <span class="tag-name">{{ tag.name }}</span>
-              <span class="tag-count">({{ tag.count }})</span>
-            </router-link>
-          </li>
-        </ul>
-
+        <div id="tag-list-container">
+          <ul id="tag-list">
+            <li class="tag" v-for="tag in sortedTags" :key="tag.id" @click="selectTag(tag)">
+              <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}" @click="selectTag()">
+                <span class="tag-name">{{ tag.name }}</span>
+                <span class="tag-count">({{ tag.count }})</span>
+              </router-link>
+            </li>
+          </ul>
+        </div>
       </li>
 		</ul>
 
@@ -56,6 +57,7 @@
 import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
+import SimpleBar from 'simplebar';
 
 export default {
   data() {
@@ -84,10 +86,26 @@ export default {
     async getTags() {
       const response = await RecipeService.getTags();
       this.tags = response.data;
-      console.log(this.tags);
+      this.createSimpleBar();
+      this.setTagListHeight();
+    },
+    createSimpleBar() {
+      new SimpleBar(document.getElementById('tag-list-container'));
     },
     selectTag(tag) {
       EventBus.$emit('TAG_SELECTED', tag);
+    },
+    setTagListHeight() {
+      this.waitFor(
+        () =>  document.querySelector('#tag-list .tag'),
+        () => {
+          const tags = document.querySelectorAll('#tag-list .tag');
+          const tagHeight = 38; // Update if changing with CSS
+          if (!tags.length) return console.log('nothing');
+          const newHeight = tagHeight * tags.length;
+          document.querySelector('#tag-list-container').style.height = `${newHeight}px`;
+        }
+      );
     }
   },
   created() {
@@ -143,7 +161,6 @@ export default {
         align-items: center;
           
         &:hover {
-          //background-color: #b2c3d5;
           background-color: rgba(228, 173, 62, 0.168);
           transition: .4s;
         }
@@ -168,7 +185,7 @@ export default {
             transform: rotate(180deg);
           }
 
-          #tag-list {
+          #tag-list-container {
             display: block;
           }
         }
@@ -193,36 +210,39 @@ export default {
     }
   }
 
-  #tag-list {
+  #tag-list-container {
     overflow: auto;
     padding: 5px 0 20px 26px;
     max-height: calc(100vh - 417px);
     display: none;
 
-    li.tag {
-      float: left;
-      clear: both;
-      padding: 0 13px;
+    #tag-list {
+      li.tag {
+        float: left;
+        clear: both;
+        padding: 0 13px;
 
-      a {
-        border-radius: 14px;
-        font-size: 13px;
-        padding: 0px 9px 0px 9px;
+        a {
+          border-radius: 14px;
+          font-size: 13px;
+          padding: 0px 9px 0px 9px;
 
 
-        &:hover {
-          .tag-name,
-          .tag-count {
-            text-decoration: underline;
+          &:hover {
+            .tag-name,
+            .tag-count {
+              text-decoration: underline;
+            }
           }
-        }
 
-        .tag-count {
-          margin-left: 4px;
+          .tag-count {
+            margin-left: 4px;
+          }
         }
       }
     }
   }
+
 }
 
 </style>

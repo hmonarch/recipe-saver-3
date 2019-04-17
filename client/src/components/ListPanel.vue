@@ -1,5 +1,5 @@
 <template>
-  <div id="list-panel" class="panel">
+  <div id="list-panel" class="panel" data-simplebar>
     <div id="heading-and-sort">
       <h1 id="list-panel-heading">{{ view }}</h1>
 
@@ -38,6 +38,7 @@
 import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
+import 'simplebar';
 
 export default {
   data() {

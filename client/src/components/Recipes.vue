@@ -9,10 +9,11 @@
 </template>
 
 <script>
-// Components
 import SideNav from './SideNav.vue';
 import ListPanel from './ListPanel.vue';
 import DetailPanel from './DetailPanel.vue';
+
+
 
 export default {
   name: 'recipes',
