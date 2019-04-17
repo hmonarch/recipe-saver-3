@@ -196,7 +196,7 @@ export default {
   #tag-list {
     overflow: auto;
     padding: 5px 0 20px 26px;
-    height: calc(100vh - 431px);
+    max-height: calc(100vh - 417px);
     display: none;
 
     li.tag {
@@ -211,7 +211,10 @@ export default {
 
 
         &:hover {
-          animation: pulse 2s;
+          .tag-name,
+          .tag-count {
+            text-decoration: underline;
+          }
         }
 
         .tag-count {
@@ -222,15 +225,4 @@ export default {
   }
 }
 
-@keyframes pulse {
-  1% {
-    transform: scale(1);
-  }
-  5% { 
-    transform: scale(1.05);
-  }
-  10% { 
-    transform: scale(1);
-  }
-}
 </style>
