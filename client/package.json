@@ -10,6 +10,8 @@
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
     "simplebar": "^4.0.0-alpha.3",
+    "tiptap": "^1.16.0",
+    "tiptap-extensions": "^1.16.0",
     "vue": "^2.6.6",
     "vue-router": "^3.0.1"
   },

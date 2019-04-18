@@ -1,19 +1,71 @@
 <template>
   <div id="detail-panel" class="panel">
-    THIS IS THE DETAIL PANEL
-    HERE IS THE RECIPE: {{ recipe }}
+    <editor-menu-bar :editor="editor">
+      <div slot-scope="{ commands, isActive }" class="menubar">
+
+        <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
+          <icon name="bold"/>
+        </button>
+        <button class="menubar__button" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
+          <icon name="italic"/>
+        </button>
+        <button class="menubar__button" :class="{ 'is-active': isActive.strike() }" @click="commands.strike">
+          <icon name="strike"/>
+        </button>
+        <button class="menubar__button" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
+          <icon name="underline"/>
+        </button>
+        <button class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
+          <icon name="ul"/>
+        </button>
+        <button class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }" @click="commands.ordered_list">
+          <icon name="ol"/>
+        </button>
+        <button class="menubar__button" @click="commands.horizontal_rule">
+          <icon name="hr"/>
+        </button>
+        <button class="menubar__button" @click="commands.undo">
+          <icon name="undo"/>
+        </button>
+        <button class="menubar__button" @click="commands.redo">
+          <icon name="redo"/>
+        </button>
+
+      </div>
+    </editor-menu-bar>
+    <editor-content :editor="editor" id="editor"></editor-content>
   </div>
 </template>
 
 <script>
-// Event Bus
 import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
+import Icon from '@/components/Icons';
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
+import {
+  HardBreak,
+  HorizontalRule,
+  OrderedList,
+  BulletList,
+  ListItem,
+  Bold,
+  Italic,
+  Strike,
+  Underline,
+  History,
+} from 'tiptap-extensions';
+
 
 export default {
+  components: {
+    EditorMenuBar,
+    EditorContent,
+    Icon
+  },
   data() {
     return {
-      recipe: null
+      recipe: null,
+      editor: null
     };
   },
   methods: {
@@ -22,19 +74,31 @@ export default {
       if (!recipeID) return console.log('no recipe id');
       const response = await RecipeService.getRecipe(recipeID);
       this.recipe = response.data;
+      this.editor.setContent(this.recipe.description);
     },
   },
   mounted() {
-    // EventBus.$on('RECIPE_SELECTED', id => {
-    //   console.log('RECIPE_SELECTED');
-    //   this.recipe = id;
-    //   localStorage.lastAccessedRecipe = id
-    // });
+    this.editor = new Editor({
+      extensions: [
+        new HardBreak(),
+        new BulletList(),
+        new HorizontalRule(),
+        new OrderedList(),
+        new ListItem(),
+        new Bold(),
+        new Italic(),
+        new Strike(),
+        new Underline(),
+        new History(),
+      ],
+    });
+  },
+  beforeDestroy() {
+    this.editor.destroy()
   },
   watch: {
     '$route.query': {
       handler() {
-        console.log('hi!');
         this.retrieveRecipe();
       },
       immediate: true,
@@ -50,6 +114,53 @@ export default {
   min-width: 305px;
   margin-right: auto;
   padding: 10px;
+
+  #editor {
+    
+    ol,
+    ul {
+      padding-left: 40px;
+      margin: 15px 0;
+      list-style-type: initial;
+    }
+
+    ol {
+      list-style-type: decimal;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+  }
 }
+
+
+.menubar {
+  margin-bottom: 25px;
+
+  .menubar__button {
+    font-weight: 700;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    background: rgba(0,0,0,0);
+    border: 0;
+    color: #000;
+    padding: .2rem .5rem;
+    margin-right: .2rem;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &.is-active {
+      background-color: rgba(0,0,0,.1);
+    }
+  }
+}
+
 </style>
 
