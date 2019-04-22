@@ -1,5 +1,9 @@
 <template>
   <div id="detail-panel" class="panel">
+    <div id="title">{{ recipe.title }}</div>
+    <div v-show="recipe.url" id="url">
+      <a :href="recipe.url" target="_blank">{{ recipe.url }}</a>
+    </div>
     <div id="description">
       <editor-menu-bar :editor="editor">
         <div slot-scope="{ commands, isActive }" class="menubar">
@@ -66,7 +70,7 @@ export default {
   },
   data() {
     return {
-      recipe: null,
+      recipe: {},
       editor: null
     };
   },
@@ -115,7 +119,25 @@ export default {
   max-width: 700px;
   min-width: 305px;
   margin-right: auto;
-  padding: 10px;
+  padding: 20px;
+
+  #title {
+    line-height: 30px;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  #url {
+    margin-bottom: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    a {
+      color: #14aaf5;
+      font-size: 14px;
+    }
+  }
 
   #description {
     border: solid 1px #dadada;
