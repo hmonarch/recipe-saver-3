@@ -74,5 +74,29 @@ body {
   border: 1px solid #B9BCC0;
   box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
 }
+
+.tag {
+  a {
+    border-radius: 14px;
+    font-size: 13px;
+    padding: 8px;
+    display: inline-block;
+    color: white;
+    margin-bottom: 6px;
+    text-decoration: none;
+    
+
+    &:hover {
+      .tag-name,
+      .tag-count {
+        text-decoration: underline;
+      }
+    }
+
+    .tag-count {
+      margin-left: 4px;
+    }
+  }
+}
 </style>
 

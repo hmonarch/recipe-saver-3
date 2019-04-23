@@ -40,7 +40,7 @@
         <div id="tag-list-container">
           <ul id="tag-list">
             <li class="tag" v-for="tag in sortedTags" :key="tag.id" @click="selectTag(tag)">
-              <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}" @click="selectTag()">
+              <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
                 <span class="tag-name">{{ tag.name }}</span>
                 <span class="tag-count">({{ tag.count }})</span>
               </router-link>
@@ -145,8 +145,8 @@ export default {
   #side-nav-menu {
     text-align: left;
 
-    li {
-      a {
+    > li {
+      > a {
         display: block;
         text-decoration: none;
         cursor: pointer;
@@ -217,28 +217,9 @@ export default {
     display: none;
 
     #tag-list {
-      li.tag {
-        float: left;
+      .tag {
         clear: both;
-        padding: 0 13px;
-
-        a {
-          border-radius: 14px;
-          font-size: 13px;
-          padding: 0px 9px 0px 9px;
-
-
-          &:hover {
-            .tag-name,
-            .tag-count {
-              text-decoration: underline;
-            }
-          }
-
-          .tag-count {
-            margin-left: 4px;
-          }
-        }
+        margin-left: 14px;
       }
     }
   }
