@@ -2,8 +2,8 @@
   <div id="recipes">
     <SideNav></SideNav>
     <section id="panels">
-      <ListPanel></ListPanel>
-      <DetailPanel></DetailPanel>
+      <ListPanel :class="{ 'full-width' : detailsOpen === false }"></ListPanel>
+      <DetailPanel v-show="detailsOpen"></DetailPanel>
     </section>
   </div>
 </template>
@@ -12,6 +12,7 @@
 import SideNav from './SideNav.vue';
 import ListPanel from './ListPanel.vue';
 import DetailPanel from './DetailPanel.vue';
+import EventBus from '@/EventBus';
 
 
 
@@ -21,7 +22,20 @@ export default {
     SideNav,
     ListPanel,
     DetailPanel
-  }
+  },
+  data() {
+    return {
+      detailsOpen: true
+    }
+  },
+  mounted() {
+    EventBus.$on('CLOSE_DETAILS', () => {
+      this.detailsOpen = false;
+    });
+    EventBus.$on('RECIPE_SELECTED', () => {
+      this.detailsOpen = true;
+    });
+  },
 }
 </script>
 
@@ -36,13 +50,13 @@ body {
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
+  padding: 0 20px;
 
   .panel {
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
     background-color: white;
     position: relative;
-    margin-top: 15px;
     overflow-y: auto;
     text-align: left;
   }

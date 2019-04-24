@@ -1,5 +1,5 @@
 <template>
-  <div id="list-panel" class="panel" data-simplebar>
+  <div id="list-panel" class="panel">
     <div id="heading-and-sort">
       <h1 id="list-panel-heading">{{ view }}</h1>
 
@@ -26,7 +26,6 @@
 
     <div v-show="getTaggedView()" class="selected-tag" :style="backgroundColor(selectedTag.color)">
       <span class="tag-name">{{ selectedTag.name }}</span>
-      <span class="tag-count">({{ selectedTag.count }})</span>
     </div>
 
     <ul id="recipe-list" class="list-panel-body" :class="{ 'image-layout' : imageLayout === true }">
@@ -46,7 +45,8 @@
 import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
-import 'simplebar';
+import SimpleBar from 'simplebar';
+
 
 export default {
   data() {
@@ -55,7 +55,8 @@ export default {
       sortVisible: false,
       imageLayout: false,
       recipes: [],
-      selectedTag: {}
+      selectedTag: {},
+      scrollEl: null
     };
   },
   mixins: [utils],
@@ -83,10 +84,23 @@ export default {
         this.selectedTag = { name, color, count };
       });
     },
+    createSimpleBar() {
+      const sb = new SimpleBar(document.getElementById('list-panel'));
+      this.scrollEl = sb.getScrollElement();
+    },
     getViewName() {
       return this.$route.path.replace('/recipes/', '');
     },
     selectRecipe(id) {
+      const clickedRecipe = document.querySelector(`.recipe-entry a[href*="${id}"]`);
+      const recipePos = clickedRecipe.getBoundingClientRect().top;
+      console.log('clicked el position', recipePos);
+      console.log('changing', this.scrollEl);
+      // setTimeout(() => {
+      //   console.log('changing', window.xxx.getScrollElement());
+      //   //window.xxx.getScrollElement().scrollTop = 100
+      // }, 2000);
+
       EventBus.$emit('RECIPE_SELECTED', id);
     },
     getTaggedView() {
@@ -103,6 +117,7 @@ export default {
     async retrieveRecipes() {
       const response = await RecipeService.getRecipes(this.sortBy);
       this.recipes = response.data;
+      this.createSimpleBar();
     },
   },
   mounted() {
@@ -133,6 +148,18 @@ export default {
   margin-left: auto;
   margin-right: 20px;
   user-select: none;
+
+  &.full-width {
+    max-width: 100%;
+    width: 1000px;
+    margin: 0 auto;
+
+    .list-panel-body.image-layout {
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-gap: 20px;
+    }
+
+  }
 
   #heading-and-sort {
     overflow: auto;

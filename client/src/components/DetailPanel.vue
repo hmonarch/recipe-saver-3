@@ -22,7 +22,7 @@
           <div class="utility-tooltip-text">Actions</div>
         </div>
       </li>
-      <li>
+      <li @click="closeDetails()">
         <div class="utility-btn">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
             <path d="M405 136.798L375.202 107 256 226.202 136.798 107 107 136.798 226.202 256 107 375.202 136.798 405 256 285.798 375.202 405 405 375.202 285.798 256z"/>
@@ -78,7 +78,7 @@
     </div>
 
     <ul id="tags">
-      <li class="tag" v-for="tag in recipe.tags" :key="tag.id">
+      <li class="tag" v-for="tag in recipe.tags" :key="tag.id" @click="selectTag(tag)">
         <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
           <span class="tag-name">{{ tag.name }}</span>
         </router-link>
@@ -122,6 +122,9 @@ export default {
   },
   mixins: [utils],
   methods: {
+    selectTag(tag) {
+      EventBus.$emit('TAG_SELECTED', tag);
+    },
     async retrieveRecipe() {
       const recipeID = this.$route.query.id;
       if (!recipeID) return console.log('no recipe id');
@@ -129,6 +132,9 @@ export default {
       this.recipe = response.data;
       this.editor.setContent(this.recipe.description);
     },
+    closeDetails() {
+      EventBus.$emit('CLOSE_DETAILS');
+    }
   },
   mounted() {
     this.editor = new Editor({
