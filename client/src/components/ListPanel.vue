@@ -56,7 +56,6 @@ export default {
       imageLayout: false,
       recipes: [],
       selectedTag: {},
-      scrollEl: null
     };
   },
   mixins: [utils],
@@ -85,22 +84,24 @@ export default {
       });
     },
     createSimpleBar() {
-      const sb = new SimpleBar(document.getElementById('list-panel'));
-      this.scrollEl = sb.getScrollElement();
+      new SimpleBar(document.getElementById('list-panel'));
     },
     getViewName() {
       return this.$route.path.replace('/recipes/', '');
     },
+    scrollToImage(id) {
+      if (!document.querySelector('#list-panel').classList.contains('full-width') ||
+        !document.querySelector('#recipe-list').classList.contains('image-layout')) { 
+        return;
+      }
+      setTimeout(() => {
+        const clickedRecipe = document.querySelector(`.recipe-entry a[href*="${id}"]`);
+        const recipePos = clickedRecipe.offsetTop;
+        document.querySelector('#list-panel .simplebar-content').scrollTop = recipePos - 20;
+      }, 50);
+    },
     selectRecipe(id) {
-      const clickedRecipe = document.querySelector(`.recipe-entry a[href*="${id}"]`);
-      const recipePos = clickedRecipe.getBoundingClientRect().top;
-      console.log('clicked el position', recipePos);
-      console.log('changing', this.scrollEl);
-      // setTimeout(() => {
-      //   console.log('changing', window.xxx.getScrollElement());
-      //   //window.xxx.getScrollElement().scrollTop = 100
-      // }, 2000);
-
+      this.scrollToImage(id);
       EventBus.$emit('RECIPE_SELECTED', id);
     },
     getTaggedView() {
@@ -296,6 +297,8 @@ export default {
             font-size: 12px;
             line-height: 20px;
             letter-spacing: 0.3px;
+            right: 1px;
+            top: 1px;
           }
         }
       }
