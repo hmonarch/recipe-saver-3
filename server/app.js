@@ -106,6 +106,27 @@ app.get('/recipe/:recipeID', (req, res) => {
 });
 
 
+// Edit recipe
+app.post('/recipe/:recipeID', (req, res) => {
+  const { recipeID } = req.params;
+  const { title, url, description, tags } = req.body;
+
+  Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
+    if (err) console.error(err);
+    recipe.title = title;
+    recipe.url = url;
+    recipe.description = description;
+    recipe.tags = tags;
+
+    recipe.save((err, recipe) => {
+      if (err) console.error(err);
+      console.log('Recipe saved!');
+      res.json(recipe);
+    });
+  });
+});
+
+
 function sortObj(sort) {
   console.log('sort', sort);
   switch(sort) {

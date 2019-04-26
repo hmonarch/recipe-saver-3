@@ -70,16 +70,14 @@ body {
 
 // Shared classes
 .btn {
-  width: 167px;
-  text-align: center;
-  border-radius: 4px;
-  height: 32px;
-  line-height: 32px;
-  font-size: 18px;
   cursor: pointer;
+  text-align: left;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  background-image: url(../assets/arrow-long.png);
+  background-repeat: no-repeat;
+  background-position: right 20px center;
   background-color: #089de3;
-  color: #fff;
-  text-shadow: 0 1px 0 rgba(0,0,0,0.3);
 
   &:hover {
     background-color: #23d82f;

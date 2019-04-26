@@ -139,7 +139,6 @@ export default {
 
   #add-recipe {
     margin: 62px auto 62px auto;
-    border-radius: 8px;
   }
 
   #side-nav-menu {
@@ -156,7 +155,6 @@ export default {
         font-size: 17px;
         margin-bottom: 6px;
         padding: 0 0 0 15px;
-        border-radius: 8px;
         display: flex;
         align-items: center;
           
@@ -178,7 +176,6 @@ export default {
 
       &#side-nav-menu-tags {
         &.open {
-          border-radius: 14px;
           background-color: rgba(0, 0, 0, 0.35);
 
           > a svg {

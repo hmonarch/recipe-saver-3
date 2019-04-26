@@ -9,5 +9,8 @@ export default {
   },
   getRecipe(id) {
     return Api().get(`recipe/${id}`);
-  }
+  },
+  updateRecipe(id, recipe) {
+    return Api().post(`recipe/${id}`, recipe);
+  },
 }

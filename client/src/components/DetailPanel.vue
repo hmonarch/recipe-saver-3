@@ -1,5 +1,5 @@
 <template>
-  <div id="detail-panel" class="panel">
+  <div id="detail-panel" class="panel" :class="{ 'edit-mode' : editMode === true }">
 
     <ul id="utility-bar">
       <li>
@@ -36,13 +36,17 @@
 
     <div id="title">{{ recipe.title }}</div>
 
-    <div v-show="recipe.url" id="url">
+    <div v-if="recipe.url && !editMode" id="url-read-only">
       <a :href="recipe.url" target="_blank">{{ recipe.url }}</a>
     </div>
+    <div v-else="editMode" id="url-edit">
+      <label>URL</label>
+      <input v-model="recipe.url" id="url-input" type="text">
+    </div>
+
 
     <div id="description">
-      <div id="description-read-only"></div>
-      <editor-menu-bar :editor="editor">
+      <editor-menu-bar :editor="editor" v-show="editMode === true">
         <div slot-scope="{ commands, isActive }" class="menubar">
 
           <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
@@ -75,7 +79,7 @@
 
         </div>
       </editor-menu-bar>
-      <editor-content :editor="editor" id="editor"></editor-content>
+      <editor-content :editor="editor" id="editor" v-model="recipe.description"></editor-content>
     </div>
 
     <ul id="tags">
@@ -85,6 +89,11 @@
         </router-link>
       </li>
     </ul>
+
+    <div class="save-cancel">
+      <div id="cancel">Cancel</div>
+      <div @click="saveRecipe()" id="save-recipe" class="btn">Save</div>
+    </div>
 
   </div>
 </template>
@@ -141,7 +150,7 @@ export default {
     editRecipe() {
       this.actionsVisible = false;
       this.editMode = true;
-      this.editor.setOptions({editable: false})
+      this.editor.setOptions({editable: true});
     },
     print() {
       this.actionsVisible = false;
@@ -150,6 +159,15 @@ export default {
     fullScreen() {
       this.actionsVisible = false;
       EventBus.$emit('CLOSE_LIST');
+    },
+    saveDescription() {
+      // Since tiptap does not use v-model we need to save the description manually
+      this.recipe.description = this.editor.getHTML();
+    },
+    async saveRecipe() {
+      this.saveDescription();
+      const recipeID = this.$route.query.id;
+      const response = await RecipeService.updateRecipe(recipeID, this.recipe);
     }
   },
   mounted() {
@@ -167,6 +185,8 @@ export default {
         new History(),
       ],
     });
+    // The editor must be set to true first or editor buttons won't work
+    this.editor.setOptions({editable: false});
   },
   created() {
     document.addEventListener('click', e => {
@@ -203,6 +223,11 @@ export default {
     width: 1000px;
     margin: 0 auto;
   }
+
+  &.edit-mode {
+    border: solid 2px #0093ff;
+  }
+
 
   #utility-bar {
     border-bottom: solid 1px #dadada;
@@ -292,6 +317,13 @@ export default {
     }
   }
 
+  label {
+    display: block;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: #757a80;
+  }
 
   #title {
     line-height: 30px;
@@ -299,8 +331,12 @@ export default {
     margin-bottom: 20px;
   }
 
-  #url {
+  #url-read-only,
+  #url-edit {
     margin-bottom: 20px;
+  }
+
+  #url-read-only {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -308,6 +344,20 @@ export default {
     a {
       color: #14aaf5;
       font-size: 14px;
+    }
+  }
+
+  #url-edit {
+    #url-input {
+      display: block;
+      width: 100%;
+      height: 38px;
+      line-height: 38px;
+      padding: 0 5px;
+      margin-top: 5px;
+      color: #757a80;
+      box-sizing: border-box;
+      border: solid 1px black;
     }
   }
 
@@ -377,6 +427,37 @@ export default {
       margin-right: 8px;
     }
   }
+
+  .save-cancel {
+    display: flex;
+    justify-content: space-between;
+
+    #save-recipe,
+    #cancel {
+      cursor: pointer;
+      height: 42px;
+      line-height: 42px;
+      width: 140px;
+      box-sizing: border-box;
+      padding: 0 20px;
+    }
+
+    #save-recipe {
+      color: #fff;
+    }
+
+    #cancel {
+      border: solid 1px #c1c1c1;
+      color: #c1c1c1;
+      text-align: center;
+      
+      &:hover {
+        background-color: #c1c1c1;
+        color: #fff;
+      }
+    }
+  }
+  
 }
 
 </style>
