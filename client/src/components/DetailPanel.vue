@@ -4,29 +4,29 @@
     <ul id="utility-bar">
       <li>
         <div class="utility-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path xmlns="http://www.w3.org/2000/svg" d="M463 192H315.9L271.2 58.6C269 52.1 262.9 48 256 48s-13 4.1-15.2 10.6L196.1 192H48c-8.8 0-16 7.2-16 16 0 .9.1 1.9.3 2.7.2 3.5 1.8 7.4 6.7 11.3l120.9 85.2-46.4 134.9c-2.3 6.5 0 13.8 5.5 18 2.9 2.1 5.6 3.9 9 3.9 3.3 0 7.2-1.7 10-3.6l118-84.1 118 84.1c2.8 2 6.7 3.6 10 3.6 3.4 0 6.1-1.7 8.9-3.9 5.6-4.2 7.8-11.4 5.5-18L352 307.2l119.9-86 2.9-2.5c2.6-2.8 5.2-6.6 5.2-10.7 0-8.8-8.2-16-17-16zm-127.2 92.5c-10 7.2-14.2 20.2-10.2 31.8l30.1 87.7c1.3 3.7-2.9 6.8-6.1 4.6l-77.4-55.2c-4.9-3.5-10.6-5.2-16.3-5.2-5.7 0-11.4 1.7-16.2 5.2l-77.4 55.1c-3.2 2.3-7.4-.9-6.1-4.6l30.1-87.7c4-11.8-.2-24.8-10.3-32l-81-57.1c-3.2-2.2-1.6-7.3 2.3-7.3H196c12 0 22.7-7.7 26.5-19.1l29.6-88.2c1.2-3.6 6.4-3.6 7.6 0l29.6 88.2c3.8 11.4 14.5 19.1 26.5 19.1h97.3c3.9 0 5.5 5 2.3 7.2l-79.6 57.5z"/>
-          </svg>
+          <icon name="star"/>
         </div>
         <div class="utility-tooltip">
           <div class="utility-tooltip-text">Favorite</div>
         </div>
       </li>
-      <li>
-        <div class="utility-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path d="M255.8 218c-21 0-38 17-38 38s17 38 38 38 38-17 38-38-17-38-38-38zM102 218c-21 0-38 17-38 38s17 38 38 38 38-17 38-38-17-38-38-38zM410 218c-21 0-38 17-38 38s17 38 38 38 38-17 38-38-17-38-38-38z"/>
-          </svg>
+      <li id="more-actions-container">
+        <div class="utility-btn" @click="actionsVisible = !actionsVisible">
+          <icon name="dots"/>
         </div>
         <div class="utility-tooltip">
           <div class="utility-tooltip-text">Actions</div>
         </div>
+        <ul v-show="actionsVisible" id="more-actions-menu" class="box">
+          <li @click="editRecipe()">Edit Recipe</li>
+          <li @click="fullScreen()">Full Screen</li>
+          <li @click="print()">Print</li>
+          <li>Delete Recipe</li>
+        </ul>  
       </li>
       <li @click="closeDetails()">
         <div class="utility-btn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-            <path d="M405 136.798L375.202 107 256 226.202 136.798 107 107 136.798 226.202 256 107 375.202 136.798 405 256 285.798 375.202 405 405 375.202 285.798 256z"/>
-          </svg>
+          <icon name="close"/>
         </div>
         <div class="utility-tooltip">
           <div class="utility-tooltip-text">Close</div>
@@ -41,6 +41,7 @@
     </div>
 
     <div id="description">
+      <div id="description-read-only"></div>
       <editor-menu-bar :editor="editor">
         <div slot-scope="{ commands, isActive }" class="menubar">
 
@@ -117,7 +118,9 @@ export default {
   data() {
     return {
       recipe: {},
-      editor: null
+      editor: null,
+      actionsVisible: false,
+      editMode: false,
     };
   },
   mixins: [utils],
@@ -134,6 +137,19 @@ export default {
     },
     closeDetails() {
       EventBus.$emit('CLOSE_DETAILS');
+    },
+    editRecipe() {
+      this.actionsVisible = false;
+      this.editMode = true;
+      this.editor.setOptions({editable: false})
+    },
+    print() {
+      this.actionsVisible = false;
+      window.print();
+    },
+    fullScreen() {
+      this.actionsVisible = false;
+      EventBus.$emit('CLOSE_LIST');
     }
   },
   mounted() {
@@ -152,8 +168,16 @@ export default {
       ],
     });
   },
+  created() {
+    document.addEventListener('click', e => {
+      const isChildOfMoreActions = e.target.closest('#more-actions-container') || e.target.matches('#more-actions-container');
+      if (!isChildOfMoreActions) {
+        this.actionsVisible = false;
+      }
+    });
+  },
   beforeDestroy() {
-    this.editor.destroy()
+    this.editor.destroy();
   },
   watch: {
     '$route.query': {
@@ -174,15 +198,22 @@ export default {
   margin-right: auto;
   padding: 20px;
 
+  &.full-width {
+    max-width: 100%;
+    width: 1000px;
+    margin: 0 auto;
+  }
+
   #utility-bar {
     border-bottom: solid 1px #dadada;
     padding-bottom: 6px;
     margin-bottom: 20px;
 
-    li {
+    > li {
       display: inline-block;
       height: 25px;
       width: 25px;
+      position: relative;
 
       &:hover {
         .utility-tooltip {
@@ -235,6 +266,32 @@ export default {
     }
   }
 
+  #more-actions-menu {
+    z-index: 2;
+    position: absolute;
+    text-align: left;
+    width: 144px;
+    left: 2px;
+
+    li {
+      padding: 3px 15px;
+      cursor: pointer;
+      text-transform: capitalize;
+      height: 20px;
+      line-height: 20px;
+
+      &:last-child {
+        margin-top: 10px;
+        border-top: solid 1px #dadada;
+      }
+
+      &:hover {
+        background-color: #008dff;
+        color: white;
+      }
+    }
+  }
+
 
   #title {
     line-height: 30px;
@@ -283,6 +340,9 @@ export default {
     }
 
     #editor {
+      font-size: 14.5px;
+      line-height: 20px;
+
       > div {
         padding: 10px;
       }

@@ -213,6 +213,26 @@ table {
 }
 
 
+/* Print styles */
+@media print {
+	body {
+		background: transparent !important;
+	}
+  #list-panel,
+  #utility-bar,
+  #side-nav,
+  .menubar {
+    display: none !important;
+  }
+  #detail-panel {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+  }
+}
+
+
+
 /* Simplebar CSS */
 [data-simplebar] {
   position: relative;

@@ -1,9 +1,9 @@
 <template>
   <div id="recipes">
-    <SideNav></SideNav>
+    <SideNav v-show="listOpen"></SideNav>
     <section id="panels">
-      <ListPanel :class="{ 'full-width' : detailsOpen === false }"></ListPanel>
-      <DetailPanel v-show="detailsOpen"></DetailPanel>
+      <ListPanel v-show="listOpen" :class="{ 'full-width' : detailsOpen === false }"></ListPanel>
+      <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }"></DetailPanel>
     </section>
   </div>
 </template>
@@ -25,12 +25,17 @@ export default {
   },
   data() {
     return {
-      detailsOpen: true
+      detailsOpen: true,
+      listOpen: true,
     }
   },
   mounted() {
     EventBus.$on('CLOSE_DETAILS', () => {
       this.detailsOpen = false;
+      if (this.listOpen === false) this.listOpen = true;
+    });
+    EventBus.$on('CLOSE_LIST', () => {
+      this.listOpen = false;
     });
     EventBus.$on('RECIPE_SELECTED', () => {
       this.detailsOpen = true;

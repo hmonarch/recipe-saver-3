@@ -128,6 +128,12 @@ export default {
   },
   created() {
     this.initTag();
+    document.addEventListener('click', e => {
+      const isChildOfSort = e.target.closest('#sort-options') || e.target.closest('#sort') || e.target.matches('#sort');
+      if (!isChildOfSort) {
+        this.sortVisible = false;
+      }
+    });
   },
   watch: {
     '$route.params': {
