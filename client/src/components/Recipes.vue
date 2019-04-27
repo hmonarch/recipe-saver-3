@@ -1,3 +1,4 @@
+
 <template>
   <div id="recipes">
     <SideNav v-show="listOpen"></SideNav>
@@ -5,6 +6,18 @@
       <ListPanel v-show="listOpen" :class="{ 'full-width' : detailsOpen === false }"></ListPanel>
       <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }"></DetailPanel>
     </section>
+
+    <div :class="{ 'active' : showMessage === true }" id="message-box">
+        <div class="message-inner">
+          <div class="message-block">
+            <span class="message-subject">{{ messageSubject }}</span>
+            <span class="message-verb">{{ messageVerb }}</span>
+          </div>
+          <div @click="showMessage = false" class="message-icon">
+            <icon name="close"/>
+          </div>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -13,20 +26,23 @@ import SideNav from './SideNav.vue';
 import ListPanel from './ListPanel.vue';
 import DetailPanel from './DetailPanel.vue';
 import EventBus from '@/EventBus';
-
-
+import Icon from '@/components/Icons';
 
 export default {
   name: 'recipes',
   components: {
     SideNav,
     ListPanel,
-    DetailPanel
+    DetailPanel,
+    Icon
   },
   data() {
     return {
       detailsOpen: true,
       listOpen: true,
+      showMessage: false,
+      messageSubject: null,
+      messageVerb: null,
     }
   },
   mounted() {
@@ -39,6 +55,14 @@ export default {
     });
     EventBus.$on('RECIPE_SELECTED', () => {
       this.detailsOpen = true;
+    });
+    EventBus.$on('RECIPE_SAVED', recipeTitle => {
+      this.messageSubject = recipeTitle;
+      this.messageVerb = ' saved!';
+      this.showMessage = true;
+      setTimeout(() => {
+        this.showMessage = false;
+      }, 4000);
     });
   },
 }
@@ -64,6 +88,55 @@ body {
     position: relative;
     overflow-y: auto;
     text-align: left;
+  }
+}
+
+#message-box {
+  position: fixed;
+  box-sizing: border-box;
+  z-index: 100;
+  background-color: white;
+  max-width: 500px;
+  bottom: 10px;
+  right: 10px;
+  padding: 20px;
+  border-top: solid 5px #23d82f;
+  line-height: 20px;
+  right: -500px;
+  transition: 1s;
+  text-align: left;
+
+  &.active {
+    right: 20px;
+  }
+
+  .message-inner {
+    .message-block {
+      padding-right: 20px;
+
+      .message-subject {
+        font-weight: bold;
+      }
+
+      .message-verb {
+        margin-right: 10px;
+      }
+    }
+    .message-icon {
+      display: inline-block;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+
+      .icon--close {
+        svg {
+          fill: #4d4d4d;
+          cursor: pointer;
+          height: 22px;
+          width: 22px;
+        }
+      }
+    }
   }
 }
 

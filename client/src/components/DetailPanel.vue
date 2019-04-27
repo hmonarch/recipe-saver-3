@@ -39,13 +39,13 @@
     <div v-if="recipe.url && !editMode" id="url-read-only">
       <a :href="recipe.url" target="_blank">{{ recipe.url }}</a>
     </div>
-    <div v-else="editMode" id="url-edit">
+    <div v-else id="url-edit">
       <label>URL</label>
       <input v-model="recipe.url" id="url-input" type="text">
     </div>
 
 
-    <div id="description">
+    <div v-show="recipe.description || editMode" id="description">
       <editor-menu-bar :editor="editor" v-show="editMode === true">
         <div slot-scope="{ commands, isActive }" class="menubar">
 
@@ -90,8 +90,8 @@
       </li>
     </ul>
 
-    <div class="save-cancel">
-      <div id="cancel">Cancel</div>
+    <div v-show="editMode" class="save-cancel">
+      <div @click="cancel()" id="cancel">Cancel</div>
       <div @click="saveRecipe()" id="save-recipe" class="btn">Save</div>
     </div>
 
@@ -162,12 +162,22 @@ export default {
     },
     saveDescription() {
       // Since tiptap does not use v-model we need to save the description manually
-      this.recipe.description = this.editor.getHTML();
+      const editorHTML = this.editor.getHTML();
+      if (editorHTML === '<p></p>') {
+        this.recipe.description = '';
+      } else {
+        this.recipe.description = this.editor.getHTML();
+      }
+    },
+    cancel() {
+      this.editMode = false;
     },
     async saveRecipe() {
       this.saveDescription();
       const recipeID = this.$route.query.id;
       const response = await RecipeService.updateRecipe(recipeID, this.recipe);
+      this.editMode = false;
+      EventBus.$emit('RECIPE_SAVED', this.recipe.title);
     }
   },
   mounted() {
@@ -187,6 +197,10 @@ export default {
     });
     // The editor must be set to true first or editor buttons won't work
     this.editor.setOptions({editable: false});
+
+    EventBus.$on('RECIPE_SELECTED', () => {
+      this.editMode = false;
+    });
   },
   created() {
     document.addEventListener('click', e => {
