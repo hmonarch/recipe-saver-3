@@ -13,4 +13,7 @@ export default {
   updateRecipe(id, recipe) {
     return Api().post(`recipe/${id}`, recipe);
   },
+  deleteRecipe(id) {
+    return Api().delete(`recipe/${id}`);
+  }
 }

@@ -1,6 +1,7 @@
 
 <template>
   <div id="recipes">
+
     <SideNav v-show="listOpen"></SideNav>
     <section id="panels">
       <ListPanel v-show="listOpen" :class="{ 'full-width' : detailsOpen === false }"></ListPanel>
@@ -8,16 +9,17 @@
     </section>
 
     <div :class="{ 'active' : showMessage === true }" id="message-box">
-        <div class="message-inner">
-          <div class="message-block">
-            <span class="message-subject">{{ messageSubject }}</span>
-            <span class="message-verb">{{ messageVerb }}</span>
-          </div>
-          <div @click="showMessage = false" class="message-icon">
-            <icon name="close"/>
-          </div>
+      <div class="message-inner">
+        <div class="message-block">
+          <span class="message-subject">{{ messageSubject }}</span>
+          <span class="message-verb">{{ messageVerb }}</span>
+        </div>
+        <div @click="showMessage = false" class="message-icon">
+          <icon name="close"/>
         </div>
       </div>
+    </div>
+
   </div>
 </template>
 
@@ -56,13 +58,16 @@ export default {
     EventBus.$on('RECIPE_SELECTED', () => {
       this.detailsOpen = true;
     });
-    EventBus.$on('RECIPE_SAVED', recipeTitle => {
-      this.messageSubject = recipeTitle;
-      this.messageVerb = ' saved!';
-      this.showMessage = true;
-      setTimeout(() => {
+    EventBus.$on('MESSAGE', (title, message) => {
+      this.showMessage = false;
+      clearInterval(window.messageTimer);
+      window.messageTimer = setTimeout(() => {
         this.showMessage = false;
-      }, 4000);
+      }, 3000);
+
+      this.messageSubject = title;
+      this.messageVerb = ` ${message}`;
+      this.showMessage = true;
     });
   },
 }
@@ -186,6 +191,24 @@ body {
     .tag-count {
       margin-left: 4px;
     }
+  }
+}
+
+.utility-tooltip {
+  display: none;
+  position: absolute;
+  z-index: 5;
+  background-image: url(../assets/caret.png);
+  background-repeat: no-repeat;
+  background-position-x: 4px;
+
+  .utility-tooltip-text {
+    background-color: #5f5d5d;
+    color: white;
+    padding: 10px;
+    margin-top: 9px;
+    border-radius: 4px;
+    font-size: 13px;
   }
 }
 </style>

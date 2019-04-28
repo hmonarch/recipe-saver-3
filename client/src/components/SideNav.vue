@@ -108,6 +108,9 @@ export default {
       );
     }
   },
+  mounted() {
+    EventBus.$on('RECALUCATE_TAGS', this.getTags);
+  },
   created() {
     this.getTags();
   }

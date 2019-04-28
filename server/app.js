@@ -109,10 +109,11 @@ app.get('/recipe/:recipeID', (req, res) => {
 // Edit recipe
 app.post('/recipe/:recipeID', (req, res) => {
   const { recipeID } = req.params;
-  const { title, url, description, tags } = req.body;
+  const { title, url, description, tags, favorite } = req.body;
 
   Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
     if (err) console.error(err);
+    recipe.favorite = favorite;
     recipe.title = title;
     recipe.url = url;
     recipe.description = description;
@@ -122,6 +123,23 @@ app.post('/recipe/:recipeID', (req, res) => {
       if (err) console.error(err);
       console.log('Recipe saved!');
       res.json(recipe);
+    });
+  });
+});
+
+
+// Delete recipe
+app.delete('/recipe/:recipeID', (req, res) => {
+  const { recipeID } = req.params;
+
+  Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
+    if (err) console.error(err);
+    if (!recipe) return res.sendStatus(404);
+
+    recipe.remove((err, data) => {
+      if (err) console.error(err);
+      console.log('Recipe delete!');
+      res.json(data);
     });
   });
 });

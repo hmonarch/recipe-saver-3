@@ -18,8 +18,14 @@
         </ul>
 
         <div id="layout-toggle">
-          <img v-show="imageLayout" class="layout-icon" src="../assets/layout-list-icon.svg" @click="imageLayout = !imageLayout">
-          <img v-show="!imageLayout" class="layout-icon" src="../assets/layout-image-icon.svg" @click="imageLayout = !imageLayout">
+          <img v-show="imageLayout" class="layout-icon list-icon" src="../assets/layout-list-icon.svg" @click="imageLayout = !imageLayout">
+          <div class="utility-tooltip">
+            <div class="utility-tooltip-text">Image Layout</div>
+          </div>
+          <img v-show="!imageLayout" class="layout-icon image-icon" src="../assets/layout-image-icon.svg" @click="imageLayout = !imageLayout">
+          <div class="utility-tooltip">
+            <div class="utility-tooltip-text">List Layout</div>
+          </div>
         </div>
       </div>
 		</div>
@@ -125,6 +131,7 @@ export default {
     EventBus.$on('TAG_SELECTED', tag => {
       this.selectedTag = tag;
     });
+    EventBus.$on('RECIPE_SAVED', this.retrieveRecipes);
   },
   created() {
     this.initTag();
@@ -231,7 +238,22 @@ export default {
         top: 4px;
         cursor: pointer;
         opacity: 0.7;
+
+        &:hover + .utility-tooltip {
+          display: inline-block;
+          top: 50px;
+          right: 25px;
+        }
+
+        &.image-icon + .utility-tooltip {
+          background-position-x: 46px; 
+        }
+
+        &.list-icon + .utility-tooltip {
+          background-position-x: 60px; 
+        }
       }
+
     }
   }
 

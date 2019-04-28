@@ -3,25 +3,27 @@
 
     <ul id="utility-bar">
       <li>
-        <div class="utility-btn">
-          <icon name="star"/>
+        <div class="utility-btn" @click="toggleFavorite()">
+          <icon v-if="recipe.favorite" name="starFilled"/>
+          <icon v-else name="star"/>
         </div>
         <div class="utility-tooltip">
-          <div class="utility-tooltip-text">Favorite</div>
+          <div class="utility-tooltip-text">{{ favoriteToggleText }}</div>
         </div>
       </li>
       <li id="more-actions-container">
         <div class="utility-btn" @click="actionsVisible = !actionsVisible">
           <icon name="dots"/>
         </div>
-        <div class="utility-tooltip">
+        <div class="utility-tooltip" v-show="!actionsVisible">
           <div class="utility-tooltip-text">Actions</div>
         </div>
         <ul v-show="actionsVisible" id="more-actions-menu" class="box">
           <li @click="editRecipe()">Edit Recipe</li>
           <li @click="fullScreen()">Full Screen</li>
           <li @click="print()">Print</li>
-          <li>Delete Recipe</li>
+          <li v-if="!confirmActive" @click="confirmActive = true">Delete Recipe</li>
+          <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
         </ul>  
       </li>
       <li @click="closeDetails()">
@@ -39,6 +41,7 @@
     <div v-if="recipe.url && !editMode" id="url-read-only">
       <a :href="recipe.url" target="_blank">{{ recipe.url }}</a>
     </div>
+    <div v-else-if="recipe.url === ''" style="display: none;"></div>
     <div v-else id="url-edit">
       <label>URL</label>
       <input v-model="recipe.url" id="url-input" type="text">
@@ -91,8 +94,8 @@
     </ul>
 
     <div v-show="editMode" class="save-cancel">
-      <div @click="cancel()" id="cancel">Cancel</div>
-      <div @click="saveRecipe()" id="save-recipe" class="btn">Save</div>
+      <div @click="cancel()" class="cancel">Cancel</div>
+      <div @click="saveRecipe()" class="save-recipe btn">Save</div>
     </div>
 
   </div>
@@ -130,6 +133,7 @@ export default {
       editor: null,
       actionsVisible: false,
       editMode: false,
+      confirmActive: false,
     };
   },
   mixins: [utils],
@@ -144,6 +148,11 @@ export default {
       this.recipe = response.data;
       this.editor.setContent(this.recipe.description);
     },
+    toggleFavorite() {
+      this.recipe.favorite = !this.recipe.favorite;
+      const message = this.recipe.favorite ? 'favorited' : 'unfavorited';
+      this.saveRecipe(message);
+    },
     closeDetails() {
       EventBus.$emit('CLOSE_DETAILS');
     },
@@ -155,6 +164,24 @@ export default {
     print() {
       this.actionsVisible = false;
       window.print();
+    },
+    confirmDelete() {
+      this.actionsVisible = false;
+      this.editMode = false;
+    },
+    async deleteRecipe() {
+      this.confirmActive = false;
+      const recipeTitle = this.recipe.title;
+      const response = await RecipeService.deleteRecipe(this.recipe._id);
+      if (response.status !== 200) return console.log('Error deleting recipe');
+
+      this.closeDetails();
+      EventBus.$emit('MESSAGE', recipeTitle, 'deleted');
+      EventBus.$emit('RECALUCATE_TAGS');
+
+      const query = Object.assign({}, this.$route.query);
+      delete query.id;
+      this.$router.replace({ query });
     },
     fullScreen() {
       this.actionsVisible = false;
@@ -172,12 +199,18 @@ export default {
     cancel() {
       this.editMode = false;
     },
-    async saveRecipe() {
+    async saveRecipe(message = 'was saved!') {
       this.saveDescription();
-      const recipeID = this.$route.query.id;
-      const response = await RecipeService.updateRecipe(recipeID, this.recipe);
+      const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
       this.editMode = false;
-      EventBus.$emit('RECIPE_SAVED', this.recipe.title);
+      this.editor.setOptions({editable: false});
+      EventBus.$emit('RECIPE_SAVED');
+      EventBus.$emit('MESSAGE', this.recipe.title, message);
+    }
+  },
+  computed: {
+    favoriteToggleText() {
+      return this.recipe.favorite ? 'Unfavorite' : 'Favorite';
     }
   },
   mounted() {
@@ -195,18 +228,26 @@ export default {
         new History(),
       ],
     });
-    // The editor must be set to true first or editor buttons won't work
+    // The editor must be set to false first or editor buttons won't work
     this.editor.setOptions({editable: false});
 
     EventBus.$on('RECIPE_SELECTED', () => {
-      this.editMode = false;
+      // this.editMode = false;
     });
   },
   created() {
     document.addEventListener('click', e => {
+
+      // More actions click off
       const isChildOfMoreActions = e.target.closest('#more-actions-container') || e.target.matches('#more-actions-container');
       if (!isChildOfMoreActions) {
         this.actionsVisible = false;
+      }
+
+      // Confirm delete click off
+      const isMoreActions = e.target.matches('.confirm-delete');
+      if (!isMoreActions) {
+        this.confirmActive = false;
       }
     });
   },
@@ -219,6 +260,14 @@ export default {
         this.retrieveRecipe();
       },
       immediate: true,
+    },
+    '$route': {
+      handler() {
+        this.editMode = false;
+        if (this.editor) {
+          this.editor.setOptions({editable: false});
+        }
+      }
     }
   }
 }
@@ -254,8 +303,8 @@ export default {
       width: 25px;
       position: relative;
 
-      &:hover {
-        .utility-tooltip {
+      .utility-btn:hover {
+        & + .utility-tooltip {
           display: inline-block;
         }
       }
@@ -276,30 +325,12 @@ export default {
         }
       }
 
-      .utility-tooltip {
-        display: none;
-        position: absolute;
-        z-index: 1;
-        background-image: url(../assets/caret.png);
-        background-repeat: no-repeat;
-        background-position-x: 4px;
-
-        .utility-tooltip-text {
-          background-color: #5f5d5d;
-          color: white;
-          padding: 10px;
-          margin-top: 9px;
-          border-radius: 4px;
-          font-size: 13px;
-        }
-      }
-
       &:last-child {
         float: right;
 
         .utility-tooltip {
-          right: 0;
-          background-position-x: 9px; 
+          right: -4px;
+          background-position-x: 25px;
         }
       }
     }
@@ -322,6 +353,11 @@ export default {
       &:last-child {
         margin-top: 10px;
         border-top: solid 1px #dadada;
+
+        &.confirm-delete {
+          background-color: red;
+          color: #fff;
+        }
       }
 
       &:hover {
@@ -342,7 +378,7 @@ export default {
   #title {
     line-height: 30px;
     font-size: 24px;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
   }
 
   #url-read-only,
@@ -409,6 +445,8 @@ export default {
 
       > div {
         padding: 10px;
+        outline: 0;
+        word-break: break-word;
       }
 
       ol,
@@ -446,8 +484,8 @@ export default {
     display: flex;
     justify-content: space-between;
 
-    #save-recipe,
-    #cancel {
+    .save-recipe,
+    .cancel {
       cursor: pointer;
       height: 42px;
       line-height: 42px;
@@ -456,11 +494,11 @@ export default {
       padding: 0 20px;
     }
 
-    #save-recipe {
+    .save-recipe {
       color: #fff;
     }
 
-    #cancel {
+    .cancel {
       border: solid 1px #c1c1c1;
       color: #c1c1c1;
       text-align: center;
