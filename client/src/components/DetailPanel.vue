@@ -89,7 +89,16 @@
       <editor-content :editor="editor" id="editor" v-model="recipe.description"></editor-content>
     </div>
 
-    <img v-show="recipe.image" class="recipe-image-read-only" :src="recipeImage">
+    <div v-show="recipe.image || editMode" class="recipe-image-container">
+      <img v-if="recipe.image" class="recipe-image" :src="recipeImage">
+      <img v-else class="recipe-image" :src="recipeImage">
+      <div class="recipe-image-overlay">
+        <div class="recipe-image-overlay-text">Upload Image</div>
+        <form id="image-form">
+          <input type="file" id="image-input" accept="image/*" @change="handleImage">
+        </form>
+      </div>
+    </div>
 
     <ul id="tags">
       <li class="tag" v-for="tag in recipe.tags" :key="tag.id" @click="selectTag(tag)">
@@ -139,7 +148,7 @@ export default {
       recipe: {},
       editor: null,
       actionsVisible: false,
-      editMode: false,
+      editMode: true,
       confirmActive: false,
     };
   },
@@ -218,6 +227,31 @@ export default {
       this.removeEditMode();
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
+    },
+    handleImage(e, imageObj) {
+      let file;
+
+      if (imageObj) {
+        if (imageObj.url) {
+          setPreview(imageObj.url);
+          return console.log(imageObj.url);
+        } else {
+          file = imageObj.image;
+        }
+      } else {
+        file = e.target.files[0];
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.addEventListener('load', e => {
+        setPreview(e.target.result);
+        document.querySelector('.recipe-image-container .recipe-image').setAttribute('src', e.target.result);
+      });
+
+      function setPreview(source) {
+        document.querySelector('.recipe-image-container .recipe-image').setAttribute('src', source);
+      }
     }
   },
   computed: {
@@ -249,6 +283,44 @@ export default {
     EventBus.$on('RECIPE_SELECTED', () => {
       // this.editMode = false;
     });
+
+    const dropArea = document.querySelector('.recipe-image-overlay');
+    dropArea.addEventListener('dragstart', e => {
+       e.dataTransfer.setData('text/html', null);
+    });
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, e => {
+        e.preventDefault();
+        e.stopPropagation();
+      }, false);
+    });
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropArea.addEventListener(eventName, () => {
+        dropArea.classList.add('highlight');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropArea.addEventListener(eventName, () => {
+        dropArea.classList.remove('highlight');
+      });
+    });
+
+
+    dropArea.addEventListener('drop', e => {
+      const imageURL = e.dataTransfer.getData('Text');
+
+      const draggedImage = {
+        image: e.dataTransfer.files[0],
+        url: imageURL ? imageURL : null,
+      };
+
+      this.handleImage(e, draggedImage);
+    });
+
+
   },
   created() {
     document.addEventListener('click', e => {
@@ -487,10 +559,33 @@ export default {
     }
   }
 
-  .recipe-image-read-only {
-    border-radius: 5px;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
-    margin-bottom: 20px;
+  .recipe-image-container {
+    position: relative;
+
+    .recipe-image {
+      border-radius: 5px;
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
+      margin-bottom: 20px;
+      height: 285px;
+      width: 285px;
+      object-fit: contain;
+    }
+
+    .recipe-image-overlay {
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      background-color: rgba(63, 63, 86, 0.63);
+      top: 0;
+      width: 287px;
+      height: 285px;
+      color: #fff;
+      border: solid 2px transparent;
+
+      &.highlight {
+        border: solid 2px #089de3;
+      }
+    }
   }
 
   #tags {

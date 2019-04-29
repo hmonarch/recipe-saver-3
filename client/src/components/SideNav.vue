@@ -96,16 +96,17 @@ export default {
       EventBus.$emit('TAG_SELECTED', tag);
     },
     setTagListHeight() {
-      this.waitFor(
-        () =>  document.querySelector('#tag-list .tag'),
-        () => {
-          const tags = document.querySelectorAll('#tag-list .tag');
-          const tagHeight = 38; // Update if changing with CSS
-          if (!tags.length) return console.log('nothing');
-          const newHeight = tagHeight * tags.length;
-          document.querySelector('#tag-list-container').style.height = `${newHeight}px`;
-        }
-      );
+      // this.waitFor(
+      //   () =>  document.querySelector('#tag-list .tag'),
+      //   () => {
+      //     const tags = document.querySelectorAll('#tag-list .tag');
+      //     const tagHeight = 38; // Update if changing with CSS
+      //     if (!tags.length) return;
+      //     const newHeight = tagHeight * tags.length;
+      //     document.querySelector('#tag-list-container').style.height = `${newHeight}px`;
+      //     console.log('newHeight', newHeight);
+      //   }
+      // );
     }
   },
   mounted() {
