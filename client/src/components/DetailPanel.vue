@@ -20,7 +20,7 @@
         </div>
         <ul v-show="actionsVisible" id="more-actions-menu" class="box">
           <li @click="editRecipe()">Edit Recipe</li>
-          <li @click="fullScreen()">Full Screen</li>
+          <li @click="toggleSreen()">{{ screenModeText }}</li>
           <li @click="print()">Print</li>
           <li v-if="!confirmActive" @click="confirmActive = true">Delete Recipe</li>
           <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
@@ -36,7 +36,11 @@
       </li>
     </ul>
 
-    <div id="title">{{ recipe.title }}</div>
+    <div v-if="!editMode" id="title-read-only">{{ recipe.title }}</div>
+    <div v-else id="title-edit">
+      <label>Title</label>
+      <input v-model="recipe.title" id="title-input" type="text">
+    </div>
 
     <div v-if="recipe.url && !editMode" id="url-read-only">
       <a :href="recipe.url" target="_blank">{{ recipe.url }}</a>
@@ -47,7 +51,7 @@
       <input v-model="recipe.url" id="url-input" type="text">
     </div>
 
-
+    <label v-show="editMode">Ingredients / Description</label>
     <div v-show="recipe.description || editMode" id="description">
       <editor-menu-bar :editor="editor" v-show="editMode === true">
         <div slot-scope="{ commands, isActive }" class="menubar">
@@ -84,6 +88,8 @@
       </editor-menu-bar>
       <editor-content :editor="editor" id="editor" v-model="recipe.description"></editor-content>
     </div>
+
+    <img v-show="recipe.image" class="recipe-image-read-only" :src="recipeImage">
 
     <ul id="tags">
       <li class="tag" v-for="tag in recipe.tags" :key="tag.id" @click="selectTag(tag)">
@@ -127,6 +133,7 @@ export default {
     EditorContent,
     Icon
   },
+  props: ['screenModeText'],
   data() {
     return {
       recipe: {},
@@ -141,6 +148,10 @@ export default {
     selectTag(tag) {
       EventBus.$emit('TAG_SELECTED', tag);
     },
+    removeEditMode() {
+      this.editMode = false;
+      this.editor.setOptions({editable: false});
+    },
     async retrieveRecipe() {
       const recipeID = this.$route.query.id;
       if (!recipeID) return console.log('no recipe id');
@@ -154,6 +165,7 @@ export default {
       this.saveRecipe(message);
     },
     closeDetails() {
+      this.removeEditMode();
       EventBus.$emit('CLOSE_DETAILS');
     },
     editRecipe() {
@@ -163,11 +175,12 @@ export default {
     },
     print() {
       this.actionsVisible = false;
-      window.print();
+      this.removeEditMode();
+      setTimeout(window.print, 100);
     },
     confirmDelete() {
       this.actionsVisible = false;
-      this.editMode = false;
+      this.removeEditMode();
     },
     async deleteRecipe() {
       this.confirmActive = false;
@@ -183,9 +196,9 @@ export default {
       delete query.id;
       this.$router.replace({ query });
     },
-    fullScreen() {
+    toggleSreen() {
       this.actionsVisible = false;
-      EventBus.$emit('CLOSE_LIST');
+      EventBus.$emit('TOGGLE_SCREEN');
     },
     saveDescription() {
       // Since tiptap does not use v-model we need to save the description manually
@@ -197,13 +210,12 @@ export default {
       }
     },
     cancel() {
-      this.editMode = false;
+      this.removeEditMode();
     },
     async saveRecipe(message = 'was saved!') {
       this.saveDescription();
       const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
-      this.editMode = false;
-      this.editor.setOptions({editable: false});
+      this.removeEditMode();
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
     }
@@ -211,6 +223,9 @@ export default {
   computed: {
     favoriteToggleText() {
       return this.recipe.favorite ? 'Unfavorite' : 'Favorite';
+    },
+    recipeImage() {
+      return this.recipe.image || 'http://res.cloudinary.com/dormh2fvt/image/upload/v1527317481/placeholder_rjy55k.jpg';
     }
   },
   mounted() {
@@ -283,7 +298,7 @@ export default {
 
   &.full-width {
     max-width: 100%;
-    width: 1000px;
+    width: 900px;
     margin: 0 auto;
   }
 
@@ -370,19 +385,19 @@ export default {
   label {
     display: block;
     letter-spacing: 0.4px;
-    text-transform: uppercase;
     font-size: 14px;
     color: #757a80;
   }
 
-  #title {
+  #title-read-only {
     line-height: 30px;
     font-size: 24px;
     margin-bottom: 12px;
   }
 
   #url-read-only,
-  #url-edit {
+  #url-edit,
+  #title-input {
     margin-bottom: 20px;
   }
 
@@ -397,22 +412,22 @@ export default {
     }
   }
 
-  #url-edit {
-    #url-input {
-      display: block;
-      width: 100%;
-      height: 38px;
-      line-height: 38px;
-      padding: 0 5px;
-      margin-top: 5px;
-      color: #757a80;
-      box-sizing: border-box;
-      border: solid 1px black;
-    }
+  #url-input,
+  #title-input {
+    display: block;
+    width: 100%;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 5px;
+    margin-top: 5px;
+    color: #757a80;
+    box-sizing: border-box;
+    border: solid 1px #dadada;
   }
 
   #description {
     border: solid 1px #dadada;
+    margin-top: 5px;
     margin-bottom: 20px;
 
     .menubar {
@@ -447,6 +462,7 @@ export default {
         padding: 10px;
         outline: 0;
         word-break: break-word;
+        min-height: 100px;
       }
 
       ol,
@@ -469,6 +485,12 @@ export default {
       }
 
     }
+  }
+
+  .recipe-image-read-only {
+    border-radius: 5px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
+    margin-bottom: 20px;
   }
 
   #tags {

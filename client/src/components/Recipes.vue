@@ -5,7 +5,7 @@
     <SideNav v-show="listOpen"></SideNav>
     <section id="panels">
       <ListPanel v-show="listOpen" :class="{ 'full-width' : detailsOpen === false }"></ListPanel>
-      <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }"></DetailPanel>
+      <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }" :screenModeText="screenModeText"></DetailPanel>
     </section>
 
     <div :class="{ 'active' : showMessage === true }" id="message-box">
@@ -47,13 +47,18 @@ export default {
       messageVerb: null,
     }
   },
+  computed: {
+    screenModeText() {
+      return this.listOpen ? 'Full Screen' : 'Half Screen';
+    }
+  },
   mounted() {
     EventBus.$on('CLOSE_DETAILS', () => {
       this.detailsOpen = false;
       if (this.listOpen === false) this.listOpen = true;
     });
-    EventBus.$on('CLOSE_LIST', () => {
-      this.listOpen = false;
+    EventBus.$on('TOGGLE_SCREEN', () => {
+      this.listOpen = !this.listOpen;
     });
     EventBus.$on('RECIPE_SELECTED', () => {
       this.detailsOpen = true;

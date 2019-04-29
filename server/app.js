@@ -22,7 +22,7 @@ const Recipe = require('./models/recipe');
 // Fetch all recipes
 app.get('/recipes/all', (req, res) => {
 
-  Recipe.find({user_id}, 'title creationDate', (err, recipes) => {
+  Recipe.find({user_id}, 'title creationDate image', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
   })
@@ -33,7 +33,7 @@ app.get('/recipes/all', (req, res) => {
 
 // Fetch favorites recipes
 app.get('/recipes/favorites', (req, res) => {
-  Recipe.find({user_id, favorite: true}, 'title creationDate', (err, recipes) => {
+  Recipe.find({user_id, favorite: true}, 'title creationDate image', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
   })
@@ -44,7 +44,7 @@ app.get('/recipes/favorites', (req, res) => {
 
 // Fetch untagged recipes
 app.get('/recipes/untagged', (req, res) => {
-  Recipe.find({user_id, tags: {$size: 0}}, 'title creationDate', (err, recipes) => {
+  Recipe.find({user_id, tags: {$size: 0}}, 'title creationDate image', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
   })
@@ -58,7 +58,7 @@ app.get('/recipes/tag/:tagName', (req, res) => {
   const { tagName } = req.params;
   console.log(tagName);
 
-  Recipe.find({user_id, tags: { '$elemMatch': { 'name': tagName }}}, 'title creationDate', (err, recipes) => {
+  Recipe.find({user_id, tags: { '$elemMatch': { 'name': tagName }}}, 'title creationDate image', (err, recipes) => {
       if (err) console.error(err);
       res.send(recipes);
   })
