@@ -8,6 +8,7 @@ const RecipeSchema = new Schema({
 	ingredients: [String],
 	description: String,
 	url: String,
+	image: String,
 	tags: { type : Array , 'default' : [] },
 	favorite: Boolean,
   creationDate: {type: Date, default: Date.now},

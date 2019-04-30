@@ -90,12 +90,16 @@
     </div>
 
     <div v-show="recipe.image || editMode" class="recipe-image-container">
-      <img v-if="recipe.image" class="recipe-image" :src="recipeImage">
-      <img v-else class="recipe-image" :src="recipeImage">
-      <div class="recipe-image-overlay">
-        <div class="recipe-image-overlay-text">Upload Image</div>
-        <form id="image-form">
-          <input type="file" id="image-input" accept="image/*" @change="handleImage">
+      <img v-if="!editMode" class="recipe-image" :src="recipeImage">
+      <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || blankImage">
+      <div class="recipe-image-overlay" v-show="editMode">
+        <form id="image-form" onsubmit="event.preventDefault();">
+          <div class="recipe-image-overlay-text">
+            <span class="recipe-image-overlay-text-drag">Drag Photo Here</span>
+            <span class="recipe-image-overlay-text-prefer">Or, if you prefer...</span>
+          </div>
+          <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
+          <input type="file" id="image-input" accept="image/*" @change="handleImage" ref="imageInput">
         </form>
       </div>
     </div>
@@ -150,6 +154,8 @@ export default {
       actionsVisible: false,
       editMode: true,
       confirmActive: false,
+      imagePreview: '',
+      blankImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1556591475/blank_z9ggqs.jpg',
     };
   },
   mixins: [utils],
@@ -159,7 +165,10 @@ export default {
     },
     removeEditMode() {
       this.editMode = false;
-      this.editor.setOptions({editable: false});
+      if (this.editor) {
+        this.editor.setOptions({editable: false});
+      }
+      this.imagePreview = '';
     },
     async retrieveRecipe() {
       const recipeID = this.$route.query.id;
@@ -228,13 +237,16 @@ export default {
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
     },
+    triggerUpload() {
+      this.$refs.imageInput.click();
+    },
     handleImage(e, imageObj) {
       let file;
 
       if (imageObj) {
         if (imageObj.url) {
-          setPreview(imageObj.url);
-          return console.log(imageObj.url);
+          this.imagePreview = imageObj.url;
+          return;
         } else {
           file = imageObj.image;
         }
@@ -245,13 +257,9 @@ export default {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.addEventListener('load', e => {
-        setPreview(e.target.result);
-        document.querySelector('.recipe-image-container .recipe-image').setAttribute('src', e.target.result);
+        this.imagePreview = e.target.result;
       });
 
-      function setPreview(source) {
-        document.querySelector('.recipe-image-container .recipe-image').setAttribute('src', source);
-      }
     }
   },
   computed: {
@@ -259,8 +267,8 @@ export default {
       return this.recipe.favorite ? 'Unfavorite' : 'Favorite';
     },
     recipeImage() {
-      return this.recipe.image || 'http://res.cloudinary.com/dormh2fvt/image/upload/v1527317481/placeholder_rjy55k.jpg';
-    }
+      return this.recipe.image || 'https://res.cloudinary.com/dormh2fvt/image/upload/v1556591475/blank_z9ggqs.jpg';
+    },
   },
   mounted() {
     this.editor = new Editor({
@@ -350,10 +358,7 @@ export default {
     },
     '$route': {
       handler() {
-        this.editMode = false;
-        if (this.editor) {
-          this.editor.setOptions({editable: false});
-        }
+        this.removeEditMode();
       }
     }
   }
@@ -575,15 +580,54 @@ export default {
       position: absolute;
       z-index: 1;
       width: 100%;
-      background-color: rgba(63, 63, 86, 0.63);
       top: 0;
       width: 287px;
       height: 285px;
       color: #fff;
-      border: solid 2px transparent;
+      border: dashed 4px #ddd;
+      text-align: center;
+      box-sizing: border-box;
+      background-color: rgba(0, 0, 0, 0.05);
 
       &.highlight {
         border: solid 2px #089de3;
+        background-color: rgba(48, 152, 255, 0.1);
+      }
+
+      .recipe-image-overlay-text {
+        color: #000;
+        background-color: #ffffff9e;
+        display: block;
+        width: 185px;
+        padding: 10px 0;
+        margin: 80px auto 12px auto;
+
+        .recipe-image-overlay-text-drag,
+        .recipe-image-overlay-text-prefer {
+          display: block;
+        }
+
+        .recipe-image-overlay-text-drag {
+          font-size: 20px;
+          margin-bottom: 4px;
+        }
+      }
+
+      #image-input-btn {
+        outline: 0;
+        border: none;
+        background-color: #089de3;
+        color: #fff;
+        padding: 10px 20px;
+        display: inline-block;
+
+        &:hover {
+          background-color: #23d82f;
+        }
+      }
+
+      #image-input {
+        display: none;
       }
     }
   }
