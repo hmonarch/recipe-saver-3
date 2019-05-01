@@ -156,6 +156,7 @@ export default {
       confirmActive: false,
       imagePreview: '',
       blankImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1556591475/blank_z9ggqs.jpg',
+      imageAsset: null,
     };
   },
   mixins: [utils],
@@ -244,22 +245,22 @@ export default {
       this.$refs.imageInput.click();
     },
     handleImage(e, imageObj) {
-      let file;
 
       // imageObj is the result of a drag and drop
       if (imageObj) {
         if (imageObj.url) {
           this.imagePreview = imageObj.url;
+          this.imageAsset = imageObj.url;
           return;
         } else {
-          file = imageObj.image;
+          this.imageAsset = imageObj.image;
         }
       } else {
-        file = e.target.files[0];
+        this.imageAsset = e.target.files[0];
       }
 
       const reader = new FileReader();
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(this.imageAsset);
       reader.addEventListener('load', e => {
         this.imagePreview = e.target.result;
       });
