@@ -159,6 +159,9 @@ export default {
     };
   },
   mixins: [utils],
+  beforeUpdate() {
+    if (!this.recipe._id) this.closeDetails();
+  },
   methods: {
     selectTag(tag) {
       EventBus.$emit('TAG_SELECTED', tag);
@@ -243,6 +246,7 @@ export default {
     handleImage(e, imageObj) {
       let file;
 
+      // imageObj is the result of a drag and drop
       if (imageObj) {
         if (imageObj.url) {
           this.imagePreview = imageObj.url;
@@ -294,7 +298,7 @@ export default {
 
     const dropArea = document.querySelector('.recipe-image-overlay');
     dropArea.addEventListener('dragstart', e => {
-       e.dataTransfer.setData('text/html', null);
+      e.dataTransfer.setData('text/html', null);
     });
 
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
