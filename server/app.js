@@ -109,7 +109,9 @@ app.get('/recipe/:recipeID', (req, res) => {
 // Edit recipe
 app.post('/recipe/:recipeID', (req, res) => {
   const { recipeID } = req.params;
-  const { title, url, description, tags, favorite } = req.body;
+  const { title, url, description, tags, favorite, image } = req.body;
+
+  console.log('image', image);
 
   Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
     if (err) console.error(err);
@@ -126,6 +128,11 @@ app.post('/recipe/:recipeID', (req, res) => {
     });
   });
 });
+
+app.post('/recipe-image/:recipeID', (req, res) => {
+  console.log('recipe-image', req.body.image);
+});
+
 
 
 // Delete recipe
@@ -146,7 +153,6 @@ app.delete('/recipe/:recipeID', (req, res) => {
 
 
 function sortObj(sort) {
-  console.log('sort', sort);
   switch(sort) {
     case 'oldest':
       return { creationDate: 1 };

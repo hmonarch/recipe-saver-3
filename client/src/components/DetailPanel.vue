@@ -236,7 +236,7 @@ export default {
     },
     async saveRecipe(message = 'was saved!') {
       this.saveDescription();
-      const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
+      const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe, this.imageAsset);
       this.removeEditMode();
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
