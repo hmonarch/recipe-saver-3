@@ -99,7 +99,7 @@
             <span class="recipe-image-overlay-text-prefer">Or, if you prefer...</span>
           </div>
           <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
-          <input type="file" id="image-input" accept="image/*" @change="handleImage" ref="imageInput">
+          <input type="file" id="image-input" accept="image/*" onchange="this.value = null; return false;" @input="handleImage" ref="imageInput">
         </form>
       </div>
     </div>
@@ -173,6 +173,7 @@ export default {
         this.editor.setOptions({editable: false});
       }
       this.imagePreview = '';
+      this.imageAsset = false;
     },
     async retrieveRecipe() {
       const recipeID = this.$route.query.id;
@@ -235,6 +236,8 @@ export default {
       this.removeEditMode();
     },
     async saveRecipe(message = 'was saved!') {
+      this.recipe.image = this.imageAsset;
+
       this.saveDescription();
       const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe, this.imageAsset);
       this.removeEditMode();
@@ -245,7 +248,6 @@ export default {
       this.$refs.imageInput.click();
     },
     handleImage(e, imageObj) {
-
       // imageObj is the result of a drag and drop
       if (imageObj) {
         if (imageObj.url) {

@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 const app = express();
 app.use(bodyParser.json());
@@ -111,8 +113,6 @@ app.post('/recipe/:recipeID', (req, res) => {
   const { recipeID } = req.params;
   const { title, url, description, tags, favorite, image } = req.body;
 
-  console.log('image', image);
-
   Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
     if (err) console.error(err);
     recipe.favorite = favorite;
@@ -120,6 +120,7 @@ app.post('/recipe/:recipeID', (req, res) => {
     recipe.url = url;
     recipe.description = description;
     recipe.tags = tags;
+    recipe.image = image;
 
     recipe.save((err, recipe) => {
       if (err) console.error(err);
@@ -129,8 +130,11 @@ app.post('/recipe/:recipeID', (req, res) => {
   });
 });
 
-app.post('/recipe-image/:recipeID', (req, res) => {
-  console.log('recipe-image', req.body.image);
+app.post('/recipe-image/:recipeID', upload.fields([{ name: 'image-asset' }]), (req, res) => {
+
+  console.log('recipe-image', req.files['image-asset'][0].path);
+  res.json({});
+
 });
 
 
