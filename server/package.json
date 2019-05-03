@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cloudinary": "^1.14.0",
     "multer": "^1.4.1",
     "nodemon": "^1.18.9"
   },

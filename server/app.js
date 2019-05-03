@@ -4,19 +4,30 @@ const cors = require('cors');
 const fs = require('fs');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+const cloudinary = require('cloudinary');
 
+// Express app / Middleware
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+// DB / Mongoose
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost:27017/recipe-saver-3',  { useNewUrlParser: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Mongo connection succeeded'));
 
+// Global constants
 const user_id = fs.readFileSync('../private/user_id.txt').toString();
-console.log('user_id', user_id);
+const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync('../private/cloudinary_secret.txt').toString();
+cloudinary.config({ 
+  cloud_name: 'dormh2fvt', 
+  api_key: '778489856867779', 
+  api_secret: cloudinarySecret 
+});
+const cloudinaryOptions = { gravity: 'center', height: 285, width: 285, crop: 'fill', tags: ['recipe_saver'] };
+
 
 
 const Recipe = require('./models/recipe');
@@ -109,35 +120,43 @@ app.get('/recipe/:recipeID', (req, res) => {
 
 
 // Edit recipe
-app.post('/recipe/:recipeID', (req, res) => {
+app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res) => {
   const { recipeID } = req.params;
   const { title, url, description, tags, favorite, image } = req.body;
 
+  const imageAsset = req.files['image-asset'] && req.files['image-asset'][0].path;
+
   Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
     if (err) console.error(err);
+    
     recipe.favorite = favorite;
     recipe.title = title;
     recipe.url = url;
     recipe.description = description;
     recipe.tags = tags;
-    recipe.image = image;
 
-    recipe.save((err, recipe) => {
-      if (err) console.error(err);
-      console.log('Recipe saved!');
-      res.json(recipe);
-    });
+    if (imageAsset) {
+      cloudinary.uploader.upload(imageAsset, result => {
+        fs.unlink(imageAsset, err => {});
+        console.log('Cloudinary upload:', result.secure_url);
+        recipe.image = result.url;
+        saveRecipe(recipe);
+      },
+      cloudinaryOptions);
+    } else {
+      recipe.image = image;
+      saveRecipe(recipe);
+    }
+
+    function saveRecipe(recipe) {
+      recipe.save((err, recipe) => {
+        if (err) console.error(err);
+        res.json(recipe);
+      });
+    }
+
   });
 });
-
-app.post('/recipe-image/:recipeID', upload.fields([{ name: 'image-asset' }]), (req, res) => {
-
-  console.log('recipe-image', req.files['image-asset'][0].path);
-  res.json({});
-
-});
-
-
 
 // Delete recipe
 app.delete('/recipe/:recipeID', (req, res) => {

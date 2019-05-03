@@ -10,21 +10,26 @@ export default {
   getRecipe(id) {
     return Api().get(`recipe/${id}`);
   },
-  updateRecipe(id, recipe, image) {
+  updateRecipe(id, recipe) {
 
-    // If the image was an object use a second request to handle upload
-    if (image && typeof(image) === 'object') {
-      const fd = new FormData();
-      fd.append('image-asset', image);
-
-      Api().post(`recipe-image/${id}`, fd, {
-        headers: {
-          'Content-Type': 'multipart/form-data;',
-        }
-      });
+    const fd = new FormData();
+    fd.append('favorite', recipe.favorite);
+    fd.append('title', recipe.title);
+    fd.append('url', recipe.url);
+    fd.append('description', recipe.description);
+    fd.append('tags', recipe.tags);
+    if (typeof(recipe.image) === 'object') {
+      fd.append('image-asset', recipe.image);
+    } else {
+      fd.append('image', recipe.image);
     }
 
-    Api().post(`recipe/${id}`, recipe);
+    return Api().post(`recipe/${id}`, fd, {
+      headers: {
+        'Content-Type': 'multipart/form-data;',
+      }
+    });
+
   },
   deleteRecipe(id) {
     return Api().delete(`recipe/${id}`);

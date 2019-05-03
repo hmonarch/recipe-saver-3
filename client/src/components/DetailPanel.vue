@@ -236,10 +236,10 @@ export default {
       this.removeEditMode();
     },
     async saveRecipe(message = 'was saved!') {
-      this.recipe.image = this.imageAsset;
-
+      this.recipe.image = this.imageAsset || this.recipe.image;
       this.saveDescription();
-      const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe, this.imageAsset);
+      const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
+      this.recipe.image = response.data.image;
       this.removeEditMode();
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
@@ -580,7 +580,7 @@ export default {
       margin-bottom: 20px;
       height: 285px;
       width: 285px;
-      object-fit: contain;
+      object-fit: cover;
     }
 
     .recipe-image-overlay {
