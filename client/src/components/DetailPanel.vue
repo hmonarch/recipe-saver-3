@@ -1,120 +1,127 @@
 <template>
-  <div id="detail-panel" class="panel" :class="{ 'edit-mode' : editMode === true }">
+  <div id="detail-panel" class="panel" :class="{ 'edit-mode' : editMode === true, 'saving': savingOverlayActive === true }">
 
-    <ul id="utility-bar">
-      <li>
-        <div class="utility-btn" @click="toggleFavorite()">
-          <icon v-if="recipe.favorite" name="starFilled"/>
-          <icon v-else name="star"/>
-        </div>
-        <div class="utility-tooltip">
-          <div class="utility-tooltip-text">{{ favoriteToggleText }}</div>
-        </div>
-      </li>
-      <li id="more-actions-container">
-        <div class="utility-btn" @click="actionsVisible = !actionsVisible">
-          <icon name="dots"/>
-        </div>
-        <div class="utility-tooltip" v-show="!actionsVisible">
-          <div class="utility-tooltip-text">Actions</div>
-        </div>
-        <ul v-show="actionsVisible" id="more-actions-menu" class="box">
-          <li @click="editRecipe()">Edit Recipe</li>
-          <li @click="toggleSreen()">{{ screenModeText }}</li>
-          <li @click="print()">Print</li>
-          <li v-if="!confirmActive" @click="confirmActive = true">Delete Recipe</li>
-          <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
-        </ul>  
-      </li>
-      <li @click="closeDetails()">
-        <div class="utility-btn">
-          <icon name="close"/>
-        </div>
-        <div class="utility-tooltip">
-          <div class="utility-tooltip-text">Close</div>
-        </div>
-      </li>
-    </ul>
-
-    <div v-if="!editMode" id="title-read-only">{{ recipe.title }}</div>
-    <div v-else id="title-edit">
-      <label>Title</label>
-      <input v-model="recipe.title" id="title-input" type="text">
-    </div>
-
-    <div v-if="recipe.url && !editMode" id="url-read-only">
-      <a :href="recipe.url" target="_blank">{{ recipe.url }}</a>
-    </div>
-    <div v-else-if="recipe.url === ''" style="display: none;"></div>
-    <div v-else id="url-edit">
-      <label>URL</label>
-      <input v-model="recipe.url" id="url-input" type="text">
-    </div>
-
-    <label v-show="editMode">Ingredients / Description</label>
-    <div v-show="recipe.description || editMode" id="description">
-      <editor-menu-bar :editor="editor" v-show="editMode === true">
-        <div slot-scope="{ commands, isActive }" class="menubar">
-
-          <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
-            <icon name="bold"/>
-          </button>
-          <button class="menubar__button" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
-            <icon name="italic"/>
-          </button>
-          <button class="menubar__button" :class="{ 'is-active': isActive.strike() }" @click="commands.strike">
-            <icon name="strike"/>
-          </button>
-          <button class="menubar__button" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
-            <icon name="underline"/>
-          </button>
-          <button class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
-            <icon name="ul"/>
-          </button>
-          <button class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }" @click="commands.ordered_list">
-            <icon name="ol"/>
-          </button>
-          <button class="menubar__button" @click="commands.horizontal_rule">
-            <icon name="hr"/>
-          </button>
-          <button class="menubar__button" @click="commands.undo">
-            <icon name="undo"/>
-          </button>
-          <button class="menubar__button" @click="commands.redo">
-            <icon name="redo"/>
-          </button>
-
-        </div>
-      </editor-menu-bar>
-      <editor-content :editor="editor" id="editor" v-model="recipe.description"></editor-content>
-    </div>
-
-    <div v-show="recipe.image || editMode" class="recipe-image-container">
-      <img v-if="!editMode" class="recipe-image" :src="recipeImage">
-      <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || recipeImage || blankImage">
-      <div class="recipe-image-overlay" v-show="editMode">
-        <form id="image-form" onsubmit="event.preventDefault();">
-          <div class="recipe-image-overlay-text">
-            <span class="recipe-image-overlay-text-drag">Drag Photo Here</span>
-            <span class="recipe-image-overlay-text-prefer">Or, if you prefer...</span>
+    <div class="detail-panel-innner">
+      <ul id="utility-bar">
+        <li>
+          <div class="utility-btn" @click="toggleFavorite()">
+            <icon v-if="recipe.favorite" name="starFilled"/>
+            <icon v-else name="star"/>
           </div>
-          <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
-          <input type="file" id="image-input" accept="image/*" onchange="this.value = null; return false;" @input="handleImage" ref="imageInput">
-        </form>
+          <div class="utility-tooltip">
+            <div class="utility-tooltip-text">{{ favoriteToggleText }}</div>
+          </div>
+        </li>
+        <li id="more-actions-container">
+          <div class="utility-btn" @click="actionsVisible = !actionsVisible">
+            <icon name="dots"/>
+          </div>
+          <div class="utility-tooltip" v-show="!actionsVisible">
+            <div class="utility-tooltip-text">Actions</div>
+          </div>
+          <ul v-show="actionsVisible" id="more-actions-menu" class="box">
+            <li @click="editRecipe()">Edit Recipe</li>
+            <li @click="toggleSreen()">{{ screenModeText }}</li>
+            <li @click="print()">Print</li>
+            <li v-if="!confirmActive" @click="confirmActive = true">Delete Recipe</li>
+            <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
+          </ul>  
+        </li>
+        <li @click="closeDetails()">
+          <div class="utility-btn">
+            <icon name="close"/>
+          </div>
+          <div class="utility-tooltip">
+            <div class="utility-tooltip-text">Close</div>
+          </div>
+        </li>
+      </ul>
+
+      <div v-if="!editMode" id="title-read-only">{{ recipe.title }}</div>
+      <div v-else id="title-edit">
+        <label>Title</label>
+        <input v-model="recipe.title" id="title-input" type="text">
+      </div>
+
+      <div v-if="recipe.url && !editMode" id="url-read-only">
+        <a :href="recipe.url" target="_blank">{{ recipe.url }}</a>
+      </div>
+      <div v-else-if="recipe.url === ''" style="display: none;"></div>
+      <div v-else id="url-edit">
+        <label>URL</label>
+        <input v-model="recipe.url" id="url-input" type="text">
+      </div>
+
+      <label v-show="editMode">Ingredients / Description</label>
+      <div v-show="recipe.description || editMode" id="description">
+        <editor-menu-bar :editor="editor" v-show="editMode === true">
+          <div slot-scope="{ commands, isActive }" class="menubar">
+
+            <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
+              <icon name="bold"/>
+            </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
+              <icon name="italic"/>
+            </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.strike() }" @click="commands.strike">
+              <icon name="strike"/>
+            </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
+              <icon name="underline"/>
+            </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
+              <icon name="ul"/>
+            </button>
+            <button class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }" @click="commands.ordered_list">
+              <icon name="ol"/>
+            </button>
+            <button class="menubar__button" @click="commands.horizontal_rule">
+              <icon name="hr"/>
+            </button>
+            <button class="menubar__button" @click="commands.undo">
+              <icon name="undo"/>
+            </button>
+            <button class="menubar__button" @click="commands.redo">
+              <icon name="redo"/>
+            </button>
+
+          </div>
+        </editor-menu-bar>
+        <editor-content :editor="editor" id="editor" v-model="recipe.description"></editor-content>
+      </div>
+
+      <div v-show="recipe.image || editMode" class="recipe-image-container">
+        <img v-if="!editMode" class="recipe-image" :src="recipeImage">
+        <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || recipeImage || blankImage">
+        <div class="recipe-image-overlay" v-show="editMode">
+          <form id="image-form" onsubmit="event.preventDefault();">
+            <div class="recipe-image-overlay-text">
+              <span class="recipe-image-overlay-text-drag">Drag Photo Here</span>
+              <span class="recipe-image-overlay-text-prefer">Or, if you prefer...</span>
+            </div>
+            <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
+            <input type="file" id="image-input" accept="image/*" onchange="this.value = null; return false;" @input="handleImage" ref="imageInput">
+          </form>
+        </div>
+      </div>
+
+      <ul id="tags">
+        <li class="tag" v-for="tag in recipe.tags" :key="tag.id" @click="selectTag(tag)">
+          <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
+            <span class="tag-name">{{ tag.name }}</span>
+          </router-link>
+        </li>
+      </ul>
+
+      <div v-show="editMode" class="save-cancel">
+        <div @click="cancel()" class="cancel">Cancel</div>
+        <div @click="saveRecipe()" class="save-recipe btn">Save</div>
       </div>
     </div>
 
-    <ul id="tags">
-      <li class="tag" v-for="tag in recipe.tags" :key="tag.id" @click="selectTag(tag)">
-        <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
-          <span class="tag-name">{{ tag.name }}</span>
-        </router-link>
-      </li>
-    </ul>
-
-    <div v-show="editMode" class="save-cancel">
-      <div @click="cancel()" class="cancel">Cancel</div>
-      <div @click="saveRecipe()" class="save-recipe btn">Save</div>
+    <div id="saving-overlay">
+      <p>Saving recipe</p>
+      <img src="../assets/spinner.gif">
     </div>
 
   </div>
@@ -157,6 +164,7 @@ export default {
       imagePreview: '',
       blankImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1556591475/blank_z9ggqs.jpg',
       imageAsset: null,
+      savingOverlayActive: false,
     };
   },
   mixins: [utils],
@@ -236,11 +244,13 @@ export default {
       this.removeEditMode();
     },
     async saveRecipe(message = 'was saved!') {
+      this.savingOverlayActive = true;
       this.recipe.image = this.imageAsset || this.recipe.image;
       this.saveDescription();
       const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
       this.recipe.image = response.data.image;
       this.removeEditMode();
+      this.savingOverlayActive = false;
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
     },
@@ -388,6 +398,16 @@ export default {
 
   &.edit-mode {
     border: solid 2px #0093ff;
+  }
+
+  &.saving {
+    .detail-panel-innner {
+      display: none;
+    }
+
+    #saving-overlay {
+      display: block;
+    }
   }
 
 
@@ -678,6 +698,24 @@ export default {
     }
   }
   
+
+  #saving-overlay {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    display: none;
+
+    p {
+      margin-bottom: 14px;
+      font-size: 18px;
+    }
+
+    img {
+      opacity: .45;
+    }
+  }
 }
 
 </style>

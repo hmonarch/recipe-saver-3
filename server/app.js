@@ -151,7 +151,6 @@ app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res
     function saveRecipe(recipe) {
       recipe.save((err, recipe) => {
         if (err) console.error(err);
-        console.log(recipe);
         res.json(recipe);
       });
     }
