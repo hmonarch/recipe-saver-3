@@ -133,7 +133,7 @@ app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res
     recipe.title = title;
     recipe.url = url;
     recipe.description = description;
-    recipe.tags = tags;
+    recipe.tags = JSON.parse(tags);
 
     if (imageAsset) {
       cloudinary.uploader.upload(imageAsset, result => {
@@ -151,6 +151,7 @@ app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res
     function saveRecipe(recipe) {
       recipe.save((err, recipe) => {
         if (err) console.error(err);
+        console.log(recipe);
         res.json(recipe);
       });
     }

@@ -91,7 +91,7 @@
 
     <div v-show="recipe.image || editMode" class="recipe-image-container">
       <img v-if="!editMode" class="recipe-image" :src="recipeImage">
-      <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || blankImage">
+      <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || recipeImage || blankImage">
       <div class="recipe-image-overlay" v-show="editMode">
         <form id="image-form" onsubmit="event.preventDefault();">
           <div class="recipe-image-overlay-text">

@@ -17,7 +17,7 @@ export default {
     fd.append('title', recipe.title);
     fd.append('url', recipe.url);
     fd.append('description', recipe.description);
-    fd.append('tags', recipe.tags);
+    fd.append('tags', JSON.stringify(recipe.tags));
     if (typeof(recipe.image) === 'object') {
       fd.append('image-asset', recipe.image);
     } else {
