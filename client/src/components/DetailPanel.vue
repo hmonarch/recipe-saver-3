@@ -106,10 +106,19 @@
       </div>
 
       <ul id="tags">
-        <li class="tag" v-for="tag in recipe.tags" :key="tag.id" @click="selectTag(tag)">
-          <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
+        <li v-if="editMode" class="tags-icon"><icon name="tags"/></li>
+        <li v-if="editMode" id="new-tag">
+          <input type="text" id="new-tag-input">
+        </li>
+
+        <li class="tag" v-for="tag in recipe.tags" :key="tag.name" @click="selectTag(tag)">
+          <router-link v-if="!editMode" :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
             <span class="tag-name">{{ tag.name }}</span>
           </router-link>
+          <div v-else class="tag-editable" :style="backgroundColor(tag.color)">
+            <span class="tag-name">{{ tag.name }}</span>
+            <span @click="deleteTag($event, tag.name)" class="tag-delete"><icon name="close"/></span>
+          </div>
         </li>
       </ul>
 
@@ -165,6 +174,7 @@ export default {
       blankImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1556591475/blank_z9ggqs.jpg',
       imageAsset: null,
       savingOverlayActive: false,
+      tagsToRemove: [],
     };
   },
   mixins: [utils],
@@ -173,7 +183,12 @@ export default {
   },
   methods: {
     selectTag(tag) {
+      if (this.editMode) return;
       EventBus.$emit('TAG_SELECTED', tag);
+    },
+    deleteTag(e, tagName) {
+      e.target.closest('.tag').classList.add('to-remove');
+      this.tagsToRemove.push(tagName);
     },
     removeEditMode() {
       this.editMode = false;
@@ -182,6 +197,8 @@ export default {
       }
       this.imagePreview = '';
       this.imageAsset = false;
+      this.tagsToRemove = [];
+      [...document.querySelectorAll('.tag.to-remove')].forEach(tag => tag.classList.remove('to-remove'))
     },
     async retrieveRecipe() {
       const recipeID = this.$route.query.id;
@@ -243,12 +260,33 @@ export default {
     cancel() {
       this.removeEditMode();
     },
+    artificiallyUpdateTagCount() {
+      const tags = [...document.querySelectorAll('#tag-list .tag')].forEach(tag => {
+        const tagName = tag.querySelector('.tag-name').textContent.trim();
+        const tagCount = tag.querySelector('.tag-count');
+        if (this.tagsToRemove.indexOf(tagName) > -1) {
+          let currentTagCount = Number(tagCount.getAttribute('data-tag-count'));
+          const newTagCount = currentTagCount - 1;
+          if (newTagCount < 1) {
+            tag.remove();
+          } else {
+            tagCount.setAttribute('data-tag-count', newTagCount);
+            tagCount.textContent = `(${newTagCount})`;
+          }
+        } 
+      });
+      this.tagsToRemove = [];
+    },
     async saveRecipe(message = 'was saved!') {
       this.savingOverlayActive = true;
       this.recipe.image = this.imageAsset || this.recipe.image;
       this.saveDescription();
+      this.recipe.tags = this.recipe.tags.filter(tag => {
+        return this.tagsToRemove.indexOf(tag.name) === -1;
+      });
       const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
       this.recipe.image = response.data.image;
+      this.artificiallyUpdateTagCount();
       this.removeEditMode();
       this.savingOverlayActive = false;
       EventBus.$emit('RECIPE_SAVED');
@@ -398,6 +436,19 @@ export default {
 
   &.edit-mode {
     border: solid 2px #0093ff;
+
+    #tags {
+      li.tags-icon {
+        display: inline;
+
+        svg {
+          height: 28px;
+          width: 30px;
+          fill: #838080;
+        }
+      }
+      
+    }
   }
 
   &.saving {
@@ -662,11 +713,53 @@ export default {
   #tags {
     margin-bottom: 20px;
 
+    &.editable {
+      border: solid 1px #dadada;
+      padding-top: 7px;
+      box-shadow: inset 0 2px #e0e6e8;
+      padding-left: 3px;
+
+      li.tags-icon {
+        display: inline;
+
+        svg {
+          height: 28px;
+          width: 30px;
+          fill: #838080;
+        }
+      }
+    }
+
     li {
       display: inline-block;
       margin-right: 8px;
+
+      &.tags-icon {
+        display: none;
+      }
+
+      &.to-remove {
+        display: none;
+      }
+    }
+
+    li#new-tag {
+      display: inline-block;
+      margin-right: 8px;
+
+      #new-tag-input {
+        width: 75px;
+        height: 23px;
+        line-height: 23px;
+        outline: 0;
+        padding-left: 8px;
+        border: solid 1px #dadada;
+        margin-bottom: 7px;
+      }
     }
   }
+
+
 
   .save-cancel {
     display: flex;

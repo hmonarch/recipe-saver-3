@@ -42,7 +42,7 @@
             <li class="tag" v-for="tag in sortedTags" :key="tag.id" @click="selectTag(tag)">
               <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
                 <span class="tag-name">{{ tag.name }}</span>
-                <span class="tag-count">({{ tag.count }})</span>
+                <span class="tag-count" :data-tag-count="tag.count">({{ tag.count }})</span>
               </router-link>
             </li>
           </ul>

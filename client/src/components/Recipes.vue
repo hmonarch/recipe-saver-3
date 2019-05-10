@@ -176,7 +176,8 @@ body {
 }
 
 .tag {
-  a {
+  a,
+  .tag-editable {
     border-radius: 14px;
     font-size: 13px;
     padding: 8px;
@@ -195,6 +196,42 @@ body {
 
     .tag-count {
       margin-left: 4px;
+    }
+  }
+
+  .tag-editable {
+    cursor: default;
+    position: relative;
+    padding-right: 22px;
+
+    &:hover {
+      .tag-name {
+        text-decoration: none;
+      }
+    }
+
+    .tag-delete {
+      position: absolute;
+      top: 8px;
+      cursor: pointer;
+
+      &:hover::after {
+        content: '';
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        position: relative;
+        top: -15px;
+        border-radius: 51%;
+        left: 3px;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+
+      svg {
+        padding-left: 4px;
+        height: 12px;
+        width: 12px;
+      }
     }
   }
 }

@@ -26,7 +26,7 @@ cloudinary.config({
   api_key: '778489856867779', 
   api_secret: cloudinarySecret 
 });
-const cloudinaryOptions = { gravity: 'center', height: 285, width: 285, crop: 'fill', tags: ['recipe_saver'] };
+const cloudinaryOptions = { quality: 60, gravity: 'center', height: 285, width: 285, crop: 'fill', tags: ['recipe_saver'] };
 
 
 
