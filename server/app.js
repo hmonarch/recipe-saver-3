@@ -35,7 +35,7 @@ const Recipe = require('./models/recipe');
 // Fetch all recipes
 app.get('/recipes/all', (req, res) => {
 
-  Recipe.find({user_id}, 'title creationDate image', (err, recipes) => {
+  Recipe.find({user_id}, 'title creationDate image tags', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
   })
@@ -82,6 +82,9 @@ app.get('/recipes/tag/:tagName', (req, res) => {
 
 // Fetch tags
 app.get('/tags', (req, res) => {
+
+  const { search } = req.query;
+
   Recipe.find({user_id}, (err, recipes) => {
     if (err) console.error(err);
 
@@ -103,6 +106,15 @@ app.get('/tags', (req, res) => {
         }
       });
     });
+
+    // if (search) {
+    //   tags.filter(tag => {
+    //     console.log('tag', tag);
+    //     tag.name.indexOf(search) > -1;
+    //   });
+
+    //   console.log(tags);
+    // }
 
     res.send(tags);
   });
