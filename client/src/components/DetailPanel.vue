@@ -111,11 +111,17 @@
         <li v-if="editMode" id="new-tag">
           <input type="text" id="new-tag-input" v-model="tagQuery" @keyup="debounceInput($event)" autocomplete="off">
           <ul v-if="showAutocompleteList" id="tag-autocomplete-list">
-            <li v-if="!autocompleteTags.length">{{ tagQuery }}</li>
-            <li v-for="tag in autocompleteTags" :key="tag.name" class="tag">
-              <div class="tag-suggestion" :style="backgroundColor(tag.color)" @click="selectAutocompleteTag(tag.name)">
-                <span class="tag-name">{{ tag.name }}</span>
-              </div>
+            <li class="add-tag-row" @click="addNewTag()">
+              <span>Add Tag: </span><b>{{ tagQuery }}</b>
+            </li>
+            <li id="tag-suggestions">
+              <ul>
+                <li v-for="tag in autocompleteTags" :key="tag.name" class="tag">
+                  <div class="tag-suggestion" :style="backgroundColor(tag.color)" @click="selectAutocompleteTag(tag.name)">
+                    <span class="tag-name">{{ tag.name }}</span>
+                  </div>
+                </li>
+              </ul>
             </li>
           </ul>
         </li>
@@ -338,6 +344,9 @@ export default {
       this.showAutocompleteList = false;
       this.tagQuery = '';
       document.querySelector('#new-tag-input').focus();
+    },
+    addNewTag() {
+      console.log('adding');
     },
     removeTagStatus() {
       this.recipe.tags.forEach(tag => {
