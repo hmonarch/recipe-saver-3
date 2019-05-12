@@ -54,8 +54,8 @@ export default {
   },
   mounted() {
     EventBus.$on('CLOSE_DETAILS', () => {
-      this.detailsOpen = false;
-      if (this.listOpen === false) this.listOpen = true;
+      // this.detailsOpen = false;
+      // if (this.listOpen === false) this.listOpen = true;
     });
     EventBus.$on('TOGGLE_SCREEN', () => {
       this.listOpen = !this.listOpen;

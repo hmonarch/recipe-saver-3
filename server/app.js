@@ -35,7 +35,7 @@ const Recipe = require('./models/recipe');
 // Fetch all recipes
 app.get('/recipes/all', (req, res) => {
 
-  Recipe.find({user_id}, 'title creationDate image tags', (err, recipes) => {
+  Recipe.find({user_id}, 'title creationDate image', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
   })

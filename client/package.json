@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "core-js": "^2.6.5",
+    "debounce": "^1.2.0",
     "simplebar": "^4.0.0-alpha.3",
     "tiptap": "^1.16.0",
     "tiptap-extensions": "^1.16.0",

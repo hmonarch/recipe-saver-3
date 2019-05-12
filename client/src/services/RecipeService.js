@@ -1,8 +1,8 @@
 import Api from '@/services/Api';
 
 export default {
-  getTags() {
-    return Api().get('tags');
+  getTags(query) {
+    return Api().get(`tags?search=${query ? query : null}`);
   },
   getRecipes(sort) {
     return Api().get(`${window.location.pathname}?sort=${sort}`);

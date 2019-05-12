@@ -108,7 +108,10 @@
       <ul id="tags">
         <li v-if="editMode" class="tags-icon"><icon name="tags"/></li>
         <li v-if="editMode" id="new-tag">
-          <input type="text" id="new-tag-input">
+          <input type="text" id="new-tag-input" @keyup="debounceInput($event)">
+          <ul id="tag-autocomplete-list">
+            <li v-for="tag in autocompleteTags" :key="tag.name">{{ tag }}</li>
+          </ul>
         </li>
 
         <li class="tag" v-for="tag in recipe.tags" :key="tag.name" @click="selectTag(tag)">
@@ -141,6 +144,7 @@ import EventBus from '@/EventBus';
 import utils from '@/mixins/utils';
 import RecipeService from '@/services/RecipeService';
 import Icon from '@/components/Icons';
+import debounce from 'debounce';
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap';
 import {
   HardBreak,
@@ -175,6 +179,7 @@ export default {
       imageAsset: null,
       savingOverlayActive: false,
       tagsToRemove: [],
+      autocompleteTags: []
     };
   },
   mixins: [utils],
@@ -291,6 +296,16 @@ export default {
       this.savingOverlayActive = false;
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
+    },
+    debounceInput: debounce(function (e) {
+      this.fetchTags(e);
+    }, 300),
+    async fetchTags(e) {
+      const query = e.target.value.trim();
+      if (!query) return;
+      const response = await RecipeService.getTags(query);
+      this.autocompleteTags = response.data;
+      console.log('autocompleteTags', this.autocompleteTags);
     },
     triggerUpload() {
       this.$refs.imageInput.click();
@@ -421,395 +436,6 @@ export default {
 </script>
 
 <style lang="scss">
-#detail-panel {
-  width: 40%;
-  max-width: 700px;
-  min-width: 305px;
-  margin-right: auto;
-  padding: 20px;
-
-  &.full-width {
-    max-width: 100%;
-    width: 900px;
-    margin: 0 auto;
-  }
-
-  &.edit-mode {
-    border: solid 2px #0093ff;
-
-    #tags {
-      li.tags-icon {
-        display: inline;
-
-        svg {
-          height: 28px;
-          width: 30px;
-          fill: #838080;
-        }
-      }
-      
-    }
-  }
-
-  &.saving {
-    .detail-panel-innner {
-      display: none;
-    }
-
-    #saving-overlay {
-      display: block;
-    }
-  }
-
-
-  #utility-bar {
-    border-bottom: solid 1px #dadada;
-    padding-bottom: 6px;
-    margin-bottom: 20px;
-
-    > li {
-      display: inline-block;
-      height: 25px;
-      width: 25px;
-      position: relative;
-
-      .utility-btn:hover {
-        & + .utility-tooltip {
-          display: inline-block;
-        }
-      }
-
-      .utility-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-
-        svg {
-          height: 22px;
-          width: 22px;
-
-          path {
-            fill: #4d4d4d;
-          }
-        }
-      }
-
-      &:last-child {
-        float: right;
-
-        .utility-tooltip {
-          right: -4px;
-          background-position-x: 25px;
-        }
-      }
-    }
-  }
-
-  #more-actions-menu {
-    z-index: 2;
-    position: absolute;
-    text-align: left;
-    width: 144px;
-    left: 2px;
-
-    li {
-      padding: 3px 15px;
-      cursor: pointer;
-      text-transform: capitalize;
-      height: 20px;
-      line-height: 20px;
-
-      &:last-child {
-        margin-top: 10px;
-        border-top: solid 1px #dadada;
-
-        &.confirm-delete {
-          background-color: red;
-          color: #fff;
-        }
-      }
-
-      &:hover {
-        background-color: #008dff;
-        color: white;
-      }
-    }
-  }
-
-  label {
-    display: block;
-    letter-spacing: 0.4px;
-    font-size: 14px;
-    color: #757a80;
-  }
-
-  #title-read-only {
-    line-height: 30px;
-    font-size: 24px;
-    margin-bottom: 12px;
-  }
-
-  #url-read-only,
-  #url-edit,
-  #title-input {
-    margin-bottom: 20px;
-  }
-
-  #url-read-only {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
-    a {
-      color: #14aaf5;
-      font-size: 14px;
-    }
-  }
-
-  #url-input,
-  #title-input {
-    display: block;
-    width: 100%;
-    height: 38px;
-    line-height: 38px;
-    padding: 0 5px;
-    margin-top: 5px;
-    color: #757a80;
-    box-sizing: border-box;
-    border: solid 1px #dadada;
-  }
-
-  #description {
-    border: solid 1px #dadada;
-    margin-top: 5px;
-    margin-bottom: 20px;
-
-    .menubar {
-      padding: 10px 0 5px ;
-      border-bottom: solid 1px #dadada;
-      margin-bottom: 5px;
-
-      .menubar__button {
-        font-weight: 700;
-        display: -webkit-inline-box;
-        display: -ms-inline-flexbox;
-        display: inline-flex;
-        background: rgba(0,0,0,0);
-        border: 0;
-        color: #000;
-        padding: .2rem .5rem;
-        margin-right: .2rem;
-        border-radius: 3px;
-        cursor: pointer;
-
-        &.is-active {
-          background-color: rgba(0,0,0,.1);
-        }
-      }
-    }
-
-    #editor {
-      font-size: 14.5px;
-      line-height: 20px;
-
-      > div {
-        padding: 10px;
-        outline: 0;
-        word-break: break-word;
-        min-height: 100px;
-      }
-
-      ol,
-      ul {
-        padding-left: 40px;
-        margin: 15px 0;
-        list-style-type: initial;
-      }
-
-      ol {
-        list-style-type: decimal;
-      }
-
-      strong {
-        font-weight: 600;
-      }
-
-      em {
-        font-style: italic;
-      }
-
-    }
-  }
-
-  .recipe-image-container {
-    position: relative;
-
-    .recipe-image {
-      border-radius: 5px;
-      box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
-      margin-bottom: 20px;
-      height: 285px;
-      width: 285px;
-      object-fit: cover;
-    }
-
-    .recipe-image-overlay {
-      position: absolute;
-      z-index: 1;
-      width: 100%;
-      top: 0;
-      width: 287px;
-      height: 285px;
-      color: #fff;
-      border: dashed 4px #ddd;
-      text-align: center;
-      box-sizing: border-box;
-      background-color: rgba(0, 0, 0, 0.05);
-
-      &.highlight {
-        border: solid 2px #089de3;
-        background-color: rgba(48, 152, 255, 0.1);
-      }
-
-      .recipe-image-overlay-text {
-        color: #000;
-        background-color: #ffffff9e;
-        display: block;
-        width: 185px;
-        padding: 10px 0;
-        margin: 80px auto 12px auto;
-
-        .recipe-image-overlay-text-drag,
-        .recipe-image-overlay-text-prefer {
-          display: block;
-        }
-
-        .recipe-image-overlay-text-drag {
-          font-size: 20px;
-          margin-bottom: 4px;
-        }
-      }
-
-      #image-input-btn {
-        outline: 0;
-        border: none;
-        background-color: #089de3;
-        color: #fff;
-        padding: 10px 20px;
-        display: inline-block;
-
-        &:hover {
-          background-color: #23d82f;
-        }
-      }
-
-      #image-input {
-        display: none;
-      }
-    }
-  }
-
-  #tags {
-    margin-bottom: 20px;
-
-    &.editable {
-      border: solid 1px #dadada;
-      padding-top: 7px;
-      box-shadow: inset 0 2px #e0e6e8;
-      padding-left: 3px;
-
-      li.tags-icon {
-        display: inline;
-
-        svg {
-          height: 28px;
-          width: 30px;
-          fill: #838080;
-        }
-      }
-    }
-
-    li {
-      display: inline-block;
-      margin-right: 8px;
-
-      &.tags-icon {
-        display: none;
-      }
-
-      &.to-remove {
-        display: none;
-      }
-    }
-
-    li#new-tag {
-      display: inline-block;
-      margin-right: 8px;
-
-      #new-tag-input {
-        width: 75px;
-        height: 23px;
-        line-height: 23px;
-        outline: 0;
-        padding-left: 8px;
-        border: solid 1px #dadada;
-        margin-bottom: 7px;
-      }
-    }
-  }
-
-
-
-  .save-cancel {
-    display: flex;
-    justify-content: space-between;
-
-    .save-recipe,
-    .cancel {
-      cursor: pointer;
-      height: 42px;
-      line-height: 42px;
-      width: 140px;
-      box-sizing: border-box;
-      padding: 0 20px;
-    }
-
-    .save-recipe {
-      color: #fff;
-    }
-
-    .cancel {
-      border: solid 1px #c1c1c1;
-      color: #c1c1c1;
-      text-align: center;
-      
-      &:hover {
-        background-color: #c1c1c1;
-        color: #fff;
-      }
-    }
-  }
-  
-
-  #saving-overlay {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%,-50%);
-    text-align: center;
-    display: none;
-
-    p {
-      margin-bottom: 14px;
-      font-size: 18px;
-    }
-
-    img {
-      opacity: .45;
-    }
-  }
-}
-
+  @import '@/styles/_detail-panel.scss';
 </style>
 
