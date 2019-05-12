@@ -107,14 +107,14 @@ app.get('/tags', (req, res) => {
       });
     });
 
-    // if (search) {
-    //   tags.filter(tag => {
-    //     console.log('tag', tag);
-    //     tag.name.indexOf(search) > -1;
-    //   });
+    if (search) {
+      tags.filter(tag => {
+        console.log('tag', tag);
+        tag.name.indexOf(search) > -1;
+      });
 
-    //   console.log(tags);
-    // }
+      console.log(tags);
+    }
 
     res.send(tags);
   });
