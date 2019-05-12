@@ -108,9 +108,14 @@
       <ul id="tags">
         <li v-if="editMode" class="tags-icon"><icon name="tags"/></li>
         <li v-if="editMode" id="new-tag">
-          <input type="text" id="new-tag-input" @keyup="debounceInput($event)">
-          <ul id="tag-autocomplete-list">
-            <li v-for="tag in autocompleteTags" :key="tag.name">{{ tag }}</li>
+          <input type="text" id="new-tag-input" @keyup="debounceInput($event)" autocomplete="off">
+          <ul v-if="showAutocompleteList" id="tag-autocomplete-list">
+            <li v-if="!autocompleteTags.length">No tags found</li>
+            <li v-for="tag in autocompleteTags" :key="tag.name" class="tag">
+              <div class="tag-suggestion" :style="backgroundColor(tag.color)" @click="selectAutocompleteTag(tag.name)">
+                <span class="tag-name">{{ tag.name }}</span>
+              </div>
+            </li>
           </ul>
         </li>
 
@@ -179,7 +184,9 @@ export default {
       imageAsset: null,
       savingOverlayActive: false,
       tagsToRemove: [],
-      autocompleteTags: []
+      tagsToAdd: [],
+      autocompleteTags: [],
+      showAutocompleteList: false,
     };
   },
   mixins: [utils],
@@ -301,11 +308,20 @@ export default {
       this.fetchTags(e);
     }, 300),
     async fetchTags(e) {
-      const query = e.target.value.trim();
+      this.showAutocompleteList = false;
+      const query = e.target.value.toLowerCase().trim();
       if (!query) return;
       const response = await RecipeService.getTags(query);
       this.autocompleteTags = response.data;
-      console.log('autocompleteTags', this.autocompleteTags);
+      this.showAutocompleteList = true;
+    },
+    selectAutocompleteTag(tagName) {
+      const selectedTag = this.autocompleteTags.find(tag => tag.name === tagName);
+      this.tagsToAdd.push(selectedTag);
+
+      // TODO: Just add to recipe.tags???
+      console.log('tagsToAdd', this.tagsToAdd);
+      this.recipe.tags.push(selectedTag);
     },
     triggerUpload() {
       this.$refs.imageInput.click();
@@ -413,6 +429,12 @@ export default {
       const isMoreActions = e.target.matches('.confirm-delete');
       if (!isMoreActions) {
         this.confirmActive = false;
+      }
+
+      // Tag autocomplete click off
+      const isAutocompleteItem = e.target.closest('#tag-autocomplete-list') || e.target.matches('#tag-autocomplete-list');
+      if (!isAutocompleteItem) {
+        this.showAutocompleteList = false;
       }
     });
   },

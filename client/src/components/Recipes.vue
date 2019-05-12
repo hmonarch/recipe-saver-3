@@ -177,7 +177,9 @@ body {
 
 .tag {
   a,
-  .tag-editable {
+  .tag-editable,
+  .tag-suggestion
+   {
     border-radius: 14px;
     font-size: 13px;
     padding: 8px;

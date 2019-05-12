@@ -88,7 +88,7 @@ app.get('/tags', (req, res) => {
   Recipe.find({user_id}, (err, recipes) => {
     if (err) console.error(err);
 
-    const tags = [];
+    let tags = [];
     const tagTracker = [];
 
     recipes.forEach(recipe => {
@@ -107,13 +107,10 @@ app.get('/tags', (req, res) => {
       });
     });
 
-    if (search) {
-      tags.filter(tag => {
-        console.log('tag', tag);
-        tag.name.indexOf(search) > -1;
+    if (search && search !== 'null') { // Note that null will be a string
+      tags = tags.filter(tag => {
+        return tag.name.indexOf(search) > -1;
       });
-
-      console.log(tags);
     }
 
     res.send(tags);
