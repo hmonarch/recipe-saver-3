@@ -183,6 +183,7 @@ body {
     border-radius: 14px;
     font-size: 13px;
     padding: 8px;
+    margin-right: 8px;
     display: inline-block;
     color: white;
     margin-bottom: 6px;

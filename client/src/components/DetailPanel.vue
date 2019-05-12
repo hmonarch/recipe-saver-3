@@ -106,11 +106,12 @@
       </div>
 
       <ul id="tags">
+        <!-- Autocomplete List -->
         <li v-if="editMode" class="tags-icon"><icon name="tags"/></li>
         <li v-if="editMode" id="new-tag">
-          <input type="text" id="new-tag-input" @keyup="debounceInput($event)" autocomplete="off">
+          <input type="text" id="new-tag-input" v-model="tagQuery" @keyup="debounceInput($event)" autocomplete="off">
           <ul v-if="showAutocompleteList" id="tag-autocomplete-list">
-            <li v-if="!autocompleteTags.length">No tags found</li>
+            <li v-if="!autocompleteTags.length">{{ tagQuery }}</li>
             <li v-for="tag in autocompleteTags" :key="tag.name" class="tag">
               <div class="tag-suggestion" :style="backgroundColor(tag.color)" @click="selectAutocompleteTag(tag.name)">
                 <span class="tag-name">{{ tag.name }}</span>
@@ -119,11 +120,12 @@
           </ul>
         </li>
 
+        <!-- Normal Tag List -->
         <li class="tag" v-for="tag in recipe.tags" :key="tag.name" @click="selectTag(tag)">
           <router-link v-if="!editMode" :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
             <span class="tag-name">{{ tag.name }}</span>
           </router-link>
-          <div v-else class="tag-editable" :style="backgroundColor(tag.color)">
+          <div v-else-if="tag.status !== 'toDelete'" class="tag-editable" :style="backgroundColor(tag.color)">
             <span class="tag-name">{{ tag.name }}</span>
             <span @click="deleteTag($event, tag.name)" class="tag-delete"><icon name="close"/></span>
           </div>
@@ -145,6 +147,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import EventBus from '@/EventBus';
 import utils from '@/mixins/utils';
 import RecipeService from '@/services/RecipeService';
@@ -183,8 +186,8 @@ export default {
       blankImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1556591475/blank_z9ggqs.jpg',
       imageAsset: null,
       savingOverlayActive: false,
+      tagQuery: '',
       tagsToRemove: [],
-      tagsToAdd: [],
       autocompleteTags: [],
       showAutocompleteList: false,
     };
@@ -199,8 +202,13 @@ export default {
       EventBus.$emit('TAG_SELECTED', tag);
     },
     deleteTag(e, tagName) {
-      e.target.closest('.tag').classList.add('to-remove');
-      this.tagsToRemove.push(tagName);
+      // e.target.closest('.tag').classList.add('to-remove');
+      // this.tagsToRemove.push(tagName);
+      const tagToDelete = this.recipe.tags.find(tag => tag.name === tagName);
+      if (!tagToDelete.status) {
+        Vue.set(tagToDelete, 'original', true);
+      }
+      Vue.set(tagToDelete, 'status', 'toDelete');
     },
     removeEditMode() {
       this.editMode = false;
@@ -209,8 +217,8 @@ export default {
       }
       this.imagePreview = '';
       this.imageAsset = false;
-      this.tagsToRemove = [];
-      [...document.querySelectorAll('.tag.to-remove')].forEach(tag => tag.classList.remove('to-remove'))
+      this.tagQuery = '';
+      this.resetTags();
     },
     async retrieveRecipe() {
       const recipeID = this.$route.query.id;
@@ -294,8 +302,9 @@ export default {
       this.recipe.image = this.imageAsset || this.recipe.image;
       this.saveDescription();
       this.recipe.tags = this.recipe.tags.filter(tag => {
-        return this.tagsToRemove.indexOf(tag.name) === -1;
+        return tag.status !== 'toDelete';
       });
+      this.removeTagStatus();
       const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
       this.recipe.image = response.data.image;
       this.artificiallyUpdateTagCount();
@@ -312,16 +321,37 @@ export default {
       const query = e.target.value.toLowerCase().trim();
       if (!query) return;
       const response = await RecipeService.getTags(query);
-      this.autocompleteTags = response.data;
+
+      let exstingTags = this.recipe.tags.filter(tag => {
+        return !tag.status || tag.status === 'toDelete';
+      });
+      exstingTags = this.recipe.tags.map(tag => tag.name);
+      this.autocompleteTags = response.data.filter(tag => {
+        return exstingTags.indexOf(tag.name) === -1;
+      });
       this.showAutocompleteList = true;
     },
     selectAutocompleteTag(tagName) {
       const selectedTag = this.autocompleteTags.find(tag => tag.name === tagName);
-      this.tagsToAdd.push(selectedTag);
-
-      // TODO: Just add to recipe.tags???
-      console.log('tagsToAdd', this.tagsToAdd);
+      Vue.set(selectedTag, 'status', 'toAdd');
       this.recipe.tags.push(selectedTag);
+      this.showAutocompleteList = false;
+      this.tagQuery = '';
+      document.querySelector('#new-tag-input').focus();
+    },
+    removeTagStatus() {
+      this.recipe.tags.forEach(tag => {
+        delete tag.status;
+        delete tag.original;
+      });
+    },
+    resetTags() {
+      if (!this.recipe.tags) return;
+      this.recipe.tags = this.recipe.tags.filter(tag => {
+        const tagToReturn = tag.original || !tag.status;
+        return tag.original || !tag.status;
+      });
+      this.removeTagStatus();
     },
     triggerUpload() {
       this.$refs.imageInput.click();

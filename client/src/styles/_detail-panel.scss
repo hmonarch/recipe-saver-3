@@ -17,6 +17,7 @@
     #tags {
       li.tags-icon {
         display: inline;
+        margin-right: 8px;
 
         svg {
           height: 28px;
@@ -310,7 +311,6 @@
 
     li {
       display: inline-block;
-      margin-right: 8px;
 
       &.tags-icon {
         display: none;
