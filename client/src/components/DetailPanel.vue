@@ -57,31 +57,31 @@
         <editor-menu-bar :editor="editor" v-show="editMode === true">
           <div slot-scope="{ commands, isActive }" class="menubar">
 
-            <button class="menubar__button" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
+            <button class="menubar__button" tabindex="-1" :class="{ 'is-active': isActive.bold() }" @click="commands.bold">
               <icon name="bold"/>
             </button>
-            <button class="menubar__button" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
+            <button class="menubar__button" tabindex="-1" :class="{ 'is-active': isActive.italic() }" @click="commands.italic">
               <icon name="italic"/>
             </button>
-            <button class="menubar__button" :class="{ 'is-active': isActive.strike() }" @click="commands.strike">
+            <button class="menubar__button" tabindex="-1" :class="{ 'is-active': isActive.strike() }" @click="commands.strike">
               <icon name="strike"/>
             </button>
-            <button class="menubar__button" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
+            <button class="menubar__button" tabindex="-1" :class="{ 'is-active': isActive.underline() }" @click="commands.underline">
               <icon name="underline"/>
             </button>
-            <button class="menubar__button" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
+            <button class="menubar__button" tabindex="-1" :class="{ 'is-active': isActive.bullet_list() }" @click="commands.bullet_list">
               <icon name="ul"/>
             </button>
-            <button class="menubar__button" :class="{ 'is-active': isActive.ordered_list() }" @click="commands.ordered_list">
+            <button class="menubar__button" tabindex="-1" :class="{ 'is-active': isActive.ordered_list() }" @click="commands.ordered_list">
               <icon name="ol"/>
             </button>
-            <button class="menubar__button" @click="commands.horizontal_rule">
+            <button class="menubar__button" tabindex="-1" @click="commands.horizontal_rule">
               <icon name="hr"/>
             </button>
-            <button class="menubar__button" @click="commands.undo">
+            <button class="menubar__button" tabindex="-1" @click="commands.undo">
               <icon name="undo"/>
             </button>
-            <button class="menubar__button" @click="commands.redo">
+            <button class="menubar__button" tabindex="-1" @click="commands.redo">
               <icon name="redo"/>
             </button>
 
@@ -298,6 +298,11 @@ export default {
         this.recipe.image = '';
       } else {
         this.recipe.image = this.imageAsset || this.recipe.image;
+      }
+
+      if (this.recipe.title.trim() === '') {
+        this.savingOverlayActive = false;
+        return EventBus.$emit('MESSAGE', this.recipe.title, 'Recipe must have a title', true, 6000);
       }
 
       if (this.imageAsset && this.imageAsset.size > 3000000) {
