@@ -64,7 +64,7 @@ import SimpleBar from 'simplebar';
 export default {
   data() {
     return {
-      sortBy: null,
+      sortBy: localStorage.sortBy ? localStorage.sortBy : false,
       sortVisible: false,
       imageLayout: false,
       recipes: [],
@@ -173,6 +173,7 @@ export default {
     },
     sortRecipes(e, critea, order) {
       this.sortBy = e.target.innerText.toLowerCase();
+      localStorage.sortBy = this.sortBy;
       this.sortVisible = false;
       this.retrieveRecipes(this.sortBy);
     },
