@@ -133,7 +133,7 @@
             <div class="recipe-image-overlay-text">
               <span class="recipe-image-overlay-text-drag">Drag Photo Here</span>
               <span class="recipe-image-overlay-text-prefer">Or, if you prefer...</span>
-              <span v-if="(recipe.image === '' && !imagePreview) || imagePreview === blankImage"></span>
+              <span v-if="((recipe.image === '' || recipe.image === undefined) && !imagePreview) || imagePreview === blankImage"></span>
               <div v-else @click="removeImage()" id="remove-image">Remove Image</div>
             </div>
             <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
