@@ -19,17 +19,17 @@
         <div id="layout-toggle">
           <img v-show="imageLayout" class="layout-icon list-icon" src="../assets/layout-list-icon.svg" @click="toggleImageLayout()">
           <div class="utility-tooltip">
-            <div class="utility-tooltip-text">Image Layout</div>
+            <div class="utility-tooltip-text">List Layout</div>
           </div>
           <img v-show="!imageLayout" class="layout-icon image-icon" src="../assets/layout-image-icon.svg" @click="toggleImageLayout()">
           <div class="utility-tooltip">
-            <div class="utility-tooltip-text">List Layout</div>
+            <div class="utility-tooltip-text">Image Layout</div>
           </div>
         </div>
       </div>
 		</div>
 
-    <div v-show="getTaggedView()" class="selected-tag" :style="backgroundColor(selectedTag.color)">
+    <div v-show="getTaggedView()" class="selected-tag" :style="dynamicBackgroundColor(selectedTag)">
       <span class="tag-name">{{ selectedTag.name }}</span>
       <span class="tag-gear" @click="tagColorMenuVisible = !tagColorMenuVisible"></span>
     </div>
@@ -64,7 +64,7 @@ import SimpleBar from 'simplebar';
 export default {
   data() {
     return {
-      sortBy: localStorage.sortBy ? localStorage.sortBy : false,
+      sortBy: localStorage.sortBy ? localStorage.sortBy : null,
       sortVisible: false,
       imageLayout: (localStorage.imageLayout === 'true') ? true : false,
       recipes: [],
@@ -170,7 +170,6 @@ export default {
     },
     selectRecipe(id) {
       this.scrollToImage(id);
-      EventBus.$emit('RECIPE_SELECTED', id);
     },
     getTaggedView() {
       return (this.$route.path.match(/\/recipes\/tag\/(.+)/) || [])[1];
@@ -259,7 +258,10 @@ export default {
       grid-template-columns: 1fr 1fr 1fr 1fr;
       grid-gap: 20px;
     }
+  }
 
+  .simplebar-resize-wrapper {
+    position: relative;
   }
 
   #heading-and-sort {
@@ -329,15 +331,15 @@ export default {
         &:hover + .utility-tooltip {
           display: inline-block;
           top: 50px;
-          right: 6px;
+          right: 0;
         }
 
         &.image-icon + .utility-tooltip {
-          background-position-x: 46px; 
+          background-position-x: 54px; 
         }
 
         &.list-icon + .utility-tooltip {
-          background-position-x: 60px; 
+          background-position-x: 40px; 
         }
       }
 
