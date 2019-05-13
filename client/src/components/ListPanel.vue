@@ -17,11 +17,11 @@
         </ul>
 
         <div id="layout-toggle">
-          <img v-show="imageLayout" class="layout-icon list-icon" src="../assets/layout-list-icon.svg" @click="imageLayout = !imageLayout">
+          <img v-show="imageLayout" class="layout-icon list-icon" src="../assets/layout-list-icon.svg" @click="toggleImageLayout()">
           <div class="utility-tooltip">
             <div class="utility-tooltip-text">Image Layout</div>
           </div>
-          <img v-show="!imageLayout" class="layout-icon image-icon" src="../assets/layout-image-icon.svg" @click="imageLayout = !imageLayout">
+          <img v-show="!imageLayout" class="layout-icon image-icon" src="../assets/layout-image-icon.svg" @click="toggleImageLayout()">
           <div class="utility-tooltip">
             <div class="utility-tooltip-text">List Layout</div>
           </div>
@@ -66,7 +66,7 @@ export default {
     return {
       sortBy: localStorage.sortBy ? localStorage.sortBy : false,
       sortVisible: false,
-      imageLayout: false,
+      imageLayout: (localStorage.imageLayout === 'true') ? true : false,
       recipes: [],
       selectedTag: {},
       tagColorMenuVisible: false,
@@ -163,6 +163,10 @@ export default {
         const recipePos = clickedRecipe.offsetTop;
         document.querySelector('#list-panel .simplebar-content').scrollTop = recipePos - 20;
       }, 50);
+    },
+    toggleImageLayout() {
+      localStorage.imageLayout = !this.imageLayout;
+      this.imageLayout = !this.imageLayout;
     },
     selectRecipe(id) {
       this.scrollToImage(id);
@@ -427,9 +431,10 @@ export default {
           }
 
           .recipe-image {
-            display: inline;
+            display: inline-block;
             border: solid 1px #dadada;
             box-sizing: border-box;
+            width: 100%;
           }
 
           .recipe-entry-left {

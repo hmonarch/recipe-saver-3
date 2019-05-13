@@ -233,6 +233,7 @@ export default {
       const response = await RecipeService.getRecipe(recipeID);
       this.recipe = response.data;
       this.editor.setContent(this.recipe.description);
+      EventBus.$emit('RECIPE_SELECTED');
     },
     toggleFavorite() {
       this.recipe.favorite = !this.recipe.favorite;

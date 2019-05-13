@@ -20,7 +20,8 @@ export default {
     },
     
     dynamicBackgroundColor(tag) {
-      const color = window.tagColorMap[tag.name] ? window.tagColorMap[tag.name] : tag.color;
+      if (!tag) return;
+      const color = (window.tagColorMap && window.tagColorMap[tag.name]) ? window.tagColorMap[tag.name] : tag.color;
       return `background-color: ${color}`;
     }
   }

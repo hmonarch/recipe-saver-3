@@ -88,7 +88,6 @@ export default {
       const response = await RecipeService.getTags();
       this.tags = response.data;
       this.createSimpleBar();
-      this.setTagListHeight();
       window.tagColorMap = {};
       this.tags.forEach(tag => {
         window.tagColorMap[tag.name] = tag.color;
@@ -100,19 +99,6 @@ export default {
     selectTag(tag) {
       EventBus.$emit('TAG_SELECTED', tag);
     },
-    setTagListHeight() {
-      // this.waitFor(
-      //   () =>  document.querySelector('#tag-list .tag'),
-      //   () => {
-      //     const tags = document.querySelectorAll('#tag-list .tag');
-      //     const tagHeight = 38; // Update if changing with CSS
-      //     if (!tags.length) return;
-      //     const newHeight = tagHeight * tags.length;
-      //     document.querySelector('#tag-list-container').style.height = `${newHeight}px`;
-      //     console.log('newHeight', newHeight);
-      //   }
-      // );
-    }
   },
   mounted() {
     EventBus.$on('RECALUCATE_TAGS', this.getTags);
