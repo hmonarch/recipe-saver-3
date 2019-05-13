@@ -3,7 +3,6 @@
     <div id="heading-and-sort">
       <h1 id="list-panel-heading">{{ view }}</h1>
 
-
       <div id="layout-sort">
         <div id="sort" @click="sortVisible = !sortVisible">
           <span>Sort by: </span><span id="sort-selection">{{ sortBy }}</span>
@@ -32,7 +31,15 @@
 
     <div v-show="getTaggedView()" class="selected-tag" :style="backgroundColor(selectedTag.color)">
       <span class="tag-name">{{ selectedTag.name }}</span>
+      <span class="tag-gear"></span>
     </div>
+
+    <ul id="tag-color-menu" class="box">
+      <li class="tag-color-menu-title">Change Tag Color</li>
+      <li v-for="tagColor in tagColors" :key="tagColor.name" class="tag">
+        <div class="tag-color-selection" @click="selectTagColor(tagColor.color)" :style="backgroundColor(tagColor.color)">{{ tagColor.name }}</div>
+      </li>
+    </ul>
 
     <ul id="recipe-list" class="list-panel-body" :class="{ 'image-layout' : imageLayout === true }">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
@@ -62,6 +69,56 @@ export default {
       imageLayout: false,
       recipes: [],
       selectedTag: {},
+      tagColors: [
+        {
+          color: '#ff0000',
+          name: 'red'
+        },
+        {
+          color: '#9e5f01',
+          name: 'brown'
+        },
+        {
+          color: '#ffa500',
+          name: 'orange'
+        },
+        {
+          color: '#dec688',
+          name: 'gold'
+        },
+        {
+          color: '#22da00',
+          name: 'green'
+        },
+        {
+          color: '#079212',
+          name: 'forest'
+        },
+        {
+          color: '#6d0873',
+          name: 'eggplant'
+        },
+        {
+          color: '#9522ff',
+          name: 'purple'
+        },
+        {
+          color: '#ff05d6',
+          name: 'pink'
+        },
+        {
+          color: '#00c5ff',
+          name: 'ocean'
+        },
+        {
+          color: '#2c77ff',
+          name: 'blue'
+        },
+        {
+          color: '#000000',
+          name: 'black'
+        },
+      ]
     };
   },
   mixins: [utils],
@@ -117,6 +174,9 @@ export default {
       this.sortBy = e.target.innerText.toLowerCase();
       this.sortVisible = false;
       this.retrieveRecipes(this.sortBy);
+    },
+    selectTagColor(tagColor) {
+      console.log(tagColor, this.selectedTag);
     },
     formatDate(data) {
       return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
@@ -268,6 +328,49 @@ export default {
 
     .tag-count {
       margin-left: 4px;
+    }
+
+    .tag-gear {
+      cursor: pointer;
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-left: 6px;
+      background-size: 10px 10px;
+      position: relative;
+      top: 1px;
+      background-image: url(../assets/color-picker.png);
+
+      &:hover {
+        filter: invert(100%);
+      }
+    }
+  }
+
+  #tag-color-menu {
+    z-index: 5;
+    position: absolute;
+    background-color: #fff;
+    width: 153px;
+    top: 93px;
+    left: 20px;
+
+    li {
+      display: block;
+      padding: 3px 15px;
+
+      &.tag-color-menu-title {
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      .tag-color-selection {
+        cursor: pointer;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
   }
 

@@ -185,7 +185,8 @@ body {
 .tag {
   a,
   .tag-editable,
-  .tag-suggestion
+  .tag-suggestion,
+  .tag-color-selection
    {
     border-radius: 14px;
     font-size: 13px;
