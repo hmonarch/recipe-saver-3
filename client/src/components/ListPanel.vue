@@ -184,8 +184,13 @@ export default {
         newColor: tagColor
       };  
       const response = await RecipeService.updateTagColor(data);
-      console.log('response', response);
-      //document.querySelector('.selected-tag').setAttribute('style', `background-color: ${tagColor};`);
+      window.tagColorMap[this.selectedTag.name] = tagColor;
+      const tagEls = document.querySelectorAll('.selected-tag, #tag-list .tag a, #tags .tag a, #tags .tag .tag-editable');
+      [...tagEls].forEach(tag => {
+        if (tag.querySelector('.tag-name').textContent.trim() === this.selectedTag.name) {
+          tag.setAttribute('style', `background-color: ${tagColor};`);
+        }
+      });
     },
     formatDate(data) {
       return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
@@ -422,7 +427,6 @@ export default {
 
           .recipe-image {
             display: inline;
-            width: 100%;
             border: solid 1px #dadada;
             box-sizing: border-box;
           }

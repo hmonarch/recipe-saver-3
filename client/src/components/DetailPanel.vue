@@ -104,7 +104,7 @@
             <li v-if="autocompleteTags.length" id="tag-suggestions">
               <ul>
                 <li v-for="tag in autocompleteTags" :key="tag.name" class="tag">
-                  <div class="tag-suggestion" :style="backgroundColor(tag.color)" @click="selectAutocompleteTag(tag.name)">
+                  <div class="tag-suggestion" :style="dynamicBackgroundColor(tag)" @click="selectAutocompleteTag(tag.name)">
                     <span class="tag-name">{{ tag.name }}</span>
                   </div>
                 </li>
@@ -115,10 +115,10 @@
 
         <!-- Normal Tag List -->
         <li class="tag" v-for="tag in recipe.tags" :key="tag.name" @click="selectTag(tag)">
-          <router-link v-if="!editMode" :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
+          <router-link v-if="!editMode" :style="dynamicBackgroundColor(tag)" :to="{path: `/recipes/tag/${tag.name}`}">
             <span class="tag-name">{{ tag.name }}</span>
           </router-link>
-          <div v-else-if="tag.status !== 'toDelete'" class="tag-editable" :style="backgroundColor(tag.color)">
+          <div v-else-if="tag.status !== 'toDelete'" class="tag-editable" :style="dynamicBackgroundColor(tag)">
             <span class="tag-name">{{ tag.name }}</span>
             <span @click="deleteTag($event, tag.name)" class="tag-delete"><icon name="close"/></span>
           </div>

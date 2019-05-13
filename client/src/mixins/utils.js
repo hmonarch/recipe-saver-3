@@ -19,5 +19,9 @@ export default {
       return `background-color: ${color}`;
     },
     
+    dynamicBackgroundColor(tag) {
+      const color = window.tagColorMap[tag.name] ? window.tagColorMap[tag.name] : tag.color;
+      return `background-color: ${color}`;
+    }
   }
 }
