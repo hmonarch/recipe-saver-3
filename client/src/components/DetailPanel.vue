@@ -3,15 +3,6 @@
 
     <div class="detail-panel-innner">
       <ul id="utility-bar">
-        <li>
-          <div class="utility-btn" @click="toggleFavorite()">
-            <icon v-if="recipe.favorite" name="starFilled"/>
-            <icon v-else name="star"/>
-          </div>
-          <div class="utility-tooltip">
-            <div class="utility-tooltip-text">{{ favoriteToggleText }}</div>
-          </div>
-        </li>
         <li id="more-actions-container">
           <div class="utility-btn" @click="actionsVisible = !actionsVisible">
             <icon name="dots"/>
@@ -26,6 +17,15 @@
             <li v-if="!confirmActive" @click="confirmActive = true">Delete Recipe</li>
             <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
           </ul>  
+        </li>
+        <li>
+          <div class="utility-btn" @click="toggleFavorite()">
+            <icon v-if="recipe.favorite" name="starFilled"/>
+            <icon v-else name="star"/>
+          </div>
+          <div class="utility-tooltip">
+            <div class="utility-tooltip-text">{{ favoriteToggleText }}</div>
+          </div>
         </li>
         <li @click="closeDetails()">
           <div class="utility-btn">
@@ -90,31 +90,18 @@
         <editor-content :editor="editor" id="editor" v-model="recipe.description"></editor-content>
       </div>
 
-      <div v-show="recipe.image || editMode" class="recipe-image-container">
-        <img v-if="!editMode" class="recipe-image" :src="recipeImage">
-        <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || recipeImage || blankImage">
-        <div class="recipe-image-overlay" v-show="editMode">
-          <form id="image-form" onsubmit="event.preventDefault();">
-            <div class="recipe-image-overlay-text">
-              <span class="recipe-image-overlay-text-drag">Drag Photo Here</span>
-              <span class="recipe-image-overlay-text-prefer">Or, if you prefer...</span>
-            </div>
-            <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
-            <input type="file" id="image-input" accept="image/*" onchange="this.value = null; return false;" @input="handleImage" ref="imageInput">
-          </form>
-        </div>
-      </div>
-
       <ul id="tags">
         <!-- Autocomplete List -->
         <li v-if="editMode" class="tags-icon"><icon name="tags"/></li>
         <li v-if="editMode" id="new-tag">
-          <input type="text" id="new-tag-input" v-model="tagQuery" @keyup="debounceInput($event)" autocomplete="off">
+          <form id="new-tag-form" @submit.prevent="addNewTag()">
+            <input type="text" id="new-tag-input" v-model="tagQuery" @keyup="debounceInput($event)" autocomplete="off">
+          </form>
           <ul v-if="showAutocompleteList" id="tag-autocomplete-list">
             <li class="add-tag-row" @click="addNewTag()">
               <span>Add Tag: </span><b>{{ tagQuery }}</b>
             </li>
-            <li id="tag-suggestions">
+            <li v-if="autocompleteTags.length" id="tag-suggestions">
               <ul>
                 <li v-for="tag in autocompleteTags" :key="tag.name" class="tag">
                   <div class="tag-suggestion" :style="backgroundColor(tag.color)" @click="selectAutocompleteTag(tag.name)">
@@ -137,6 +124,23 @@
           </div>
         </li>
       </ul>
+
+      <div v-show="recipe.image || editMode" class="recipe-image-container">
+        <img v-if="!editMode" class="recipe-image" :src="recipeImage">
+        <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || recipeImage || blankImage">
+        <div class="recipe-image-overlay" v-show="editMode">
+          <form id="image-form" onsubmit="event.preventDefault();">
+            <div class="recipe-image-overlay-text">
+              <span class="recipe-image-overlay-text-drag">Drag Photo Here</span>
+              <span class="recipe-image-overlay-text-prefer">Or, if you prefer...</span>
+              <span v-if="(recipe.image === '' && !imagePreview) || imagePreview === blankImage"></span>
+              <div v-else @click="removeImage()" id="remove-image">Remove Image</div>
+            </div>
+            <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
+            <input type="file" id="image-input" accept="image/*" onchange="this.value = null; return false;" @input="handleImage" ref="imageInput">
+          </form>
+        </div>
+      </div>
 
       <div v-show="editMode" class="save-cancel">
         <div @click="cancel()" class="cancel">Cancel</div>
@@ -193,7 +197,6 @@ export default {
       imageAsset: null,
       savingOverlayActive: false,
       tagQuery: '',
-      tagsToRemove: [],
       autocompleteTags: [],
       showAutocompleteList: false,
     };
@@ -208,8 +211,6 @@ export default {
       EventBus.$emit('TAG_SELECTED', tag);
     },
     deleteTag(e, tagName) {
-      // e.target.closest('.tag').classList.add('to-remove');
-      // this.tagsToRemove.push(tagName);
       const tagToDelete = this.recipe.tags.find(tag => tag.name === tagName);
       if (!tagToDelete.status) {
         Vue.set(tagToDelete, 'original', true);
@@ -286,26 +287,20 @@ export default {
     cancel() {
       this.removeEditMode();
     },
-    artificiallyUpdateTagCount() {
-      const tags = [...document.querySelectorAll('#tag-list .tag')].forEach(tag => {
-        const tagName = tag.querySelector('.tag-name').textContent.trim();
-        const tagCount = tag.querySelector('.tag-count');
-        if (this.tagsToRemove.indexOf(tagName) > -1) {
-          let currentTagCount = Number(tagCount.getAttribute('data-tag-count'));
-          const newTagCount = currentTagCount - 1;
-          if (newTagCount < 1) {
-            tag.remove();
-          } else {
-            tagCount.setAttribute('data-tag-count', newTagCount);
-            tagCount.textContent = `(${newTagCount})`;
-          }
-        } 
-      });
-      this.tagsToRemove = [];
-    },
     async saveRecipe(message = 'was saved!') {
       this.savingOverlayActive = true;
-      this.recipe.image = this.imageAsset || this.recipe.image;
+      if (this.imageAsset === 'remove') {
+        this.recipe.image = '';
+      } else {
+        this.recipe.image = this.imageAsset || this.recipe.image;
+      }
+
+      if (this.imageAsset && this.imageAsset.size > 3000000) {
+        this.savingOverlayActive = false;
+        return EventBus.$emit('MESSAGE', this.recipe.title, 'Cannot save - Image must be 3MB or less', true, 6000);
+      }
+
+      console.log(this.recipe.image);
       this.saveDescription();
       this.recipe.tags = this.recipe.tags.filter(tag => {
         return tag.status !== 'toDelete';
@@ -313,10 +308,10 @@ export default {
       this.removeTagStatus();
       const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
       this.recipe.image = response.data.image;
-      this.artificiallyUpdateTagCount();
       this.removeEditMode();
       this.savingOverlayActive = false;
       EventBus.$emit('RECIPE_SAVED');
+      EventBus.$emit('RECALUCATE_TAGS');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
     },
     debounceInput: debounce(function (e) {
@@ -341,12 +336,36 @@ export default {
       const selectedTag = this.autocompleteTags.find(tag => tag.name === tagName);
       Vue.set(selectedTag, 'status', 'toAdd');
       this.recipe.tags.push(selectedTag);
+      this.clearTagQueryAndRefocus();
+    },
+    addNewTag() {
+      const newTag = {
+        color: '#808080',
+        name: this.tagQuery.trim(),
+      };
+      const existingTag = this.recipe.tags.find(tag => {
+        return tag.name === this.tagQuery.trim();
+      });
+
+      if (existingTag) {
+        if (existingTag.status === 'toDelete') {
+          existingTag.status = 'toAdd';
+          newTag.color = existingTag.color;
+        }
+      } else {
+        if (window.tagColorMap[newTag.name]) {
+          newTag.color = window.tagColorMap[newTag.name];
+        }
+        Vue.set(newTag, 'status', 'toAdd');
+        this.recipe.tags.push(newTag);
+      }
+
+      this.clearTagQueryAndRefocus();
+    },
+    clearTagQueryAndRefocus() {
       this.showAutocompleteList = false;
       this.tagQuery = '';
       document.querySelector('#new-tag-input').focus();
-    },
-    addNewTag() {
-      console.log('adding');
     },
     removeTagStatus() {
       this.recipe.tags.forEach(tag => {
@@ -364,6 +383,10 @@ export default {
     },
     triggerUpload() {
       this.$refs.imageInput.click();
+    },
+    removeImage() {
+      this.imagePreview = this.blankImage;
+      this.imageAsset = 'remove';
     },
     handleImage(e, imageObj) {
       // imageObj is the result of a drag and drop
@@ -392,7 +415,7 @@ export default {
       return this.recipe.favorite ? 'Unfavorite' : 'Favorite';
     },
     recipeImage() {
-      return this.recipe.image || 'https://res.cloudinary.com/dormh2fvt/image/upload/v1556591475/blank_z9ggqs.jpg';
+      return this.recipe.image || this.blankImage;
     },
   },
   mounted() {

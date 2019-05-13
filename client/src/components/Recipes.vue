@@ -8,7 +8,7 @@
       <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }" :screenModeText="screenModeText"></DetailPanel>
     </section>
 
-    <div :class="{ 'active' : showMessage === true }" id="message-box">
+    <div :class="{ 'active' : showMessage === true, 'error': isError === true }" id="message-box">
       <div class="message-inner">
         <div class="message-block">
           <span class="message-subject">{{ messageSubject }}</span>
@@ -45,6 +45,7 @@ export default {
       showMessage: false,
       messageSubject: null,
       messageVerb: null,
+      isError: false,
     }
   },
   computed: {
@@ -63,12 +64,14 @@ export default {
     EventBus.$on('RECIPE_SELECTED', () => {
       this.detailsOpen = true;
     });
-    EventBus.$on('MESSAGE', (title, message) => {
+    EventBus.$on('MESSAGE', (title, message, isError, timeout = 3000) => {
+      if (isError) this.isError = true;
       this.showMessage = false;
       clearInterval(window.messageTimer);
       window.messageTimer = setTimeout(() => {
         this.showMessage = false;
-      }, 3000);
+        this.isError = false;
+      }, timeout);
 
       this.messageSubject = title;
       this.messageVerb = ` ${message}`;
@@ -118,6 +121,10 @@ body {
 
   &.active {
     right: 20px;
+  }
+
+  &.error {
+    border-top: solid 5px #f00;
   }
 
   .message-inner {
@@ -186,7 +193,6 @@ body {
     margin-right: 8px;
     display: inline-block;
     color: white;
-    margin-bottom: 6px;
     text-decoration: none;
     
 
@@ -236,6 +242,12 @@ body {
         width: 12px;
       }
     }
+  }
+}
+
+#tags {
+  .tag {
+    margin-bottom: 6px;
   }
 }
 

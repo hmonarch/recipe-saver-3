@@ -63,7 +63,7 @@ export default {
   data() {
     return {
       tags: [],
-      tagListOpen: false,
+      tagListOpen: (localStorage.tagListOpen === 'true') ? true : false,
     };
   },
   mixins: [utils],
@@ -81,6 +81,7 @@ export default {
   },
   methods: {
     toggleTagList() {
+      localStorage.tagListOpen = !this.tagListOpen;
       this.tagListOpen = !this.tagListOpen;
     },
     async getTags() {
@@ -88,6 +89,10 @@ export default {
       this.tags = response.data;
       this.createSimpleBar();
       this.setTagListHeight();
+      window.tagColorMap = {};
+      this.tags.forEach(tag => {
+        window.tagColorMap[tag.name] = tag.color;
+      });
     },
     createSimpleBar() {
       new SimpleBar(document.getElementById('tag-list-container'));
@@ -221,6 +226,7 @@ export default {
       .tag {
         clear: both;
         margin-left: 14px;
+        margin-bottom: 6px;
       }
     }
   }
