@@ -26,7 +26,7 @@ cloudinary.config({
   api_key: '778489856867779', 
   api_secret: cloudinarySecret 
 });
-const cloudinaryOptions = { quality: 60, gravity: 'center', height: 285, width: 285, crop: 'fill', tags: ['recipe_saver'] };
+const cloudinaryOptions = { quality: 60, gravity: 'center', height: 570, width: 570, crop: 'fill', tags: ['recipe_saver'] };
 
 
 
@@ -185,17 +185,13 @@ app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res
     recipe.description = description;
     recipe.tags = JSON.parse(tags);
 
-    if (imageAsset) {
-      cloudinary.uploader.upload(imageAsset, result => {
-        fs.unlink(imageAsset, err => {});
-        recipe.image = result.url;
-        saveRecipe(recipe);
-      },
-      cloudinaryOptions);
-    } else {
-      recipe.image = image;
+
+    cloudinary.uploader.upload(imageAsset || image, result => {
+      if (imageAsset) fs.unlink(imageAsset, err => {});
+      recipe.image = result.url;
       saveRecipe(recipe);
-    }
+    },
+    cloudinaryOptions);
 
     function saveRecipe(recipe) {
       recipe.save((err, recipe) => {
