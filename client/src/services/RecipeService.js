@@ -4,6 +4,9 @@ export default {
   getTags(query) {
     return Api().get(`tags?search=${query ? query : null}`);
   },
+  updateTagColor(data) {
+    return Api().post('tag-color', data);
+  },
   getRecipes(sort) {
     return Api().get(`${window.location.pathname}?sort=${sort}`);
   },

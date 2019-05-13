@@ -31,10 +31,10 @@
 
     <div v-show="getTaggedView()" class="selected-tag" :style="backgroundColor(selectedTag.color)">
       <span class="tag-name">{{ selectedTag.name }}</span>
-      <span class="tag-gear"></span>
+      <span class="tag-gear" @click="tagColorMenuVisible = !tagColorMenuVisible"></span>
     </div>
 
-    <ul id="tag-color-menu" class="box">
+    <ul v-show="tagColorMenuVisible" id="tag-color-menu" class="box">
       <li class="tag-color-menu-title">Change Tag Color</li>
       <li v-for="tagColor in tagColors" :key="tagColor.name" class="tag">
         <div class="tag-color-selection" @click="selectTagColor(tagColor.color)" :style="backgroundColor(tagColor.color)">{{ tagColor.name }}</div>
@@ -69,6 +69,7 @@ export default {
       imageLayout: false,
       recipes: [],
       selectedTag: {},
+      tagColorMenuVisible: false,
       tagColors: [
         {
           color: '#ff0000',
@@ -175,8 +176,16 @@ export default {
       this.sortVisible = false;
       this.retrieveRecipes(this.sortBy);
     },
-    selectTagColor(tagColor) {
+    async selectTagColor(tagColor) {
       console.log(tagColor, this.selectedTag);
+      this.tagColorMenuVisible = false;
+      const data = {
+        tagToUpdate: this.selectedTag.name,
+        newColor: tagColor
+      };  
+      const response = await RecipeService.updateTagColor(data);
+      console.log('response', response);
+      //document.querySelector('.selected-tag').setAttribute('style', `background-color: ${tagColor};`);
     },
     formatDate(data) {
       return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
@@ -196,9 +205,17 @@ export default {
   created() {
     this.initTag();
     document.addEventListener('click', e => {
+
+      // Sort Options Menu
       const isChildOfSort = e.target.closest('#sort-options') || e.target.closest('#sort') || e.target.matches('#sort');
       if (!isChildOfSort) {
         this.sortVisible = false;
+      }
+
+      // Tag Colors Menu
+      const isChildOfTagColorsMenu = e.target.closest('#tag-color-menu') || e.target.matches('#tag-color-menu') || e.target.matches('.tag-gear');
+      if (!isChildOfTagColorsMenu) {
+        this.tagColorMenuVisible = false;
       }
     });
   },

@@ -80,6 +80,38 @@ app.get('/recipes/tag/:tagName', (req, res) => {
 });
 
 
+// Change tag color
+app.post('/tag-color', (req, res) => {
+  const { tagToUpdate, newColor } = req.body;
+  console.log(tagToUpdate, newColor);
+
+  Recipe.find({user_id, 'tags.name': tagToUpdate}, (err, recipes) => {
+
+    saveRecipes(recipes);
+  
+    async function saveRecipes(recipes) {
+      for (const recipe of recipes) {
+        const targetTag = recipe.tags.find(tag => tag.name === tagToUpdate);
+        targetTag.color = newColor;
+        recipe.markModified('tags');
+        await saveRecord(recipe);
+      }
+
+      res.json(recipes);
+    }
+
+    function saveRecord(doc) {
+      return new Promise((resolve, reject) => {
+        doc.save((err, saved) => {
+          if (err) reject(err);
+          resolve(saved);
+        });
+      });
+    }
+  });
+});
+
+
 // Fetch tags
 app.get('/tags', (req, res) => {
 
