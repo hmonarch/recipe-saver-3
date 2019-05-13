@@ -61,6 +61,14 @@ export default {
     EventBus.$on('TOGGLE_SCREEN', () => {
       this.listOpen = !this.listOpen;
     });
+    EventBus.$on('NEW_RECIPE', () => {
+      this.listOpen = false;
+      this.detailsOpen = true;
+    });
+    EventBus.$on('RECIPE_SAVED', () => {
+      this.listOpen = true;
+      this.detailsOpen = true;
+    });
     EventBus.$on('RECIPE_SELECTED', () => {
       this.detailsOpen = true;
     });

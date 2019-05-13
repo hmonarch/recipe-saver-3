@@ -27,7 +27,7 @@ export default {
       fd.append('image', recipe.image);
     }
 
-    return Api().post(`recipe/${id}`, fd, {
+    return Api().post(`recipe/${id ? id : 'new'}`, fd, {
       headers: {
         'Content-Type': 'multipart/form-data;',
       }

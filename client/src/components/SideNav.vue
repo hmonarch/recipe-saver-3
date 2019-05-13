@@ -6,7 +6,7 @@
       <div class="side-nav-logo-text">Recipe Saver</div>
     </div>
 
-    <div id="add-recipe" class="btn">New Recipe</div>
+    <div id="add-recipe" class="btn" @click="addNewRecipe()">New Recipe</div>
 
     <ul id="side-nav-menu">
 			<li>
@@ -80,6 +80,9 @@ export default {
     }
   },
   methods: {
+    addNewRecipe() {
+      EventBus.$emit('NEW_RECIPE');
+    },
     toggleTagList() {
       localStorage.tagListOpen = !this.tagListOpen;
       this.tagListOpen = !this.tagListOpen;

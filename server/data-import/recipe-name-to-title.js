@@ -1,4 +1,5 @@
 // NOTE: Delete raw data after use for privacy reasons
+// TODO: Merge old ingredients field?
 
 const fs = require('fs');
 const recipes = require('./recipes_backup.js');

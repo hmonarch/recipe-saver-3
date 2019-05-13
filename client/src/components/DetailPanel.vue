@@ -3,7 +3,7 @@
 
     <div class="detail-panel-innner">
       <ul id="utility-bar">
-        <li id="more-actions-container">
+        <li v-show="!recipe.newEntry" id="more-actions-container">
           <div class="utility-btn" @click="actionsVisible = !actionsVisible">
             <icon name="dots"/>
           </div>
@@ -18,7 +18,7 @@
             <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
           </ul>  
         </li>
-        <li>
+        <li v-show="!recipe.newEntry" >
           <div class="utility-btn" @click="toggleFavorite()">
             <icon v-if="recipe.favorite" name="starFilled"/>
             <icon v-else name="star"/>
@@ -40,16 +40,16 @@
       <div v-if="!editMode" id="title-read-only">{{ recipe.title }}</div>
       <div v-else id="title-edit">
         <label>Title</label>
-        <input v-model="recipe.title" id="title-input" type="text">
+        <input v-model="recipe.title" id="title-input" type="text" autocomplete="off">
       </div>
 
       <div v-if="recipe.url && !editMode" id="url-read-only">
         <a :href="recipe.url" target="_blank">{{ recipe.url }}</a>
       </div>
-      <div v-else-if="recipe.url === ''" style="display: none;"></div>
+      <div v-else-if="recipe.url === '' && !editMode" style="display: none;"></div>
       <div v-else id="url-edit">
         <label>URL</label>
-        <input v-model="recipe.url" id="url-input" type="text">
+        <input v-model="recipe.url" id="url-input" type="text" autocomplete="off">
       </div>
 
       <label v-show="editMode">Ingredients / Description</label>
@@ -203,7 +203,7 @@ export default {
   },
   mixins: [utils],
   beforeUpdate() {
-    if (!this.recipe._id) this.closeDetails();
+    if (!this.recipe._id && !this.recipe.newEntry) this.closeDetails();
   },
   methods: {
     selectTag(tag) {
@@ -229,7 +229,7 @@ export default {
     },
     async retrieveRecipe() {
       const recipeID = this.$route.query.id;
-      if (!recipeID) return console.log('no recipe id');
+      if (!recipeID || recipeID === 'new') return console.log('no recipe id');
       const response = await RecipeService.getRecipe(recipeID);
       this.recipe = response.data;
       this.editor.setContent(this.recipe.description);
@@ -287,6 +287,10 @@ export default {
     },
     cancel() {
       this.removeEditMode();
+      this.retrieveRecipe();
+      if (this.recipe.newEntry) {
+        this.closeDetails();
+      }
     },
     async saveRecipe(message = 'was saved!') {
       this.savingOverlayActive = true;
@@ -301,16 +305,17 @@ export default {
         return EventBus.$emit('MESSAGE', this.recipe.title, 'Cannot save - Image must be 3MB or less', true, 6000);
       }
 
-      console.log(this.recipe.image);
       this.saveDescription();
       this.recipe.tags = this.recipe.tags.filter(tag => {
         return tag.status !== 'toDelete';
       });
       this.removeTagStatus();
+      delete this.recipe.newEntry;
       const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
       this.recipe.image = response.data.image;
       this.removeEditMode();
       this.savingOverlayActive = false;
+
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('RECALUCATE_TAGS');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
@@ -437,8 +442,23 @@ export default {
     // The editor must be set to false first or editor buttons won't work
     this.editor.setOptions({editable: false});
 
-    EventBus.$on('RECIPE_SELECTED', () => {
-      // this.editMode = false;
+    EventBus.$on('NEW_RECIPE', () => {
+      console.log('NEW_RECIPE');
+
+      this.$router.push({ path: this.$route.path, query: { id: 'new' } });
+      this.removeEditMode();
+      this.recipe = {
+        newEntry: true,
+        description: '',
+        favorite: false,
+        image: '',
+        tags: [],
+        title: '',
+        url: '',
+      };
+      this.editor.setContent('');
+      this.editor.setOptions({editable: true});
+      this.editMode = true;
     });
 
     const dropArea = document.querySelector('.recipe-image-overlay');
@@ -507,12 +527,14 @@ export default {
   watch: {
     '$route.query': {
       handler() {
+        if (this.$route.query.id === 'new') return;
         this.retrieveRecipe();
       },
       immediate: true,
     },
     '$route': {
       handler() {
+        if (this.$route.query.id === 'new') return;
         this.removeEditMode();
       }
     }

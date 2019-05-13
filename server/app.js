@@ -167,9 +167,18 @@ app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res
 
   const imageAsset = req.files['image-asset'] && req.files['image-asset'][0].path;
 
-  Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
-    if (err) console.error(err);
-    
+  if (recipeID === 'new') {
+    const newRecipe = new Recipe();
+    newRecipe.user_id = user_id;
+    addRecipe(newRecipe);
+  } else {
+    Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
+      if (err) console.error(err);
+      addRecipe(recipe);
+    });
+  }
+
+  function addRecipe(recipe) {
     recipe.favorite = favorite;
     recipe.title = title;
     recipe.url = url;
@@ -179,7 +188,6 @@ app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res
     if (imageAsset) {
       cloudinary.uploader.upload(imageAsset, result => {
         fs.unlink(imageAsset, err => {});
-        console.log('Cloudinary upload:', result.secure_url);
         recipe.image = result.url;
         saveRecipe(recipe);
       },
@@ -195,8 +203,7 @@ app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res
         res.json(recipe);
       });
     }
-
-  });
+  }
 });
 
 // Delete recipe
