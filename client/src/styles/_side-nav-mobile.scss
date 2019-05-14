@@ -65,14 +65,14 @@
           left: -26px;
           width: calc(100% + 25px);
           text-align: center;
-          padding: 20px;
+          padding: 72px 20px 20px 20px;
           box-sizing: border-box;
-          display: grid;
           grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
           grid-gap: 8px;
+          columns: 2;
 
           .tag {
-            margin: 0;
+            margin: 0 0 8px 0;
             line-height: 20px;
 
             &:first-child {
@@ -84,6 +84,10 @@
                 font-size: 24px;
                 text-align: center;
                 padding: 30px 26px 20px 0;
+                width: 100%;
+                position: absolute;
+                top: 0;
+                left: -4px;
               }
             }
 
