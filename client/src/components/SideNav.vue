@@ -31,13 +31,14 @@
         <a @click.prevent.self="toggleTagList">
           <img class="side-nav-menu-icon" src="../assets/icon-tag.png">
           <span>Tags</span>
-          <svg viewBox="0 0 64 36.26">
-            <g><path d="M35,35,62.75,7.31a4.28,4.28,0,1,0-6-6.06L32,26,7.29,1.25a4.28,4.28,0,0,0-6,6.06L29,35a4.4,4.4,0,0,0,3,1.25A4.26,4.26,0,0,0,35,35Zm0,0">
-            </path></g>
-          </svg>
+          <icon name="caret"/>
         </a>
 
         <div id="tag-list-container">
+          <div class="mobile back-arrow">
+            <icon name="caret"/>
+          </div>
+
           <ul id="tag-list">
             <li class="tag" v-for="tag in sortedTags" :key="tag.id" @click="selectTag(tag)">
               <router-link :style="backgroundColor(tag.color)" :to="{path: `/recipes/tag/${tag.name}`}">
@@ -58,8 +59,12 @@ import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
 import SimpleBar from 'simplebar';
+import Icon from '@/components/Icons';
 
 export default {
+  components: {
+    Icon
+  },
   data() {
     return {
       tags: [],
@@ -177,8 +182,10 @@ export default {
         &.open {
           background-color: rgba(0, 0, 0, 0.35);
 
-          > a svg {
-            transform: rotate(180deg);
+          > a {
+            svg {
+              transform: rotate(180deg);
+            }
           }
 
           #tag-list-container {
@@ -189,12 +196,14 @@ export default {
         > a {
           display: block;
 
+          .icon--caret {
+            float: right;
+          }
+
           svg {
             height: 8px;
             position: relative;
-            top: 13px;
-            right: 11px;
-            float: right;
+            right: 6px;
 
             path {
               fill: white;

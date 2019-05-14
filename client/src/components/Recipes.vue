@@ -167,6 +167,10 @@ body {
 
 
 // Shared classes
+.mobile {
+  display: none;
+}
+
 .btn {
   cursor: pointer;
   text-align: left;
