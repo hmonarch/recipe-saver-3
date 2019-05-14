@@ -1,0 +1,23 @@
+{
+  "name": "recipe-saver-3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "simplebar": "^4.0.0-alpha.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doctafaustus/recipe-saver-3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/doctafaustus/recipe-saver-3/issues"
+  },
+  "homepage": "https://github.com/doctafaustus/recipe-saver-3#readme"
+}
