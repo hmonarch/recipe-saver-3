@@ -1,38 +1,40 @@
 <template>
   <div id="list-panel" class="panel">
-    <div id="heading-and-sort">
-      <h1 id="list-panel-heading">{{ view }}</h1>
+    <div id="heading-and-sort" :class="{ 'tag-view': getTaggedView() }">
 
-      <div id="layout-sort">
-        <div id="sort" @click="sortVisible = !sortVisible">
-          <span>Sort by: </span><span id="sort-selection">{{ sortBy }}</span>
-          <img src="../assets/arrow-down-small.png">
-        </div>
+      <div id="heading-and-sort-inner">
+        <h1 id="list-panel-heading">{{ view }}</h1>
 
-        <ul class="box" id="sort-options" v-show="sortVisible">
-          <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">a - z</li>
-          <li class="sort-option" @click="sortRecipes($event, 'title', '1')">z - a</li>
-          <li class="sort-option" @click="sortRecipes($event, 'creationDate', '1')">newest</li>
-          <li class="sort-option" @click="sortRecipes($event, 'creationDate', '-1')">oldest</li>
-        </ul>
-
-        <div id="layout-toggle">
-          <img v-show="imageLayout" class="layout-icon list-icon" src="../assets/layout-list-icon.svg" @click="toggleImageLayout()">
-          <div class="utility-tooltip">
-            <div class="utility-tooltip-text">List Layout</div>
+        <div id="layout-sort">
+          <div id="sort" @click="sortVisible = !sortVisible">
+            <span>Sort by: </span><span id="sort-selection">{{ sortBy }}</span>
+            <img src="../assets/arrow-down-small.png">
           </div>
-          <img v-show="!imageLayout" class="layout-icon image-icon" src="../assets/layout-image-icon.svg" @click="toggleImageLayout()">
-          <div class="utility-tooltip">
-            <div class="utility-tooltip-text">Image Layout</div>
+
+          <ul class="box" id="sort-options" v-show="sortVisible">
+            <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">a - z</li>
+            <li class="sort-option" @click="sortRecipes($event, 'title', '1')">z - a</li>
+            <li class="sort-option" @click="sortRecipes($event, 'creationDate', '1')">newest</li>
+            <li class="sort-option" @click="sortRecipes($event, 'creationDate', '-1')">oldest</li>
+          </ul>
+
+          <div id="layout-toggle">
+            <img v-show="imageLayout" class="layout-icon list-icon" src="../assets/layout-list-icon.svg" @click="toggleImageLayout()">
+            <div class="utility-tooltip">
+              <div class="utility-tooltip-text">List Layout</div>
+            </div>
+            <img v-show="!imageLayout" class="layout-icon image-icon" src="../assets/layout-image-icon.svg" @click="toggleImageLayout()">
+            <div class="utility-tooltip">
+              <div class="utility-tooltip-text">Image Layout</div>
+            </div>
           </div>
         </div>
       </div>
+      <div v-show="getTaggedView()" class="selected-tag" :style="dynamicBackgroundColor(selectedTag)">
+        <span class="tag-name">{{ selectedTag.name }}</span>
+        <span class="tag-gear" @click="tagColorMenuVisible = !tagColorMenuVisible"></span>
+      </div>
 		</div>
-
-    <div v-show="getTaggedView()" class="selected-tag" :style="dynamicBackgroundColor(selectedTag)">
-      <span class="tag-name">{{ selectedTag.name }}</span>
-      <span class="tag-gear" @click="tagColorMenuVisible = !tagColorMenuVisible"></span>
-    </div>
 
     <ul v-show="tagColorMenuVisible" id="tag-color-menu" class="box">
       <li class="tag-color-menu-title">Change Tag Color</li>
@@ -264,20 +266,30 @@ export default {
     z-index: 10;
     background-color: #fff;
     box-sizing: border-box;
-    padding: 20px 20px 0 20px;
+    padding: 14px 20px 0 20px;
     box-shadow: 0 0 2px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,.10);
 
+    #heading-and-sort-inner {
+      display: flex;
+      justify-content: space-between;
+      overflow: hidden;
+      white-space: nowrap;
+      padding-bottom: 2px;
+    }
+
+    &.tag-view {
+      height: 94px;
+    }
+
     #list-panel-heading {
-      margin: 0;
+      margin: 0 10px 0 0;
       font-size: 24px;
-      margin-bottom: 20px;
-      float: left;
+      position: relative;
+      top: 5px;
       text-transform: capitalize;
     }
 
     #layout-sort {
-      float: right;
-
       #sort {
         display: inline-block;
         margin-top: 10px;
@@ -353,7 +365,9 @@ export default {
     display: inline-block;
     padding: 8px;
     font-size: 12px;
-    margin-bottom: 15px;
+    margin-top: 8px;
+    clear: both;
+    float: left;
 
     .tag-count {
       margin-left: 4px;
@@ -377,7 +391,7 @@ export default {
   }
 
   #tag-color-menu {
-    z-index: 5;
+    z-index: 15;
     position: absolute;
     background-color: #fff;
     width: 153px;
@@ -405,7 +419,7 @@ export default {
 
   .list-panel-body {
     box-sizing: border-box;
-    padding: 20px;
+    padding: 10px 20px 20px 20px;
     width: 100%;
     height: calc(100% - 64px);
     overflow-y: scroll;
