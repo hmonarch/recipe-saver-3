@@ -28,14 +28,14 @@
         </router-link>
       </li>
 			<li id="side-nav-menu-tags" :class="{ open : tagListOpen === true }">
-        <a @click.prevent.self="toggleTagList">
+        <a @click.prevent.self="toggleTagList()">
           <img class="side-nav-menu-icon" src="../assets/icon-tag.png">
           <span>Tags</span>
           <icon name="caret"/>
         </a>
 
-        <div id="tag-list-container">
-          <div class="mobile back-arrow">
+        <div id="tag-list-container" :class="{ open : tagListOpen === true }">
+          <div @click="toggleTagList()" class="mobile back-arrow">
             <icon name="caret"/>
           </div>
 
@@ -58,7 +58,6 @@
 import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
-import SimpleBar from 'simplebar';
 import Icon from '@/components/Icons';
 
 export default {
@@ -95,14 +94,10 @@ export default {
     async getTags() {
       const response = await RecipeService.getTags();
       this.tags = response.data;
-      //this.createSimpleBar();
       window.tagColorMap = {};
       this.tags.forEach(tag => {
         window.tagColorMap[tag.name] = tag.color;
       });
-    },
-    createSimpleBar() {
-      new SimpleBar(document.getElementById('tag-list-container'));
     },
     selectTag(tag) {
       EventBus.$emit('TAG_SELECTED', tag);
