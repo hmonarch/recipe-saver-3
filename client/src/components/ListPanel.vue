@@ -159,7 +159,7 @@ export default {
       setTimeout(() => {
         const clickedRecipe = document.querySelector(`.recipe-entry a[href*="${id}"]`);
         const recipePos = clickedRecipe.offsetTop;
-        // document.querySelector('#list-panel .simplebar-content').scrollTop = recipePos - 20;
+        document.querySelector('#recipe-list').scrollTop = recipePos - 75;
       }, 50);
     },
     toggleImageLayout() {
@@ -430,6 +430,7 @@ export default {
       grid-gap: 16px;
       justify-items: center;
       width: 100%;
+      padding-top: 20px;
 
       .recipe-entry {
         margin-bottom: 6px;
