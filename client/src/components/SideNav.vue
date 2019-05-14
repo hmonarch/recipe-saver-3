@@ -131,7 +131,8 @@ export default {
 
     .side-nav-logo-text {
       margin-left: 12px;
-      font-size: 23px;
+      font-size: 22px;
+      font-family: 'Merriweather', serif;
     }
   }
 
@@ -221,5 +222,5 @@ export default {
   }
 
 }
-
+@import '@/styles/_side-nav-mobile.scss';
 </style>
