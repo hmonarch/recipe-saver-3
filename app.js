@@ -9,6 +9,7 @@ const cloudinary = require('cloudinary');
 
 // Express app / Middleware
 const app = express();
+app.use(express.static(`${__dirname}/client/dist`));
 app.use(bodyParser.json());
 
 // TODO: Investigate if this is needed in production
