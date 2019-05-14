@@ -54,7 +54,7 @@ const Recipe = require('./models/recipe');
 
 
 // Get base page
-app.get(['/', '/recipes', '/recipes:category', '/recipes/tag/:tagname'], (req, res) => {
+app.get(['/', '/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) => {
   res.sendFile(`${__dirname}/client/dist/index.html`);
 });
 
