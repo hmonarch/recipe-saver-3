@@ -170,6 +170,7 @@ export default {
     },
     selectRecipe(id) {
       this.scrollToImage(id);
+      EventBus.$emit('RECIPE_SELECTED', id);
     },
     getTaggedView() {
       return (this.$route.path.match(/\/recipes\/tag\/(.+)/) || [])[1];

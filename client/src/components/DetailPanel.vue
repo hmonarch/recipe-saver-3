@@ -11,7 +11,8 @@
             <div class="utility-tooltip-text">Actions</div>
           </div>
           <ul v-show="actionsVisible" id="more-actions-menu" class="box">
-            <li @click="editRecipe()">Edit Recipe</li>
+            <li v-show="!editMode" @click="editRecipe()">Edit Recipe</li>
+            <li v-show="editMode" @click="cancel()">Cancel</li>
             <li @click="toggleSreen()">{{ screenModeText }}</li>
             <li @click="print()">Print</li>
             <li v-if="!confirmActive" @click="confirmActive = true">Delete Recipe</li>
@@ -286,6 +287,7 @@ export default {
       }
     },
     cancel() {
+      this.actionsVisible = false;
       this.removeEditMode();
       this.retrieveRecipe();
       if (this.recipe.newEntry) {

@@ -69,7 +69,6 @@ app.get('/recipes/untagged', (req, res) => {
 // Fetch tag
 app.get('/recipes/tag/:tagName', (req, res) => {
   const { tagName } = req.params;
-  console.log(tagName);
 
   Recipe.find({user_id, tags: { '$elemMatch': { 'name': tagName }}}, 'title creationDate image', (err, recipes) => {
       if (err) console.error(err);
@@ -83,7 +82,6 @@ app.get('/recipes/tag/:tagName', (req, res) => {
 // Change tag color
 app.post('/tag-color', (req, res) => {
   const { tagToUpdate, newColor } = req.body;
-  console.log(tagToUpdate, newColor);
 
   Recipe.find({user_id, 'tags.name': tagToUpdate}, (err, recipes) => {
 
@@ -212,7 +210,6 @@ app.delete('/recipe/:recipeID', (req, res) => {
 
     recipe.remove((err, data) => {
       if (err) console.error(err);
-      console.log('Recipe delete!');
       res.json(data);
     });
   });
