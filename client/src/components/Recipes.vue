@@ -95,10 +95,10 @@ body {
   background-size: cover;
 }
 
-#detail-panel,
-#side-nav {
-  display: none !important;
-}
+// #detail-panel,
+// #side-nav {
+//   display: none !important;
+// }
 
 #panels {
   height: calc(100% - 50px);
@@ -108,6 +108,7 @@ body {
   padding: 0 20px;
 
   .panel {
+    box-sizing: border-box;
     border-radius: 3px;
     box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
     background-color: white;

@@ -58,7 +58,6 @@
 import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
-import SimpleBar from 'simplebar';
 
 
 export default {
@@ -147,9 +146,6 @@ export default {
         this.selectedTag = { name, color, count };
       });
     },
-    createSimpleBar() {
-      new SimpleBar(document.getElementById('list-panel'));
-    },
     getViewName() {
       return this.$route.path.replace('/recipes/', '');
     },
@@ -161,7 +157,7 @@ export default {
       setTimeout(() => {
         const clickedRecipe = document.querySelector(`.recipe-entry a[href*="${id}"]`);
         const recipePos = clickedRecipe.offsetTop;
-        document.querySelector('#list-panel .simplebar-content').scrollTop = recipePos - 20;
+        // document.querySelector('#list-panel .simplebar-content').scrollTop = recipePos - 20;
       }, 50);
     },
     toggleImageLayout() {
@@ -203,7 +199,6 @@ export default {
     async retrieveRecipes() {
       const response = await RecipeService.getRecipes(this.sortBy);
       this.recipes = response.data;
-      this.createSimpleBar();
     },
   },
   mounted() {
@@ -261,12 +256,9 @@ export default {
     }
   }
 
-  .simplebar-resize-wrapper {
-    position: relative;
-  }
-
   #heading-and-sort {
     overflow: auto;
+    width: 100%;
 
     #list-panel-heading {
       margin: 0;
@@ -406,6 +398,7 @@ export default {
 
   .list-panel-body {
     box-sizing: border-box;
+    width: 100%;
 
     &.image-layout {
       display: grid;
