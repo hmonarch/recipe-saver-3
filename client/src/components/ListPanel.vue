@@ -421,8 +421,8 @@ export default {
     box-sizing: border-box;
     padding: 10px 20px 20px 20px;
     width: 100%;
-    height: calc(100% - 64px);
-    overflow-y: scroll;
+    max-height: calc(100% - 64px);
+    overflow-y: auto;
 
     &.image-layout {
       display: grid;
