@@ -59,6 +59,8 @@
       #tag-list-container {
         position: static;
         max-height: calc(100vh - 40px);
+        position: absolute;
+        top: 0;
 
         #tag-list {
           background-color: #fff;

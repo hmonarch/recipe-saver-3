@@ -44,7 +44,7 @@
     <ul id="recipe-list" class="list-panel-body" :class="{ 'image-layout' : imageLayout === true }">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
         <router-link :to="{ query: { id: recipe._id }}">
-          <img class="recipe-image" :src="recipe.image || 'http://res.cloudinary.com/dormh2fvt/image/upload/v1527317481/placeholder_rjy55k.jpg'">
+          <img class="recipe-image" :src="recipe.image || 'https://res.cloudinary.com/dormh2fvt/image/upload/v1527317481/placeholder_rjy55k.jpg'">
           <span class="recipe-entry-left">{{ recipe.title }}</span>
           <span class="recipe-entry-right">{{ formatDate(recipe.creationDate) }}</span>
         </router-link>
