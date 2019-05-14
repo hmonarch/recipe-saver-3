@@ -65,9 +65,12 @@
           left: -26px;
           width: calc(100% + 25px);
           text-align: center;
+          padding: 20px;
+          box-sizing: border-box;
 
           .tag {
             margin-bottom: 12px;
+            line-height: 20px;
 
             &:first-child {
               &::before {
@@ -75,14 +78,14 @@
                 font-family: 'Merriweather', serif;
                 display: block;
                 color: #000;
-                font-size: 25px;
+                font-size: 24px;
                 text-align: center;
                 padding: 30px 26px 20px 0;
               }
             }
 
             a {
-              padding: 16px;
+              padding: 12px;
               border-radius: 30px;
               font-size: 16px;
             }
