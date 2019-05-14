@@ -10,6 +10,8 @@ const cloudinary = require('cloudinary');
 // Express app / Middleware
 const app = express();
 app.use(bodyParser.json());
+
+// TODO: Investigate if this is needed in production
 app.use(cors());
 
 // DB / Mongoose
