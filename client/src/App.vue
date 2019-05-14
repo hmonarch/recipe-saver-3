@@ -9,6 +9,8 @@
 </template>
 
 <style lang="scss">
+@import '@/styles/_reset.scss';
+
 html,
 body,
 #app,
