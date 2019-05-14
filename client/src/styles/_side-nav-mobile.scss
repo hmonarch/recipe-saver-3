@@ -67,9 +67,12 @@
           text-align: center;
           padding: 20px;
           box-sizing: border-box;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          grid-gap: 8px;
 
           .tag {
-            margin-bottom: 12px;
+            margin: 0;
             line-height: 20px;
 
             &:first-child {
@@ -85,9 +88,10 @@
             }
 
             a {
-              padding: 12px;
+              padding: 10px;
               border-radius: 30px;
-              font-size: 16px;
+              font-size: 13px;
+              margin: 0;
             }
           }
         }
