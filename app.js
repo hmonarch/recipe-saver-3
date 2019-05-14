@@ -32,12 +32,6 @@ if (!process.env.PORT) {
         keepAlive: 1, 
         connectTimeoutMS: 30000 
       }
-    },
-    replset: {
-      socketOptions: {
-        keepAlive: 1,
-        connectTimeoutMS : 30000 
-      }
     }
   });
 }
@@ -66,7 +60,7 @@ app.get(['/'], (req, res) => {
 
 
 // Fetch all recipes
-app.get('/recipes/all', (req, res) => {
+app.get('/api/recipes/all', (req, res) => {
   console.log('!!! /recipes/all');
 
 
@@ -80,7 +74,7 @@ app.get('/recipes/all', (req, res) => {
 });
 
 // Fetch favorites recipes
-app.get('/recipes/favorites', (req, res) => {
+app.get('/api/recipes/favorites', (req, res) => {
   Recipe.find({user_id, favorite: true}, 'title creationDate image', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
@@ -91,7 +85,7 @@ app.get('/recipes/favorites', (req, res) => {
 
 
 // Fetch untagged recipes
-app.get('/recipes/untagged', (req, res) => {
+app.get('/api/recipes/untagged', (req, res) => {
   Recipe.find({user_id, tags: {$size: 0}}, 'title creationDate image', (err, recipes) => {
     if (err) console.error(err);
     res.send(recipes);
@@ -102,7 +96,7 @@ app.get('/recipes/untagged', (req, res) => {
 
 
 // Fetch tag
-app.get('/recipes/tag/:tagName', (req, res) => {
+app.get('/api/recipes/tag/:tagName', (req, res) => {
   const { tagName } = req.params;
 
   Recipe.find({user_id, tags: { '$elemMatch': { 'name': tagName }}}, 'title creationDate image', (err, recipes) => {
@@ -115,7 +109,7 @@ app.get('/recipes/tag/:tagName', (req, res) => {
 
 
 // Change tag color
-app.post('/tag-color', (req, res) => {
+app.post('/api/tag-color', (req, res) => {
   const { tagToUpdate, newColor } = req.body;
 
   Recipe.find({user_id, 'tags.name': tagToUpdate}, (err, recipes) => {
@@ -146,7 +140,7 @@ app.post('/tag-color', (req, res) => {
 
 
 // Fetch tags
-app.get('/tags', (req, res) => {
+app.get('/api/tags', (req, res) => {
 
   const { search } = req.query;
 
@@ -183,7 +177,7 @@ app.get('/tags', (req, res) => {
 });
 
 // Fetch single recipe
-app.get('/recipe/:recipeID', (req, res) => {
+app.get('/api/recipe/:recipeID', (req, res) => {
   const { recipeID } = req.params;
 
   Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
@@ -194,7 +188,7 @@ app.get('/recipe/:recipeID', (req, res) => {
 
 
 // Edit recipe
-app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res) => {
+app.post('/api/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res) => {
   const { recipeID } = req.params;
   const { title, url, description, tags, favorite, image } = req.body;
 
@@ -236,7 +230,7 @@ app.post('/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res
 });
 
 // Delete recipe
-app.delete('/recipe/:recipeID', (req, res) => {
+app.delete('/api/recipe/:recipeID', (req, res) => {
   const { recipeID } = req.params;
 
   Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
