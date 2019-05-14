@@ -113,7 +113,6 @@ body {
     box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
     background-color: white;
     position: relative;
-    overflow-y: auto;
     text-align: left;
   }
 }

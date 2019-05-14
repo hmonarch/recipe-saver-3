@@ -237,7 +237,7 @@ export default {
 
 <style lang="scss">
 #list-panel {
-  padding: 20px;
+  padding: 0;
   width: 40%;
   max-width: 400px;
   min-width: 220px;
@@ -257,8 +257,15 @@ export default {
   }
 
   #heading-and-sort {
-    overflow: auto;
+    overflow: visible;
+    height: 64px;
     width: 100%;
+    position: relative;
+    z-index: 10;
+    background-color: #fff;
+    box-sizing: border-box;
+    padding: 20px 20px 0 20px;
+    box-shadow: 0 0 2px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,.10);
 
     #list-panel-heading {
       margin: 0;
@@ -398,7 +405,10 @@ export default {
 
   .list-panel-body {
     box-sizing: border-box;
+    padding: 20px;
     width: 100%;
+    height: calc(100% - 64px);
+    overflow-y: scroll;
 
     &.image-layout {
       display: grid;
@@ -460,6 +470,12 @@ export default {
 
 
     .recipe-entry {
+      &:first-child {
+        a {
+          border-top: none;
+        }
+      }
+
       a {
         color: #000;
         overflow: auto;
