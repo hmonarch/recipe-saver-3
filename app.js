@@ -54,15 +54,13 @@ const Recipe = require('./models/recipe');
 
 
 // Get base page
-app.get(['/'], (req, res) => {
+app.get(['/', '/recipes', '/recipes:category', '/recipes/tag/:tagname'], (req, res) => {
   res.sendFile(`${__dirname}/client/dist/index.html`);
 });
 
 
 // Fetch all recipes
 app.get('/api/recipes/all', (req, res) => {
-  console.log('!!! /recipes/all');
-
 
   Recipe.find({user_id}, 'title creationDate image', (err, recipes) => {
     if (err) console.error(err);
