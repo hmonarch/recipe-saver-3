@@ -24,7 +24,21 @@ if (!process.env.PORT) {
   console.log('App running in heroku');
 	const mongodbUri = process.env.MONGODB_URI;
 	const mongooseUri = uriUtil.formatMongoose(mongodbUri);
-	mongoose.connect(mongooseUri, dbOptions);
+  mongoose.connect(mongooseUri, { 
+    useNewUrlParser: true, 
+    server: { 
+      socketOptions: { 
+        keepAlive: 1, 
+        connectTimeoutMS: 30000 
+      }
+    },
+    replset: {
+      socketOptions: {
+        keepAlive: 1,
+        connectTimeoutMS : 30000 
+      }
+    }
+  });
 }
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
