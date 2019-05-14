@@ -90,7 +90,7 @@ export default {
     async getTags() {
       const response = await RecipeService.getTags();
       this.tags = response.data;
-      this.createSimpleBar();
+      //this.createSimpleBar();
       window.tagColorMap = {};
       this.tags.forEach(tag => {
         window.tagColorMap[tag.name] = tag.color;
