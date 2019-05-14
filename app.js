@@ -45,8 +45,8 @@ db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Mongo connection succeeded'));
 
 // Global constants
-const user_id = process.env.PORT ? process.env.USER_ID : fs.readFileSync(`${__dirname}/../private/user_id.txt`).toString();
-const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync(`${__dirname}/../private/cloudinary_secret.txt`).toString();
+const user_id = process.env.PORT ? process.env.USER_ID : fs.readFileSync(`${__dirname}/private/user_id.txt`).toString();
+const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync(`${__dirname}/private/cloudinary_secret.txt`).toString();
 cloudinary.config({ 
   cloud_name: 'dormh2fvt', 
   api_key: '778489856867779', 
@@ -60,7 +60,7 @@ const Recipe = require('./models/recipe');
 
 // Get base page
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/../client/dist/index.html`);
+  res.sendFile(`${__dirname}/client/dist/index.html`);
 });
 
 
