@@ -29,15 +29,14 @@ db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Mongo connection succeeded'));
 
 // Global constants
-const user_id = fs.readFileSync('../private/user_id.txt').toString();
-const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync('../private/cloudinary_secret.txt').toString();
+const user_id = process.env.PORT ? process.env.USER_ID : fs.readFileSync(`${__dirname}/private/user_id.txt`).toString();
+const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync(`${__dirname}/private/cloudinary_secret.txt`).toString();
 cloudinary.config({ 
   cloud_name: 'dormh2fvt', 
   api_key: '778489856867779', 
   api_secret: cloudinarySecret 
 });
 const cloudinaryOptions = { quality: 60, gravity: 'center', height: 570, width: 570, crop: 'fill', tags: ['recipe_saver'] };
-
 
 
 const Recipe = require('./models/recipe');
