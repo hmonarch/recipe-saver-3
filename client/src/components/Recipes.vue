@@ -95,6 +95,11 @@ body {
   background-size: cover;
 }
 
+#detail-panel,
+#side-nav {
+  display: none !important;
+}
+
 #panels {
   height: calc(100% - 50px);
   display: flex;
@@ -169,6 +174,18 @@ body {
 // Shared classes
 .mobile {
   display: none;
+}
+
+.overlay {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.32);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  padding: 0 0 100% 0;
 }
 
 .btn {
@@ -281,5 +298,7 @@ body {
     font-size: 13px;
   }
 }
+
+@import '@/styles/_recipes-mobile.scss';
 </style>
 

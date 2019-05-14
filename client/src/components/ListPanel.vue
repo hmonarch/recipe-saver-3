@@ -514,5 +514,7 @@ export default {
     }
   }
 }
+
+@import '@/styles/_list-panel-mobile.scss';
 </style>
 
