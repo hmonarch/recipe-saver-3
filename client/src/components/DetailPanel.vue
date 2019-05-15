@@ -327,7 +327,7 @@ export default {
       EventBus.$emit('RECALUCATE_TAGS');
       EventBus.$emit('MESSAGE', this.recipe.title, message);
     },
-    debounceInput: debounce(function (e) {
+    debounceInput: debounce(function(e) {
       this.fetchTags(e);
     }, 300),
     async fetchTags(e) {

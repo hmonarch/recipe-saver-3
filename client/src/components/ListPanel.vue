@@ -260,13 +260,13 @@ export default {
 
   #heading-and-sort {
     overflow: visible;
-    height: 64px;
+    height: 55px;
     width: 100%;
     position: relative;
     z-index: 10;
     background-color: #fff;
     box-sizing: border-box;
-    padding: 14px 20px 0 20px;
+    padding: 10px 20px 0 20px;
     box-shadow: 0 0 2px rgba(0,0,0,0.10), 0 2px 2px rgba(0,0,0,.10);
 
     #heading-and-sort-inner {
@@ -278,14 +278,14 @@ export default {
     }
 
     &.tag-view {
-      height: 94px;
+      height: 88px;
     }
 
     #list-panel-heading {
       margin: 0 10px 0 0;
-      font-size: 24px;
+      font-size: 22px;
       position: relative;
-      top: 5px;
+      top: 6px;
       text-transform: capitalize;
     }
 
@@ -311,8 +311,8 @@ export default {
     #sort-options {
       z-index: 2;
       position: absolute;
-      right: 24px;
-      top: 54px;
+      right: 49px;
+      top: 44px;
       text-align: left;
 
       li {

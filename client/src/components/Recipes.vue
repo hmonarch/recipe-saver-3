@@ -1,8 +1,8 @@
-
 <template>
   <div id="recipes">
 
     <SideNav v-show="listOpen"></SideNav>
+    <Header></Header>
     <section id="panels">
       <ListPanel v-show="listOpen" :class="{ 'full-width' : detailsOpen === false }"></ListPanel>
       <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }" :screenModeText="screenModeText"></DetailPanel>
@@ -24,9 +24,10 @@
 </template>
 
 <script>
-import SideNav from './SideNav.vue';
-import ListPanel from './ListPanel.vue';
-import DetailPanel from './DetailPanel.vue';
+import SideNav from '@/components/SideNav.vue';
+import Header from '@/components/Header.vue';
+import ListPanel from '@/components/ListPanel.vue';
+import DetailPanel from '@/components/DetailPanel.vue';
 import EventBus from '@/EventBus';
 import Icon from '@/components/Icons';
 
@@ -34,6 +35,7 @@ export default {
   name: 'recipes',
   components: {
     SideNav,
+    Header,    
     ListPanel,
     DetailPanel,
     Icon
@@ -105,7 +107,7 @@ body {
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 10px 20px 0 20px;
 
   .panel {
     box-sizing: border-box;
