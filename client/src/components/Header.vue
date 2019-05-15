@@ -15,7 +15,7 @@
         </li>
         <li class="search-container">
           <icon name="magnifyingGlass"/>
-          <form @submit.prevent="function(){}">
+          <form @submit.prevent="()=>{}">
             <input id="search-input" @keyup="debounceSearch($event)" v-model="searchTerm" type="text" placeholder="Search Recipes">
           </form>
           <ul v-if="searchResultsVisible" id="search-results" class="box">

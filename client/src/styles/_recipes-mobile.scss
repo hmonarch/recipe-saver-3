@@ -1,5 +1,11 @@
 @media (max-width: 767px) {
   #panels {
-    height: calc(100% - 20px);
+    height: calc(100% - 61px);
+
+    #list-panel {
+      .list-panel-body {
+        max-height: calc(100% - 55px);
+      }
+    }
   }
 }

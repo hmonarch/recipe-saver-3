@@ -9,6 +9,11 @@
     <div id="add-recipe" class="btn" @click="addNewRecipe()">New Recipe</div>
 
     <ul id="side-nav-menu">
+      <li class="mobile account">
+        <a href="#">
+          Account
+        </a>
+      </li>
 			<li>
         <router-link :class="{ active : view === 'all' }" :to="{ path: '/recipes/all' }">
           <img class="side-nav-menu-icon" src="../assets/icon-card.png">
@@ -28,7 +33,7 @@
         </router-link>
       </li>
 			<li id="side-nav-menu-tags" :class="{ open : tagListOpen === true }">
-        <a @click.prevent.self="toggleTagList()">
+        <a @click.prevent="toggleTagList()">
           <img class="side-nav-menu-icon" src="../assets/icon-tag.png">
           <span>Tags</span>
           <icon name="caret"/>
@@ -66,7 +71,7 @@ export default {
   data() {
     return {
       tags: [],
-      tagListOpen: (localStorage.tagListOpen === 'true') ? true : false,
+      tagListOpen: (localStorage.tagListOpen === 'true' && !window.matchMedia('(max-width: 767px)').matches) ? true : false,
       mobileMenuOpen: false,
     };
   },
@@ -106,12 +111,20 @@ export default {
       this.mobileMenuOpen = true;
     });
     EventBus.$on('CLOSE_MENUS', () => {
-      this.closeMenus = false;
       this.mobileMenuOpen = false;
+      this.tagListOpen = false;
     });
   },
   created() {
     this.getTags();
+  },
+  watch: {
+    '$route': {
+      handler() {
+        this.tagListOpen = false;
+        this.mobileMenuOpen = false;
+      }
+    }
   }
 }
 </script>

@@ -5,7 +5,7 @@
       <router-link to="/about">About</router-link>
     </div> -->
     <router-view/>
-    <div class="mobile overlay" @click="closeMenus"></div>
+    <div class="mobile overlay" @click="closeMenus" :class="{ 'active': showOverlay === true }"></div>
   </div>
 </template>
 
@@ -14,19 +14,26 @@ import EventBus from '@/EventBus';
 export default {
   data() {
     return {
-
+      showOverlay: false,
     }
   },
   methods: {
     closeMenus() {
-      console.log('close menus');
       EventBus.$emit('CLOSE_MENUS');
+      this.showOverlay = false;
     }
   },
   mounted() {
     EventBus.$on('SHOW_MOBILE_MENU', () => {
       this.showOverlay = true;
     });
+  },
+  watch: {
+    '$route': {
+      handler() {
+        this.showOverlay = false;
+      }
+    }
   }
 }
 </script>
