@@ -15,7 +15,9 @@
           <form @submit.prevent="test()">
             <input id="search-input" @keyup="debounceSearch($event)" v-model="searchTerm" type="text" placeholder="Search Recipes">
           </form>
-          <ul id="search-results" class="box">
+          <ul v-if="searchResultsVisible" id="search-results" class="box">
+            <li v-show="!recipeSearchResults.length && !tagSearchResults.length" class="no-results">No results</li>
+
             <li v-for="recipe in recipeSearchResults.slice(0, 8)" :key="recipe._id">
               <router-link :to="{ query: { id: recipe._id }}">
                 <span class="result-title">{{ recipe.title }}</span>
@@ -56,6 +58,7 @@ export default {
       searchTerm: '',
       recipeSearchResults: [],
       tagSearchResults: [],
+      searchResultsVisible: false,
     };
   },
   mixins: [utils],
@@ -64,14 +67,23 @@ export default {
       this.search(e);
     }, 300),
     async search(e) {
-      if (this.searchTerm.trim() === '') return;
+      if (this.searchTerm.trim() === '') return this.searchResultsVisible = false;
+      this.searchResultsVisible = true;
       const response = await RecipeService.searchRecipes(this.searchTerm.trim());
       this.recipeSearchResults = response.data.recipeResults;
       this.tagSearchResults = response.data.tagResults;
     }
   },
-  mounted() {
+  created() {
+    document.addEventListener('click', e => {
 
+      // Search results click off
+      const isChildofSearchResults =  e.target.matches('#search-results') || e.target.matches('#search-input') || e.target.matches('#search-results .tag') || e.target.matches('.no-results');
+      if (!isChildofSearchResults) {
+        this.searchResultsVisible = false;
+      }
+
+    });
   },
 }
 </script>
@@ -165,6 +177,12 @@ header {
       background-color: #fff;
       width: 340px;
       top: 39px;
+
+      li.no-results {
+        padding: 3px 15px;
+        cursor: default;
+        color: #706a6a;
+      }
 
       li:not(.tag) {
         line-height: 20px;

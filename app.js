@@ -210,6 +210,7 @@ app.get('/api/search/:term', (req, res) => {
       });
     });
 
+    // Sort results by name first
     recipeResults.sort((a, b) => sortFn(a, b, 'title'));
     tagResults.sort((a, b) => sortFn(a, b, 'name'));
 
@@ -217,6 +218,16 @@ app.get('/api/search/:term', (req, res) => {
       if (a[criteria].toLowerCase() < b[criteria].toLowerCase()) return -1; 
       if (a[criteria].toLowerCase() > b[criteria].toLowerCase()) return 1; 
       return 0;
+    }
+
+    // Move exact matches to the top of the list
+    recipeResults.forEach((item, index) => prioritizeExactMatch(item, index, 'title', recipeResults));
+    tagResults.forEach((item, index) => prioritizeExactMatch(item, index, 'name', tagResults));
+
+    function prioritizeExactMatch(item, index, criteria, arr) {
+      if (term.toLowerCase() === item[criteria].toLowerCase()) {
+        arr.unshift(arr.splice(index, 1)[0]);
+      }
     }
 
     res.json({ recipeResults, tagResults });
