@@ -62,10 +62,10 @@ export default {
 
       EventBus.$emit('FULL_SCREEN_HEADER', false);
     });
-    EventBus.$on('TOGGLE_SCREEN', (forceHalf) => {
-      this.listOpen = forceHalf || !this.listOpen;
+    EventBus.$on('TOGGLE_SCREEN', (forceListOpen) => {
+      this.listOpen = forceListOpen || !this.listOpen;
 
-      EventBus.$emit('FULL_SCREEN_HEADER', forceHalf || !this.listOpen);
+      EventBus.$emit('LISTOPEN_HEADER', forceListOpen || this.listOpen);
       
     });
     EventBus.$on('NEW_RECIPE', () => {

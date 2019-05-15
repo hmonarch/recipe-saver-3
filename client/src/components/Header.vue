@@ -87,8 +87,8 @@ export default {
     });
   },
   mounted() {
-    EventBus.$on('FULL_SCREEN_HEADER', isFullScreen => {
-      this.fullScreen = isFullScreen;
+    EventBus.$on('LISTOPEN_HEADER', listOpen => {
+      this.fullScreen = !listOpen;
     });
   }
 }
