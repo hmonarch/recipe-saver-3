@@ -1,6 +1,7 @@
 @media (max-width: 767px) {
   #panels {
     height: calc(100% - 61px);
+    padding: 10px 10px 0 10px;
 
     #list-panel {
       .list-panel-body {
