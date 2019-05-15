@@ -216,6 +216,9 @@ export default {
             name: this.$route.params.tagName,
             color: '#808080'
           };
+
+          // We need to close full screen details here if a user clicked a tag in the search results so the list panel will show
+          EventBus.$emit('TOGGLE_SCREEN', true);
         }
 
       },

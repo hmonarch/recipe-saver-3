@@ -59,9 +59,14 @@ export default {
     EventBus.$on('CLOSE_DETAILS', () => {
       this.detailsOpen = false;
       if (this.listOpen === false) this.listOpen = true;
+
+      EventBus.$emit('FULL_SCREEN_HEADER', false);
     });
-    EventBus.$on('TOGGLE_SCREEN', () => {
-      this.listOpen = !this.listOpen;
+    EventBus.$on('TOGGLE_SCREEN', (forceHalf) => {
+      this.listOpen = forceHalf || !this.listOpen;
+
+      EventBus.$emit('FULL_SCREEN_HEADER', forceHalf || !this.listOpen);
+      
     });
     EventBus.$on('NEW_RECIPE', () => {
       this.listOpen = false;

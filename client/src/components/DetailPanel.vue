@@ -13,7 +13,7 @@
           <ul v-show="actionsVisible" id="more-actions-menu" class="box">
             <li v-show="!editMode" @click="editRecipe()">Edit Recipe</li>
             <li v-show="editMode" @click="cancel()">Cancel</li>
-            <li @click="toggleSreen()">{{ screenModeText }}</li>
+            <li @click="toggleScreen()">{{ screenModeText }}</li>
             <li @click="print()">Print</li>
             <li v-if="!confirmActive" @click="confirmActive = true">Delete Recipe</li>
             <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
@@ -273,7 +273,7 @@ export default {
       delete query.id;
       this.$router.replace({ query });
     },
-    toggleSreen() {
+    toggleScreen() {
       this.actionsVisible = false;
       EventBus.$emit('TOGGLE_SCREEN');
     },

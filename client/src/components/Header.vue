@@ -1,6 +1,6 @@
 <template>
   <header>
-    <div class="header-inner">
+    <div class="header-inner" :class="{ 'full-width' : fullScreen === true }">
       <ul id="nav">
         <li class="my-recipes">
           <router-link :to="{ path: '/recipes/all' }">
@@ -19,7 +19,7 @@
             <li v-show="!recipeSearchResults.length && !tagSearchResults.length" class="no-results">No results</li>
 
             <li v-for="recipe in recipeSearchResults.slice(0, 8)" :key="recipe._id">
-              <router-link :to="{ query: { id: recipe._id }}">
+              <router-link :to="{ path: '/recipes/all', query: { id: recipe._id }}">
                 <span class="result-title">{{ recipe.title }}</span>
               </router-link>
             </li>
@@ -59,6 +59,7 @@ export default {
       recipeSearchResults: [],
       tagSearchResults: [],
       searchResultsVisible: false,
+      fullScreen: false,
     };
   },
   mixins: [utils],
@@ -85,6 +86,11 @@ export default {
 
     });
   },
+  mounted() {
+    EventBus.$on('FULL_SCREEN_HEADER', isFullScreen => {
+      this.fullScreen = isFullScreen;
+    });
+  }
 }
 </script>
 
@@ -97,6 +103,10 @@ header {
     margin-left: auto;
     height: 50px;
     box-shadow: rgba(0, 0, 0, 0.4) 0px 1px 3px 0px;
+
+    &.full-width {
+      width: 100%;
+    }
 
     #nav {
       text-align: left;
