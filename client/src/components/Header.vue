@@ -2,7 +2,7 @@
   <header>
     <div class="header-inner" :class="{ 'full-width' : fullScreen === true }">
       <ul id="nav">
-        <li class="mobile burger">
+        <li class="mobile burger" @click="showMobileMenu()">
           <icon name="burger"/>
         </li>
         <li class="my-recipes">
@@ -15,7 +15,7 @@
         </li>
         <li class="search-container">
           <icon name="magnifyingGlass"/>
-          <form @submit.prevent="test()">
+          <form @submit.prevent="function(){}">
             <input id="search-input" @keyup="debounceSearch($event)" v-model="searchTerm" type="text" placeholder="Search Recipes">
           </form>
           <ul v-if="searchResultsVisible" id="search-results" class="box">
@@ -67,6 +67,9 @@ export default {
   },
   mixins: [utils],
   methods: {
+    showMobileMenu() {
+      EventBus.$emit('SHOW_MOBILE_MENU');
+    },
     debounceSearch: debounce(function(e) {
       this.search(e);
     }, 300),

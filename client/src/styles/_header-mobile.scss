@@ -1,12 +1,9 @@
 @media (max-width: 767px) {  
-  #panels #detail-panel,
-  #side-nav {
+  #panels #detail-panel {
     display: none !important;
   }
 
   header {
-    border: solid 1px red;
-
     .header-inner {
       width: 100% !important;
       background-color: rgba(0, 0, 0, 0.52);
@@ -37,6 +34,7 @@
           position: relative;
           margin-right: 8px;
           background-color: #3e3a3d;
+          width: calc(100% - 125px);
 
           .icon--magnifyingGlass svg {
             fill: #fff;
@@ -53,6 +51,7 @@
 
       #search-results {
         width: 100%;
+        top: 34px;
       }
     }
   }

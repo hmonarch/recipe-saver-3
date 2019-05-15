@@ -1,5 +1,5 @@
 <template>
-  <div id="side-nav">
+  <div id="side-nav" :class="{ 'open': mobileMenuOpen === true }">
 
     <div class="side-nav-logo">
       <img src="../assets/logo-37x37.png">
@@ -50,9 +50,6 @@
         </div>
       </li>
 		</ul>
-
-    <div class="mobile overlay"></div>
-
   </div>
 </template>
 
@@ -70,6 +67,7 @@ export default {
     return {
       tags: [],
       tagListOpen: (localStorage.tagListOpen === 'true') ? true : false,
+      mobileMenuOpen: false,
     };
   },
   mixins: [utils],
@@ -104,6 +102,13 @@ export default {
   },
   mounted() {
     EventBus.$on('RECALUCATE_TAGS', this.getTags);
+    EventBus.$on('SHOW_MOBILE_MENU', () => {
+      this.mobileMenuOpen = true;
+    });
+    EventBus.$on('CLOSE_MENUS', () => {
+      this.closeMenus = false;
+      this.mobileMenuOpen = false;
+    });
   },
   created() {
     this.getTags();

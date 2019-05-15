@@ -5,8 +5,32 @@
       <router-link to="/about">About</router-link>
     </div> -->
     <router-view/>
+    <div class="mobile overlay" @click="closeMenus"></div>
   </div>
 </template>
+
+<script>
+import EventBus from '@/EventBus';
+export default {
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    closeMenus() {
+      console.log('close menus');
+      EventBus.$emit('CLOSE_MENUS');
+    }
+  },
+  mounted() {
+    EventBus.$on('SHOW_MOBILE_MENU', () => {
+      this.showOverlay = true;
+    });
+  }
+}
+</script>
+
 
 <style lang="scss">
 @import '@/styles/_reset.scss';
