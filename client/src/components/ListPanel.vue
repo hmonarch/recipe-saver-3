@@ -37,7 +37,6 @@
 		</div>
 
     <ul v-show="tagColorMenuVisible" id="tag-color-menu" class="box">
-      <li class="tag-color-menu-title">Change Tag Color</li>
       <li v-for="tagColor in tagColors" :key="tagColor.name" class="tag">
         <div class="tag-color-selection" @click="selectTagColor(tagColor.color)" :style="backgroundColor(tagColor.color)">{{ tagColor.name }}</div>
       </li>
@@ -390,18 +389,27 @@ export default {
     width: 153px;
     top: 93px;
     left: 20px;
+    padding: 40px 10px 10px 10px;
+    columns: 2;
+
+    &::after {
+      font-weight: bold;
+      content: 'Change Tag Color';
+      position: absolute;
+      top: 0;
+      width: 100%;
+      left: 0;
+      text-align: center;
+      padding-top: 10px;
+    }
 
     li {
       display: block;
-      padding: 3px 15px;
-
-      &.tag-color-menu-title {
-        font-weight: bold;
-        margin-bottom: 8px;
-      }
+      padding: 3px 0;
 
       .tag-color-selection {
         cursor: pointer;
+        margin-right: 0;
         
         &:hover {
           text-decoration: underline;

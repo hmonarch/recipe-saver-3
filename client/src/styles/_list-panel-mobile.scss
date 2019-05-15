@@ -4,8 +4,37 @@
     width: 1000px;
     margin: 0 auto;
 
+    .list-panel-body.image-layout {
+      .recipe-entry {
+        a {
+          .recipe-entry-right {
+            top: 6px;
+          }
+        }
+      }
+    }
+
     #heading-and-sort {
       z-index: 5;
+      padding: 10px 10px 0 10px;
+
+      #sort-options {
+        width: 114px;
+        padding: 0;
+
+        li {
+          padding: 10px;
+          border-top: solid 1px #eee;
+
+          &:first-child {
+            border-top: none;
+          }
+        }
+      }
+    }
+
+    #tag-color-menu {
+      top: 82px;
     }
 
     .recipe-entry {
