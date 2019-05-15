@@ -1,0 +1,59 @@
+@media (max-width: 767px) {  
+  #panels #detail-panel,
+  #side-nav {
+    display: none !important;
+  }
+
+  header {
+    border: solid 1px red;
+
+    .header-inner {
+      width: 100% !important;
+      background-color: rgba(0, 0, 0, 0.52);
+
+      #nav {
+        li.my-recipes,
+        li.extension,
+        li.logout,
+        li.account {
+          display: none;
+        }
+
+        li.mobile.burger {
+          display: inline-block;
+          padding: 5px 0 5px 8px;
+
+          .icon--burger {
+            svg {
+              height: 40px;
+              width: 40px;
+              fill: #fff;
+            }
+          }
+        }
+
+        li.search-container {
+          float: right;
+          position: relative;
+          margin-right: 8px;
+          background-color: #3e3a3d;
+
+          .icon--magnifyingGlass svg {
+            fill: #fff;
+          }
+
+          form {
+            #search-input {
+              background-color: #3e3a3d;
+              color: #fff;
+            }
+          }
+        }
+      }
+
+      #search-results {
+        width: 100%;
+      }
+    }
+  }
+}

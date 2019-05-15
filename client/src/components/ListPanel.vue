@@ -218,7 +218,9 @@ export default {
           };
 
           // We need to close full screen details here if a user clicked a tag in the search results so the list panel will show
-          EventBus.$emit('TOGGLE_SCREEN', true);
+          if (this.$route.query && this.$route.query.id !== 'new') {
+            EventBus.$emit('TOGGLE_SCREEN', true);
+          }
         }
 
       },

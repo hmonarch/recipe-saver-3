@@ -2,12 +2,15 @@
   <header>
     <div class="header-inner" :class="{ 'full-width' : fullScreen === true }">
       <ul id="nav">
+        <li class="mobile burger">
+          <icon name="burger"/>
+        </li>
         <li class="my-recipes">
           <router-link :to="{ path: '/recipes/all' }">
             My Recipes
           </router-link>
         </li>
-        <li>
+        <li class="extension">
           <a href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a>
         </li>
         <li class="search-container">
@@ -111,7 +114,7 @@ header {
     #nav {
       text-align: left;
 
-      > li {
+      > li:not(.mobile) {
         display: inline-block;
 
         &.my-recipes {
@@ -223,5 +226,7 @@ header {
     }
   }
 }
+
+@import '@/styles/_header-mobile.scss';
 </style>
 

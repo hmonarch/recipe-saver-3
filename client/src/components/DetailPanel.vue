@@ -450,8 +450,6 @@ export default {
     this.editor.setOptions({editable: false});
 
     EventBus.$on('NEW_RECIPE', () => {
-      console.log('NEW_RECIPE');
-
       this.$router.push({ path: this.$route.path, query: { id: 'new' } });
       this.removeEditMode();
       this.recipe = {
@@ -463,7 +461,7 @@ export default {
         title: '',
         url: '',
       };
-      this.editor.setContent('');
+      this.editor.clearContent();
       this.editor.setOptions({editable: true});
       this.editMode = true;
     });

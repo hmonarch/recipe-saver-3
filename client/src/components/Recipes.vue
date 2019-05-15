@@ -60,7 +60,7 @@ export default {
       this.detailsOpen = false;
       if (this.listOpen === false) this.listOpen = true;
 
-      EventBus.$emit('FULL_SCREEN_HEADER', false);
+      EventBus.$emit('LISTOPEN_HEADER', true);
     });
     EventBus.$on('TOGGLE_SCREEN', (forceListOpen) => {
       this.listOpen = forceListOpen || !this.listOpen;
@@ -71,6 +71,8 @@ export default {
     EventBus.$on('NEW_RECIPE', () => {
       this.listOpen = false;
       this.detailsOpen = true;
+
+      EventBus.$emit('LISTOPEN_HEADER', false);
     });
     EventBus.$on('RECIPE_SAVED', () => {
       this.listOpen = true;
@@ -101,11 +103,6 @@ body {
   background: url('../assets/bg-recipes.jpg') no-repeat center center fixed;
   background-size: cover;
 }
-
-// #detail-panel,
-// #side-nav {
-//   display: none !important;
-// }
 
 #panels {
   height: calc(100% - 50px);
