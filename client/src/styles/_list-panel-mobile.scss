@@ -4,6 +4,13 @@
     width: 1000px;
     margin: 0 auto;
 
+    &.full-width {
+      .list-panel-body.image-layout {
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 16px;
+      }
+    }
+
     .list-panel-body.image-layout {
       .recipe-entry {
         a {

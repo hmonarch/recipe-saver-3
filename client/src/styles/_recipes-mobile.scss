@@ -9,5 +9,16 @@
         max-height: calc(100% - 55px);
       }
     }
+
+    #detail-panel {
+      position: absolute;
+      z-index: 10;
+      width: 100%;
+      max-width: none;
+      top: 50px;
+      left: 0;
+      border-radius: 0;
+      height: calc(100% - 50px);
+    }
   }
 }

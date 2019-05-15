@@ -549,5 +549,6 @@ export default {
 
 <style lang="scss">
   @import '@/styles/_detail-panel.scss';
+  @import '@/styles/_detail-panel-mobile.scss';
 </style>
 

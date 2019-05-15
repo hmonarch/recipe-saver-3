@@ -8,7 +8,7 @@
       <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }" :screenModeText="screenModeText"></DetailPanel>
     </section>
 
-    <div :class="{ 'active' : showMessage === true, 'error': isError === true }" id="message-box">
+    <div :class="{ 'active' : showMessage === true, 'error': isError === true }" id="message-box" class="box">
       <div class="message-inner">
         <div class="message-block">
           <span class="message-subject">{{ messageSubject }}</span>

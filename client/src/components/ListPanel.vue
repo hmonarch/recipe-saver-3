@@ -220,6 +220,11 @@ export default {
           if (this.$route.query && this.$route.query.id !== 'new') {
             EventBus.$emit('TOGGLE_SCREEN', true);
           }
+
+          // Never show full screen details on mobile when showing tag list view
+          if (window.matchMedia('(max-width: 767px)').matches) {
+            EventBus.$emit('CLOSE_DETAILS');
+          }
         }
 
       },
@@ -424,6 +429,7 @@ export default {
     width: 100%;
     max-height: calc(100% - 64px);
     overflow-y: auto;
+    -webkit-tap-highlight-color: transparent;
 
     &.image-layout {
       display: grid;
