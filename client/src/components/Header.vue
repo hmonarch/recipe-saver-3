@@ -13,8 +13,20 @@
         <li class="search-container">
           <icon name="magnifyingGlass"/>
           <form @submit.prevent="test()">
-            <input id="search-input" @keyup="debounceSearch($event)" type="text" placeholder="Search Recipes">
+            <input id="search-input" @keyup="debounceSearch($event)" v-model="searchTerm" type="text" placeholder="Search Recipes">
           </form>
+          <ul id="search-results" class="box">
+            <li v-for="recipe in recipeSearchResults.slice(0, 8)" :key="recipe._id">
+              <router-link :to="{ query: { id: recipe._id }}">
+                <span class="result-title">{{ recipe.title }}</span>
+              </router-link>
+            </li>
+            <li v-for="(tag, index) in tagSearchResults.slice(0, 4)" :key="tag.name" class="tag" :data-tag-num="index">
+              <router-link :style="dynamicBackgroundColor(tag)" :to="{path: `/recipes/tag/${tag.name}`}">
+                <span class="tag-name">{{ tag.name }}</span>
+              </router-link>
+            </li>
+          </ul>
         </li>
 
         <li class="logout">
@@ -41,6 +53,9 @@ export default {
   },
   data() {
     return {
+      searchTerm: '',
+      recipeSearchResults: [],
+      tagSearchResults: [],
     };
   },
   mixins: [utils],
@@ -48,8 +63,11 @@ export default {
     debounceSearch: debounce(function(e) {
       this.search(e);
     }, 300),
-    search(e) {
-      console.log(e);
+    async search(e) {
+      if (this.searchTerm.trim() === '') return;
+      const response = await RecipeService.searchRecipes(this.searchTerm.trim());
+      this.recipeSearchResults = response.data.recipeResults;
+      this.tagSearchResults = response.data.tagResults;
     }
   },
   mounted() {
@@ -61,7 +79,7 @@ export default {
 <style lang="scss">
 header {
   .header-inner {
-    background-color: white;
+    background-color: #fff;
     width: calc(100% - 234px);
     box-sizing: border-box;
     margin-left: auto;
@@ -71,7 +89,7 @@ header {
     #nav {
       text-align: left;
 
-      li {
+      > li {
         display: inline-block;
 
         &.my-recipes {
@@ -81,7 +99,7 @@ header {
           }
         }
 
-        a {
+        > a {
           color: #555a5e;
           text-decoration: none;
           padding: 0 10px;
@@ -105,6 +123,7 @@ header {
         position: relative;
         top: 8px;
         height: 32px;
+        width: 185px;
         margin-left: 15px;
         position: absolute;
 
@@ -137,6 +156,41 @@ header {
       li.account,
       li.logout {
         float: right;
+      }
+    }
+
+    #search-results {
+      position: absolute;
+      z-index: 15;
+      background-color: #fff;
+      width: 340px;
+      top: 39px;
+
+      li:not(.tag) {
+        line-height: 20px;
+
+        a {
+          padding: 3px 15px;
+          display: block;
+          color: #000;
+          text-decoration: none;
+
+          &:hover {
+            background-color: #008dff;
+            color: #fff;
+          }
+        }
+      }
+
+      li.tag {
+        margin: 0 0 5px 0;
+        padding-left: 16px;
+
+        &[data-tag-num="0"] {
+          border-top: solid 1px #eee;
+          margin-top: 6px;
+          padding-top: 8px;
+        }
       }
     }
   }

@@ -132,22 +132,6 @@ export default {
     }
   },
   methods: {
-    initTag() {
-      const name = this.getTaggedView();
-      const selector = '#tag-list .tag';
-      let color = '';
-      let count = 0;
-      this.waitFor(() => document.querySelector(selector),
-      () => {
-        [...document.querySelectorAll(selector)].forEach(tag => {
-          if (tag.querySelector('.tag-name').innerText.trim() === name) {
-            color = tag.querySelector('a').style.backgroundColor;
-            count = tag.querySelector('.tag-count').innerText.trim().replace(/(\(|\))/g, '');
-          }
-        });
-        this.selectedTag = { name, color, count };
-      });
-    },
     getViewName() {
       return this.$route.path.replace('/recipes/', '');
     },
@@ -204,13 +188,9 @@ export default {
     },
   },
   mounted() {
-    EventBus.$on('TAG_SELECTED', tag => {
-      this.selectedTag = tag;
-    });
     EventBus.$on('RECIPE_SAVED', this.retrieveRecipes);
   },
   created() {
-    this.initTag();
     document.addEventListener('click', e => {
 
       // Sort Options Menu
@@ -230,6 +210,14 @@ export default {
     '$route.params': {
       handler() {
         this.retrieveRecipes();
+
+        if (this.$route.name === 'Tag') {
+          this.selectedTag = {
+            name: this.$route.params.tagName,
+            color: '#808080'
+          };
+        }
+
       },
       immediate: true,
     }

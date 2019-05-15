@@ -13,6 +13,9 @@ export default {
   getRecipe(id) {
     return Api().get(`recipe/${id}`);
   },
+  searchRecipes(term) {
+    return Api().get(`search/${term}`);
+  },
   updateRecipe(id, recipe) {
 
     const fd = new FormData();

@@ -174,6 +174,7 @@ app.get('/api/tags', (req, res) => {
   });
 });
 
+
 // Fetch single recipe
 app.get('/api/recipe/:recipeID', (req, res) => {
   const { recipeID } = req.params;
@@ -184,8 +185,46 @@ app.get('/api/recipe/:recipeID', (req, res) => {
   });
 });
 
+app.get('/api/search/:term', (req, res) => {
 
-// Edit recipe
+  const { term } = req.params;
+
+  Recipe.find({ user_id }, 'id title tags', { sort: { title: 1 }}, (err, recipes) => {
+    if (err) console.error(err);
+
+    const recipeResults = [];
+    const tagResults = [];
+
+    recipes.forEach(recipe => {
+      // Capture recipe results
+      if (recipe.title.toLowerCase().indexOf(term.toLowerCase()) > -1) {
+        recipeResults.push(recipe);
+      }
+
+      // Capture tag reults
+      recipe.tags.forEach(tag => {
+        if (tag.name.toLowerCase().indexOf(term.toLowerCase()) > -1) {
+          const isCaptured = tagResults.some(tagResult => tagResult.name.toLowerCase() === tag.name.toLowerCase());
+          if (!isCaptured) tagResults.push(tag);
+        }
+      });
+    });
+
+    recipeResults.sort((a, b) => sortFn(a, b, 'title'));
+    tagResults.sort((a, b) => sortFn(a, b, 'name'));
+
+    function sortFn(a, b, criteria) {
+      if (a[criteria].toLowerCase() < b[criteria].toLowerCase()) return -1; 
+      if (a[criteria].toLowerCase() > b[criteria].toLowerCase()) return 1; 
+      return 0;
+    }
+
+    res.json({ recipeResults, tagResults });
+  });
+});
+
+
+// Update recipe
 app.post('/api/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res) => {
   const { recipeID } = req.params;
   const { title, url, description, tags, favorite, image } = req.body;
