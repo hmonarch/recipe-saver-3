@@ -11,11 +11,11 @@
             <div class="utility-tooltip-text">Actions</div>
           </div>
           <ul v-show="actionsVisible" id="more-actions-menu" class="box">
-            <li v-show="!editMode" @click="editRecipe()">Edit Recipe</li>
-            <li v-show="editMode" @click="cancel()">Cancel</li>
-            <li @click="toggleScreen()">{{ screenModeText }}</li>
-            <li @click="print()">Print</li>
-            <li v-if="!confirmActive" @click="confirmActive = true">Delete Recipe</li>
+            <li v-show="!editMode" @click="editRecipe()" class="action-edit">Edit Recipe</li>
+            <li v-show="editMode" @click="cancel()" class="action-cancel">Cancel</li>
+            <li @click="toggleScreen()" class="action-toggle-screen">{{ screenModeText }}</li>
+            <li @click="print()" class="action-print">Print</li>
+            <li v-if="!confirmActive" @click="confirmActive = true" class="action-delete">Delete Recipe</li>
             <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
           </ul>  
         </li>

@@ -96,6 +96,7 @@
     text-align: left;
     width: 144px;
     left: 2px;
+    padding-bottom: 0;
 
     li {
       padding: 3px 15px;
@@ -106,6 +107,8 @@
 
       &:last-child {
         margin-top: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
         border-top: solid 1px #dadada;
 
         &.confirm-delete {
