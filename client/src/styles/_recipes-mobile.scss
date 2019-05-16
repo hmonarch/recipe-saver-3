@@ -1,4 +1,9 @@
 @media (max-width: 767px) {
+  /* Set overflow: hidden; on mobile so that -100% bottom details panel is not shown */
+  body {
+    overflow: hidden;
+  }
+
   #panels {
     height: calc(100% - 61px);
     padding: 10px 10px 0 10px;
@@ -7,18 +12,28 @@
       .list-panel-body {
         padding: 10px 10px 0 10px;
         max-height: calc(100% - 55px);
+
+        &.tagged-view {
+          max-height: calc(100% - 88px);
+        }
       }
     }
 
     #detail-panel {
+      display: block !important;
       position: absolute;
       z-index: 5;
       width: 100%;
       max-width: none;
-      top: 50px;
+      bottom: -100%;
       left: 0;
       border-radius: 0;
       height: calc(100% - 50px);
+      transition: 300ms;
+
+      &.open {
+        bottom: 0;
+      }
     }
   }
 }

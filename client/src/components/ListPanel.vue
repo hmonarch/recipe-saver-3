@@ -42,7 +42,7 @@
       </li>
     </ul>
 
-    <ul id="recipe-list" class="list-panel-body" :class="{ 'image-layout' : imageLayout === true }">
+    <ul id="recipe-list" class="list-panel-body" :class="{ 'image-layout' : imageLayout === true, 'tagged-view': getTaggedView() }">
       <li class="recipe-entry" v-for="recipe in recipes" :key="recipe.id" @click="selectRecipe(recipe._id)">
         <router-link :to="{ query: { id: recipe._id }}">
           <img class="recipe-image" :src="recipe.image || 'https://res.cloudinary.com/dormh2fvt/image/upload/v1527317481/placeholder_rjy55k.jpg'">
@@ -216,14 +216,10 @@ export default {
           };
 
           // We need to close full screen details here if a user clicked a tag in the search results so the list panel will show
-          if (this.$route.query && this.$route.query.id !== 'new') {
+          if (this.$route.query && this.$route.query.id !== 'new' && !window.matchMedia('(max-width: 767px)').matches) {
             EventBus.$emit('TOGGLE_SCREEN', true);
           }
 
-          // Never show full screen details on mobile when showing tag list view
-          if (window.matchMedia('(max-width: 767px)').matches) {
-            EventBus.$emit('CLOSE_DETAILS');
-          }
         }
 
       },

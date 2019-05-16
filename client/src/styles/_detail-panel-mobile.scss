@@ -1,5 +1,7 @@
 @media (max-width: 767px) {
   #detail-panel {
+    display: block !important;
+
     #utility-bar {
       li#more-actions-container {
         margin-right: 16px;

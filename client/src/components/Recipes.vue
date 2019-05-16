@@ -5,7 +5,7 @@
     <Header></Header>
     <section id="panels">
       <ListPanel :class="{ 'list-open': listOpen, 'full-width' : detailsOpen === false }"></ListPanel>
-      <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }" :screenModeText="screenModeText"></DetailPanel>
+      <DetailPanel :class="{ 'full-width' : listOpen === false, 'close': !detailsOpen, 'open': detailsOpen }" :screenModeText="screenModeText"></DetailPanel>
     </section>
 
     <div :class="{ 'active' : showMessage === true, 'error': isError === true }" id="message-box" class="box">
@@ -70,6 +70,7 @@ export default {
     EventBus.$on('NEW_RECIPE', () => {
       this.listOpen = false;
       this.detailsOpen = true;
+      console.log('NEW_RECIPE, closed list, opened details')
 
       EventBus.$emit('LISTOPEN_HEADER', false);
     });
