@@ -1,16 +1,29 @@
 const express = require('express');
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const cloudinary = require('cloudinary');
+const passport = require('passport');
+const Auth0Strategy = require('passport-auth0');
+
+const authRouter = require('./routes/auth');
+
 
 
 // Express app / Middleware
 const app = express();
 app.use(express.static(`${__dirname}/client/dist`));
 app.use(bodyParser.json());
+app.use(session({
+  secret: 'cj-the-cat',
+  cookie: {},
+  resave: false,
+  saveUninitialized: true
+}));
+
 
 // TODO: Investigate if this is needed in production
 app.use(cors());
@@ -41,6 +54,9 @@ db.once('open', () => console.log('Mongo connection succeeded'));
 
 // Global constants
 const user_id = process.env.PORT ? process.env.USER_ID : fs.readFileSync(`${__dirname}/private/user_id.txt`).toString();
+const AUTH0_CLIENT_ID = process.env.PORT ? process.env.AUTH0_CLIENT_ID : fs.readFileSync(`${__dirname}/private/auth0_client_id.txt`).toString();
+const AUTH0_DOMAIN = process.env.PORT ? process.env.AUTH0_DOMAIN : fs.readFileSync(`${__dirname}/private/auth0_domain.txt`).toString();
+const AUTH0_CLIENT_SECRET = process.env.PORT ? process.env.AUTH0_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/auth0_client_secret.txt`).toString();
 const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync(`${__dirname}/private/cloudinary_secret.txt`).toString();
 cloudinary.config({ 
   cloud_name: 'dormh2fvt', 
@@ -50,11 +66,34 @@ cloudinary.config({
 const cloudinaryOptions = { quality: 60, gravity: 'center', height: 570, width: 570, crop: 'fill', tags: ['recipe_saver'] };
 
 
+const strategy = new Auth0Strategy(
+  {
+    domain: AUTH0_DOMAIN,
+    clientID: AUTH0_CLIENT_ID,
+    clientSecret: AUTH0_CLIENT_SECRET,
+    callbackURL:
+      process.env.PORT ? process.env.AUTH0_CALLBACK_URL : 'http://localhost:8080/api/callback'
+  },
+  function (accessToken, refreshToken, extraParams, profile, done) {
+    console.log('?');
+    // accessToken is the token to call Auth0 API (not needed in the most cases)
+    // extraParams.id_token has the JSON Web Token
+    // profile has all the information from the user
+    return done(null, profile);
+  }
+);
+
+passport.use(strategy);
+app.use(passport.initialize());
+app.use(passport.session());
+
 const Recipe = require('./models/recipe');
 
+app.use('/', authRouter);
 
 // Get base page
 app.get(['/', '/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) => {
+  console.log('just the base page');
   res.sendFile(`${__dirname}/client/dist/index.html`);
 });
 
