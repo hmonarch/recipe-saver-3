@@ -163,7 +163,6 @@ export default {
       this.retrieveRecipes(this.sortBy);
     },
     async selectTagColor(tagColor) {
-      console.log(tagColor, this.selectedTag);
       this.tagColorMenuVisible = false;
       const data = {
         tagToUpdate: this.selectedTag.name,
@@ -243,6 +242,11 @@ export default {
   margin-left: auto;
   margin-right: 20px;
   user-select: none;
+  display: none;
+
+  &.list-open {
+    display: block;
+  }
 
   &.full-width {
     max-width: 100%;

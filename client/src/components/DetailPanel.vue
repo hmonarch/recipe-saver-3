@@ -541,6 +541,12 @@ export default {
       handler() {
         if (this.$route.query.id === 'new') return;
         this.removeEditMode();
+
+        if (window.matchMedia('(max-width: 767px)').matches &&
+            !this.$route.query.id
+        ) {
+          EventBus.$emit('CLOSE_DETAILS');
+        }
       }
     }
   }

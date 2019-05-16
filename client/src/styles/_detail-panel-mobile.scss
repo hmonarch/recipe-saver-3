@@ -20,5 +20,17 @@
         }
       }
     }
+
+    .recipe-image-container {
+      .recipe-image-overlay {
+        .recipe-image-overlay-text {
+          display: none;
+        }
+
+        #image-input-btn {
+          margin-top: 126px;
+        }
+      }
+    }
   }
 }

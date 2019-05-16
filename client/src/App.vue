@@ -27,13 +27,16 @@ export default {
     EventBus.$on('SHOW_MOBILE_MENU', () => {
       this.showOverlay = true;
     });
+    EventBus.$on('NEW_RECIPE', () => {
+      this.showOverlay = false;
+    });
   },
   watch: {
     '$route': {
       handler() {
         this.showOverlay = false;
       }
-    }
+    },
   }
 }
 </script>

@@ -16,7 +16,7 @@
         <li class="search-container">
           <icon name="magnifyingGlass"/>
           <form @submit.prevent="()=>{}">
-            <input id="search-input" @keyup="debounceSearch($event)" v-model="searchTerm" type="text" placeholder="Search Recipes">
+            <input id="search-input" @keyup="debounceSearch($event)" v-model="searchTerm" type="text" placeholder="Search Recipes" autocomplete="off">
           </form>
           <ul v-if="searchResultsVisible" id="search-results" class="box">
             <li v-show="!recipeSearchResults.length && !tagSearchResults.length" class="no-results">No results</li>

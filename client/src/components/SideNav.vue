@@ -91,6 +91,10 @@ export default {
   methods: {
     addNewRecipe() {
       EventBus.$emit('NEW_RECIPE');
+      if (window.matchMedia('(max-width: 767px)').matches) {
+        this.tagListOpen = false;
+        this.mobileMenuOpen = false;
+      }
     },
     toggleTagList() {
       localStorage.tagListOpen = !this.tagListOpen;
@@ -121,10 +125,12 @@ export default {
   watch: {
     '$route': {
       handler() {
-        this.tagListOpen = false;
-        this.mobileMenuOpen = false;
+        if (window.matchMedia('(max-width: 767px)').matches) {
+          this.tagListOpen = false;
+          this.mobileMenuOpen = false;
+        }
       }
-    }
+    },
   }
 }
 </script>
@@ -141,6 +147,10 @@ export default {
   color: white;
   padding: 20px;
   overflow-y: hidden;
+
+  &.full-screen-hide {
+    display: none;
+  }
 
   .side-nav-logo {
     display: flex;

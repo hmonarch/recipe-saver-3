@@ -1,10 +1,10 @@
 <template>
   <div id="recipes">
 
-    <SideNav v-show="listOpen"></SideNav>
+    <SideNav :class="{ 'full-screen-hide': !listOpen }"></SideNav>
     <Header></Header>
     <section id="panels">
-      <ListPanel v-show="listOpen" :class="{ 'full-width' : detailsOpen === false }"></ListPanel>
+      <ListPanel :class="{ 'list-open': listOpen, 'full-width' : detailsOpen === false }"></ListPanel>
       <DetailPanel v-show="detailsOpen" :class="{ 'full-width' : listOpen === false }" :screenModeText="screenModeText"></DetailPanel>
     </section>
 
@@ -66,7 +66,6 @@ export default {
       this.listOpen = forceListOpen || !this.listOpen;
 
       EventBus.$emit('LISTOPEN_HEADER', forceListOpen || this.listOpen);
-      
     });
     EventBus.$on('NEW_RECIPE', () => {
       this.listOpen = false;
@@ -307,27 +306,30 @@ body {
   }
 }
 
-::-webkit-scrollbar {
+
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
     width: 10px;
-}
- 
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
-  -webkit-box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  -webkit-border-radius: 10px;
-  border-radius: 10px;
-  background: rgba(178, 195, 213, 0.6); 
-  // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-}
-::-webkit-scrollbar-thumb:window-inactive {
-	background: rgba(246, 245, 245, 0.3); 
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
+    -webkit-box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: rgba(178, 195, 213, 0.6); 
+    // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+  }
+  ::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(246, 245, 245, 0.3); 
+  }
 }
 
 
