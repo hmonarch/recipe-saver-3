@@ -26,7 +26,13 @@
     .recipe-image-container {
       .recipe-image-overlay {
         .recipe-image-overlay-text {
-          display: none;
+          padding: 0;
+          margin: 0;
+
+          .recipe-image-overlay-text-drag,
+          .recipe-image-overlay-text-prefer {
+            display: none;
+          }
         }
 
         #image-input-btn {
@@ -34,6 +40,12 @@
           box-shadow: 2px 3px 5px 1px rgba(128, 128, 128, 0.35);
         }
       }
+    }
+  }
+
+  #description {
+    #editor {
+      font-size: 15.5px;
     }
   }
 }
