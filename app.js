@@ -72,10 +72,9 @@ const strategy = new Auth0Strategy(
     clientID: AUTH0_CLIENT_ID,
     clientSecret: AUTH0_CLIENT_SECRET,
     callbackURL:
-      process.env.PORT ? process.env.AUTH0_CALLBACK_URL : 'http://localhost:8080/api/callback'
+      process.env.PORT ? process.env.AUTH0_CALLBACK_URL : 'http://localhost:8081/callback'
   },
   function (accessToken, refreshToken, extraParams, profile, done) {
-    console.log('?');
     // accessToken is the token to call Auth0 API (not needed in the most cases)
     // extraParams.id_token has the JSON Web Token
     // profile has all the information from the user
@@ -86,6 +85,12 @@ const strategy = new Auth0Strategy(
 passport.use(strategy);
 app.use(passport.initialize());
 app.use(passport.session());
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
 
 const Recipe = require('./models/recipe');
 

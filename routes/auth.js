@@ -12,15 +12,14 @@ const AUTH0_CLIENT_SECRET = process.env.PORT ? process.env.AUTH0_CLIENT_SECRET :
 
 
 // Perform the login, after login Auth0 will redirect to callback
-router.get('/api/login', passport.authenticate('auth0', {
+router.get('/login', passport.authenticate('auth0', {
   scope: 'openid email profile'
 }), (req, res) => {
-  console.log('yo yo yo');
   res.redirect('/');
 });
 
 // Perform the final stage of authentication and redirect to previously requested URL or '/user'
-router.get('/api/callback', (req, res, next) => {
+router.get('/callback', (req, res, next) => {
   console.log('Callback!');
   passport.authenticate('auth0', (err, user, info) => {
     if (err) { return next(err); }
@@ -29,6 +28,7 @@ router.get('/api/callback', (req, res, next) => {
       if (err) { return next(err); }
       const returnTo = req.session.returnTo;
       delete req.session.returnTo;
+      console.log('USER', user);
       res.redirect(returnTo || '/user');
     });
   })(req, res, next);
