@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const fs = require('fs');
+const secured = require('../middleware/secured');
+
 const util = require('util');
 const url = require('url');
 const querystring = require('querystring');
-const fs = require('fs');
+
 
 const AUTH0_CLIENT_ID = process.env.PORT ? process.env.AUTH0_CLIENT_ID : fs.readFileSync(`${__dirname}/../private/auth0_client_id.txt`).toString();
 const AUTH0_DOMAIN = process.env.PORT ? process.env.AUTH0_DOMAIN : fs.readFileSync(`${__dirname}/../private/auth0_domain.txt`).toString();
@@ -28,10 +31,20 @@ router.get('/callback', (req, res, next) => {
       if (err) { return next(err); }
       const returnTo = req.session.returnTo;
       delete req.session.returnTo;
-      console.log('USER', user);
-      res.redirect(returnTo || '/user');
+      res.redirect(returnTo || '/');
     });
   })(req, res, next);
+});
+
+
+router.get('/user', secured(), function (req, res, next) {
+  const { _raw, _json, ...userProfile } = req.user;
+  console.log('/user!', JSON.stringify(userProfile, null, 2));
+  res.sendStatus(200);
+  // res.render('user', {
+  //   userProfile: JSON.stringify(userProfile, null, 2),
+  //   title: 'Profile page'
+  // });
 });
 
 

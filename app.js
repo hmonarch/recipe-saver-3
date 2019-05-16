@@ -9,28 +9,15 @@ const cloudinary = require('cloudinary');
 const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 
+
+const userInViews = require('./middleware/userInViews');
 const authRouter = require('./routes/auth');
 
-
-
-// Express app / Middleware
-const app = express();
-app.use(express.static(`${__dirname}/client/dist`));
-app.use(bodyParser.json());
-app.use(session({
-  secret: 'cj-the-cat',
-  cookie: {},
-  resave: false,
-  saveUninitialized: true
-}));
-
-
-// TODO: Investigate if this is needed in production
-app.use(cors());
 
 // DB / Mongoose
 const mongoose = require('mongoose');
 const uriUtil = require('mongodb-uri');
+const MongoStore = require('connect-mongo')(session);
 
 if (!process.env.PORT) {
   mongoose.connect('mongodb://localhost:27017/recipe-saver-3',  { useNewUrlParser: true });
@@ -52,6 +39,36 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Mongo connection succeeded'));
 
+// Configure MongoStore options
+let mongoStoreOptions;
+if (!process.env.PORT) {
+  mongoStoreOptions = {
+    url: 'mongodb://localhost/recipe-saver-3',
+  };
+} else {
+	mongoStoreOptions = {
+		url: process.env.MONGODB_URI,
+		ttl: 365 * 24 * 60 * 60,
+	};
+}
+
+// Express app / Middleware
+const app = express();
+app.set('view engine', 'ejs');
+app.use(express.static(`${__dirname}/client/dist`));
+app.use(bodyParser.json());
+app.use(session({
+  secret: 'cj-the-cat',
+  cookie: {},
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore(mongoStoreOptions)
+}));
+
+
+// TODO: Investigate if this is needed in production
+app.use(cors());
+
 // Global constants
 const user_id = process.env.PORT ? process.env.USER_ID : fs.readFileSync(`${__dirname}/private/user_id.txt`).toString();
 const AUTH0_CLIENT_ID = process.env.PORT ? process.env.AUTH0_CLIENT_ID : fs.readFileSync(`${__dirname}/private/auth0_client_id.txt`).toString();
@@ -72,7 +89,7 @@ const strategy = new Auth0Strategy(
     clientID: AUTH0_CLIENT_ID,
     clientSecret: AUTH0_CLIENT_SECRET,
     callbackURL:
-      process.env.PORT ? process.env.AUTH0_CALLBACK_URL : 'http://localhost:8081/callback'
+      process.env.PORT ? process.env.AUTH0_CALLBACK_URL : 'http://localhost:8080/callback'
   },
   function (accessToken, refreshToken, extraParams, profile, done) {
     // accessToken is the token to call Auth0 API (not needed in the most cases)
@@ -95,11 +112,17 @@ passport.deserializeUser((user, done) => {
 const Recipe = require('./models/recipe');
 
 app.use('/', authRouter);
+app.use('/test', userInViews());
 
 // Get base page
 app.get(['/', '/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) => {
   console.log('just the base page');
   res.sendFile(`${__dirname}/client/dist/index.html`);
+});
+
+app.get('/test', (req, res) => {
+  console.log('/test', res.locals.user);
+  res.sendStatus(200);
 });
 
 
