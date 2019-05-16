@@ -127,8 +127,8 @@
       </ul>
 
       <div v-show="recipe.image || editMode" class="recipe-image-container">
-        <img v-if="!editMode" class="recipe-image" :src="recipeImage">
-        <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || recipeImage || blankImage">
+        <img v-if="!editMode" class="recipe-image" :src="recipeImage()">
+        <img v-else class="recipe-image recipe-image-preview" :src="imagePreview || recipeImage() || blankImage">
         <div class="recipe-image-overlay" v-show="editMode">
           <form id="image-form" onsubmit="event.preventDefault();">
             <div class="recipe-image-overlay-text">
@@ -421,14 +421,14 @@ export default {
         this.imagePreview = e.target.result;
       });
 
-    }
+    },
+    recipeImage() {
+      return this.recipe.image || this.blankImage;
+    },
   },
   computed: {
     favoriteToggleText() {
       return this.recipe.favorite ? 'Unfavorite' : 'Favorite';
-    },
-    recipeImage() {
-      return this.recipe.image || this.blankImage;
     },
   },
   mounted() {
