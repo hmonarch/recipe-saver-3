@@ -2,6 +2,7 @@
   /* Set overflow: hidden; on mobile so that -100% bottom details panel is not shown */
   body {
     overflow: hidden;
+    position: fixed;
   }
 
   #panels {
@@ -12,10 +13,6 @@
       .list-panel-body {
         padding: 10px 10px 0 10px;
         max-height: calc(100% - 55px);
-
-        &.tagged-view {
-          max-height: calc(100% - 88px);
-        }
       }
     }
 
@@ -34,6 +31,14 @@
       &.open {
         bottom: 0;
       }
+    }
+  }
+
+  #message-box {
+    width: 100%;
+
+    &.active {
+      right: 0
     }
   }
 }

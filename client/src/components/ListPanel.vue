@@ -431,6 +431,10 @@ export default {
     overflow-y: auto;
     -webkit-tap-highlight-color: transparent;
 
+    &.tagged-view {
+      max-height: calc(100% - 88px) !important;
+    }
+
     &.image-layout {
       display: grid;
       grid-template-columns: 1fr 1fr;
