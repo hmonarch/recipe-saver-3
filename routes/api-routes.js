@@ -225,7 +225,7 @@ module.exports = function(app) {
 
       cloudinary.uploader.upload(imageAsset || image, result => {
         if (imageAsset) fs.unlink(imageAsset, err => {});
-        recipe.image = result.url;
+        recipe.image = result.secure_url;
         saveRecipe(recipe);
       },
       cloudinaryOptions);
