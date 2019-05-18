@@ -110,6 +110,7 @@ app.get(['/', '/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, 
   res.sendFile(`${__dirname}/client/dist/index.html`);
 });
 
+
 app.get('/test', (req, res) => {
   console.log('/test', res.locals.user);
   res.sendStatus(200);
