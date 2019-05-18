@@ -1,0 +1,20 @@
+/* Color Theme Swatches in Hex */
+.health-green-1-hex { color: #2B802B; }
+.health-green-2-hex { color: #40BF40; }
+.health-green-3-hex { color: #56FF55; }
+.health-green-4-hex { color: #154015; }
+.health-green-5-hex { color: #4DE64D; }
+
+/* Color Theme Swatches in RGBA */
+.health-green-1-rgba { color: rgba(42, 127, 42, 1); }
+.health-green-2-rgba { color: rgba(64, 191, 64, 1); }
+.health-green-3-rgba { color: rgba(85, 255, 85, 1); }
+.health-green-4-rgba { color: rgba(21, 63, 21, 1); }
+.health-green-5-rgba { color: rgba(77, 229, 76, 1); }
+
+/* Color Theme Swatches in HSLA */
+.health-green-1-hsla { color: hsla(119, 49, 33, 1); }
+.health-green-2-hsla { color: hsla(119, 49, 50, 1); }
+.health-green-3-hsla { color: hsla(119, 100, 66, 1); }
+.health-green-4-hsla { color: hsla(119, 49, 16, 1); }
+.health-green-5-hsla { color: hsla(119, 74, 60, 1); }
