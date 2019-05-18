@@ -58,7 +58,7 @@ db.once('open', () => console.log('Mongo connection succeeded'));
 // Express app / Middleware
 const app = express();
 app.set('view engine', 'ejs');
-// app.use(express.static(`${__dirname}/client/dist`));
+app.use(express.static(`${__dirname}/client/dist`));
 app.use(bodyParser.json());
 app.use(session({
   secret: 'cj-the-cat',
@@ -105,6 +105,7 @@ require('./routes/api-routes')(app);
 
 
 // Get base page
+// Index route is only accessible via heroku
 app.get(['/', '/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) => {
   console.log('has this log ever appearred?');
   res.sendFile(`${__dirname}/client/dist/index.html`);
