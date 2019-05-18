@@ -105,7 +105,7 @@ require('./routes/api-routes')(app);
 
 
 // Get base page
-// The webpack output html file should not be the same as the index route otherwise the Express static directory will immediately return the same-named file in the director and this custom Express route will never run
+// The webpack output html file should not be the same as the index route otherwise the Express static directory will immediately return the same-named file in the director and this custom Express route will never run so that's why '/' will return 'app.html' and not 'index.html'
 app.get('/', (req, res) => {
   console.log('I can do things on the server now');
   res.sendFile(`${__dirname}/client/dist/app.html`);
