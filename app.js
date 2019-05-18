@@ -58,7 +58,7 @@ db.once('open', () => console.log('Mongo connection succeeded'));
 // Express app / Middleware
 const app = express();
 app.set('view engine', 'ejs');
-app.use(express.static(`${__dirname}/client/dist`));
+// app.use(express.static(`${__dirname}/client/dist`));
 app.use(bodyParser.json());
 app.use(session({
   secret: 'cj-the-cat',
@@ -108,6 +108,12 @@ require('./routes/api-routes')(app);
 app.get(['/', '/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) => {
   console.log('has this log ever appearred?');
   res.sendFile(`${__dirname}/client/dist/index.html`);
+});
+
+
+// We can't proxy / since the Vue dev server lives there so to mimic production, we'll hit the /home router in development which will do the same thing as / in production
+app.get('/home', (req, res) => {
+  console.log('JUST TESTING - home');
 });
 
 
