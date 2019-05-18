@@ -4,6 +4,7 @@ module.exports = {
     ? 'app.html'
     : 'index.html',
   devServer: {
+    https: true,
     port: 8080,
     host: 'localhost', 
     proxy: {
@@ -22,7 +23,15 @@ module.exports = {
         secure: false,
       },
       '/test': {
+        target: 'https://localhost:8081',
+        changeOrigin: true
+      },
+      '/auth/google': {
         target: 'http://localhost:8081',
+        changeOrigin: true
+      },
+      '/auth/facebook': {
+        target: 'https://localhost:8081',
         changeOrigin: true
       },
     }

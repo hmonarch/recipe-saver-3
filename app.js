@@ -5,7 +5,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 const passport = require('passport');
-const Auth0Strategy = require('passport-auth0');
+const FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const https = require('https');
 
 // DB / Mongoose modules
 const mongoose = require('mongoose');
@@ -14,12 +16,11 @@ const MongoStore = require('connect-mongo')(session);
 
 // Middleware
 const userInViews = require('./middleware/userInViews');
-const authRouter = require('./routes/auth');
 
 // Global constants
-const AUTH0_CLIENT_ID = process.env.PORT ? process.env.AUTH0_CLIENT_ID : fs.readFileSync(`${__dirname}/private/auth0_client_id.txt`).toString();
-const AUTH0_DOMAIN = process.env.PORT ? process.env.AUTH0_DOMAIN : fs.readFileSync(`${__dirname}/private/auth0_domain.txt`).toString();
-const AUTH0_CLIENT_SECRET = process.env.PORT ? process.env.AUTH0_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/auth0_client_secret.txt`).toString();
+const GOOGLE_CLIENT_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/google_client_secret.txt`).toString();
+const FACEBOOK_APP_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/facebook_app_secret.txt`).toString();
+
 
 
 // DB setup
@@ -71,23 +72,39 @@ app.use(session({
 app.use(cors());
 
 
-const strategy = new Auth0Strategy(
-  {
-    domain: AUTH0_DOMAIN,
-    clientID: AUTH0_CLIENT_ID,
-    clientSecret: AUTH0_CLIENT_SECRET,
-    callbackURL:
-      process.env.PORT ? process.env.AUTH0_CALLBACK_URL : 'http://localhost:8080/callback'
-  },
-  function (accessToken, refreshToken, extraParams, profile, done) {
-    // accessToken is the token to call Auth0 API (not needed in the most cases)
-    // extraParams.id_token has the JSON Web Token
-    // profile has all the information from the user
-    return done(null, profile);
-  }
-);
 
-passport.use(strategy);
+passport.use(new GoogleStrategy({
+    clientID: '906915295802-ut89lg3pkgiv6t566r06imtq45d40ltl.apps.googleusercontent.com',
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: 'http://localhost:8081/auth/google/callback'
+  },
+  (accessToken, refreshToken, profile, done) => {
+    console.log('profile', profile);
+    return done(null, profile);
+    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
+    //   return done(err, user);
+    // });
+  }
+));
+
+passport.use(new FacebookStrategy({
+  clientID: '299096254361478',
+  clientSecret: FACEBOOK_APP_SECRET,
+  callbackURL: 'https://localhost:8081/auth/facebook/callback',
+  profileFields: ['id', 'emails', 'name']
+},
+(accessToken, refreshToken, profile, done) => {
+  console.log('profile', profile);
+  return done(null, profile);
+  // User.findOrCreate(..., function(err, user) {
+  //   if (err) { return done(err); }
+  //   done(null, user);
+  // });
+}
+));
+
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.serializeUser((user, done) => {
@@ -96,13 +113,34 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
-app.use('/', authRouter);
 app.use('/test', userInViews());
+
+
+
+app.get('/auth/google', passport.authenticate('google', 
+  { scope: [
+    'https://www.googleapis.com/auth/plus.login',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email' ]
+  })
+);
+app.get('/auth/facebook', passport.authenticate('facebook', 
+  { scope: ['email'] }
+));
+
+
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
+  console.log('all good!');
+  res.redirect('/');
+});
+
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login-f' }), (req, res) => {
+  console.log('all good fb!');
+});
 
 
 // Initialize API router
 require('./routes/api-routes')(app);
-
 
 // Get base page
 // The webpack output html file should not be the same as the index route otherwise the Express static directory will immediately return the same-named file in the director and this custom Express route will never run so that's why '/' will return 'app.html' and not 'index.html'
@@ -119,10 +157,15 @@ app.get(['/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) 
 
 
 app.get('/test', (req, res) => {
-  console.log('/test', res.locals.user);
+  // console.log('/test', res.locals.user);
+  console.log('/test');
   res.sendStatus(200);
 });
 
 
-// List on port 8081
-app.listen(process.env.PORT || 8081);
+// Listen on port 8081
+// Use a self-signed certificate to serve localhost on https since Facebook login requires it
+https.createServer({
+  key: fs.readFileSync('server.key'),
+  cert: fs.readFileSync('server.cert')
+}, app).listen(process.env.PORT || 8081);
