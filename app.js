@@ -105,16 +105,16 @@ require('./routes/api-routes')(app);
 
 
 // Get base page
-// Index route is only accessible via heroku
-app.get(['/', '/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) => {
-  console.log('--------------------------has this log ever appearred????????????');
-  res.sendFile(`${__dirname}/client/dist/index2.html`);
+// The webpack output html file should not be the same as the index route otherwise the Express static directory will immediately return the same-named file in the director and this custom Express route will never run
+app.get('/', (req, res) => {
+  console.log('I can do things on the server now');
+  res.sendFile(`${__dirname}/client/dist/app.html`);
 });
 
 
-// We can't proxy / since the Vue dev server lives there so to mimic production, we'll hit the /home router in development which will do the same thing as / in production
-app.get('/home', (req, res) => {
-  console.log('JUST TESTING - home');
+app.get(['/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) => {
+  console.log('array of routes');
+  res.sendFile(`${__dirname}/client/dist/app.html`);
 });
 
 
