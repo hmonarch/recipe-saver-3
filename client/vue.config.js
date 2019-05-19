@@ -8,12 +8,7 @@ module.exports = {
     port: 8080,
     host: 'localhost', 
     proxy: {
-      // We need to proxy so Auth0 recieves http://localhost:8080 as the origin of the request
       // Remember to restart Vue server after making changes
-      '/login': {
-        target: 'http://localhost:8081',
-        secure: false
-      },
       '/user': {
         target: 'http://localhost:8081',
         secure: false,

@@ -29,5 +29,10 @@ export default new Router({
       name: 'Tag',
       component: () => import('./components/Recipes.vue')
     },
+    {
+      path: '/login',
+      name: 'Login',
+      component: () => import('./components/Login.vue')
+    },
   ]
 })
