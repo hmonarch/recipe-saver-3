@@ -2,11 +2,11 @@
   <div class="home">
 
     <br>
-    <a href="/auth/facebook">Faceook Login</a>
+    <a href="https://localhost:8080//auth/facebook">Faceook Login</a>
     <br>
-    <a href="/auth/google">Google Login</a>
+    <a href="https://localhost:8080//auth/google">Google Login</a>
     <br>
-    <a href="/login">Regular Login</a>
+    <a href="https://localhost:8080/login">Regular Login</a>
     <br>
 
 

@@ -7,7 +7,11 @@ const fs = require('fs');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const LocalStrategy = require('passport-local').Strategy;
 const https = require('https');
+const bcrypt = require('bcrypt');
+
+const User = require('./models/user');
 
 // DB / Mongoose modules
 const mongoose = require('mongoose');
@@ -72,35 +76,56 @@ app.use(session({
 app.use(cors());
 
 
+app.use(passport.initialize());
+// Passport Facebook middleware
+passport.use(new FacebookStrategy({
+    clientID: '299096254361478',
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: 'https://localhost:8081/auth/facebook/callback',
+    profileFields: ['id', 'emails', 'name']
+  },
+  (accessToken, refreshToken, profile, done) => {
+    console.log('profile');
+    return done(null, profile);
+  }
+));
 
+// Passport Google middleware
 passport.use(new GoogleStrategy({
     clientID: '906915295802-ut89lg3pkgiv6t566r06imtq45d40ltl.apps.googleusercontent.com',
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: 'https://localhost:8081/auth/google/callback'
   },
   (accessToken, refreshToken, profile, done) => {
-    return done(null, profile);
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //   return done(err, user);
-    // });
+    User.findOne({ googleId: profile.id }, (err, user) => {
+      console.log('Google user found in DB!', user._id);
+      return done(err, user);
+    });
   }
 ));
 
-passport.use(new FacebookStrategy({
-  clientID: '299096254361478',
-  clientSecret: FACEBOOK_APP_SECRET,
-  callbackURL: 'https://localhost:8081/auth/facebook/callback',
-  profileFields: ['id', 'emails', 'name']
-},
-(accessToken, refreshToken, profile, done) => {
-  console.log('profile');
-  return done(null, profile);
-  // User.findOrCreate(..., function(err, user) {
-  //   if (err) { return done(err); }
-  //   done(null, user);
-  // });
-}
+// Passport Local middleware
+passport.use(new LocalStrategy(
+  { usernameField : 'email', passwordField : 'password', passReqToCallback : true },
+  (req, email, password, done) => {
+    User.findOne({ email }, (err, user) => {
+      if (err) return done(null, { errMessage: 'Something went wrong. Please try again.' });
+      if (!user) return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
+      if (!bcrypt.compareSync(password, user.password)) return done(null, { errMessage: 'Incorrect password. Please try again.' });
+      console.log('User found and authenticated', user);
+      return done(null, user);
+    });
+  }
 ));
+
+app.post('/api/login', passport.authenticate('local'), (req, res) => {
+  console.log('local login success');
+  console.log('userOrmessage', req.user);
+  if (/gmail\.com$/.test(req.user.email)) console.log('Is google email and might need transfer');
+  res.json(req.user);
+});
+
+
 
 
 

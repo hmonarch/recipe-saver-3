@@ -27,20 +27,21 @@
 
           <div class="or">or</div>
 
-          <form class="default-login-form">
+          <form class="default-login-form" @submit.prevent="login()">
             <div class="login-strategy email">
               <div class="icon-block"><icon name="email"/></div>
-              <input id="email" class="login-input" type="email" placeholder="yours@example.com" @focus="addHighlight($event)" @blur="removeHighlight($event)">
+              <input id="email" class="login-input" type="email" placeholder="yours@example.com" v-model="email" @focus="addHighlight($event)" @blur="removeHighlight($event)">
             </div>
             <div class="login-strategy password">
               <div class="icon-block"><icon name="password"/></div>
-              <input id="password" class="login-input" type="password" placeholder="your password" @focus="addHighlight($event)" @blur="removeHighlight($event)">
+              <input id="password" class="login-input" type="password" placeholder="your password" v-model="password" @focus="addHighlight($event)" @blur="removeHighlight($event)">
             </div>
+            <input type="submit" hidden>
           </form>
         </div>
       </div>
 
-      <div class="login-footer">
+      <div class="login-footer" @click="login()">
         <span>Log In</span>
         <icon name="caret"/>
       </div>
@@ -51,6 +52,7 @@
 
 <script>
 import Icon from '@/components/Icons';
+import AuthService from '@/services/AuthService';
 
 export default {
   components: {
@@ -58,6 +60,8 @@ export default {
   },
   data() {
     return {
+      email: '',
+      password: '',
     };
   },
   methods: {
@@ -66,9 +70,11 @@ export default {
     },
     removeHighlight(e) {
       e.target.closest('.login-strategy').classList.remove('highlight');
+    },
+    async login() {
+      const response = await AuthService.login({ email: this.email.toLowerCase().trim(), password: this.password });
+      console.log(response.data);
     }
-  },
-  computed: {
   },
 }
 </script>
