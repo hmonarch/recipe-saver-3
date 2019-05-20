@@ -2,8 +2,11 @@
   <div class="home">
 
     <br>
-      <a href="/auth/facebook">Faceook Login</a>
-      <a href="/auth/google">Google Login</a>
+    <a href="/auth/facebook">Faceook Login</a>
+    <br>
+    <a href="/auth/google">Google Login</a>
+    <br>
+    <a href="/login">Regular Login</a>
     <br>
 
 

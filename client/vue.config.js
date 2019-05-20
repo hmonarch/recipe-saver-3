@@ -10,7 +10,7 @@ module.exports = {
     proxy: {
       // Remember to restart Vue server after making changes
       '/user': {
-        target: 'http://localhost:8081',
+        target: 'https://localhost:8081',
         secure: false,
       },
       '/callback': {
@@ -22,7 +22,7 @@ module.exports = {
         changeOrigin: true
       },
       '/auth/google': {
-        target: 'http://localhost:8081',
+        target: 'https://localhost:8081',
         changeOrigin: true
       },
       '/auth/facebook': {

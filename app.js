@@ -76,10 +76,9 @@ app.use(cors());
 passport.use(new GoogleStrategy({
     clientID: '906915295802-ut89lg3pkgiv6t566r06imtq45d40ltl.apps.googleusercontent.com',
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'http://localhost:8081/auth/google/callback'
+    callbackURL: 'https://localhost:8081/auth/google/callback'
   },
   (accessToken, refreshToken, profile, done) => {
-    console.log('profile', profile);
     return done(null, profile);
     // User.findOrCreate({ googleId: profile.id }, function (err, user) {
     //   return done(err, user);
@@ -94,7 +93,7 @@ passport.use(new FacebookStrategy({
   profileFields: ['id', 'emails', 'name']
 },
 (accessToken, refreshToken, profile, done) => {
-  console.log('profile', profile);
+  console.log('profile');
   return done(null, profile);
   // User.findOrCreate(..., function(err, user) {
   //   if (err) { return done(err); }
@@ -113,7 +112,11 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
-app.use('/test', userInViews());
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
+
 
 
 
@@ -130,13 +133,16 @@ app.get('/auth/facebook', passport.authenticate('facebook',
 
 
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
-  console.log('all good!');
+  console.log('all good google!', res.locals.user);
   res.redirect('/');
 });
 
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login-f' }), (req, res) => {
-  console.log('all good fb!');
+app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login-f' }), (req, res) => {
+  console.log('all good fb!', res.locals.user);
+  res.redirect('/');
 });
+
+
 
 
 // Initialize API router

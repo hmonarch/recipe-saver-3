@@ -15,7 +15,7 @@
 
         <div class="login-body-padding">
           <div class="login-strategies">
-            <a class="login-strategy facebook" href="#">
+            <a class="login-strategy facebook" href="/auth/facebook">
               <div class="icon-block"><icon name="facebook"/></div>
               <div class="login-strategy-text">Log In With Facebook</div>
             </a>
