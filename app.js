@@ -102,6 +102,7 @@ passport.use(new GoogleStrategy({
 
     // TODO: When the user logins via email and has a google account then hide all other buttons and only show a google login button with a specific path which will eventually become req.query.state here
     console.log('actionToTake:', req.query.state);
+    // If we need to consolidate then get the current gmail email and search Users for that have that email
 
     User.findOne({ googleId: profile.id }, (err, user) => {
       console.log('Google user found in DB!', user._id);
