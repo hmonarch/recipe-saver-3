@@ -9,6 +9,7 @@ const UserSchema = new Schema({
 	facebookId: String,
 	googleId: String,
 	subscription: String,
+	hasBeenConsolidated: Boolean,
   creationDate: {type: Date, default: Date.now},
   lastLogin: String,
   resetPasswordToken: String,

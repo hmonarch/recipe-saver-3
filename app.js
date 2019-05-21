@@ -12,6 +12,7 @@ const https = require('https');
 const bcrypt = require('bcrypt');
 
 const User = require('./models/user');
+const Recipe = require('./models/recipe');
 
 // DB / Mongoose modules
 const mongoose = require('mongoose');
@@ -94,15 +95,33 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: '906915295802-ut89lg3pkgiv6t566r06imtq45d40ltl.apps.googleusercontent.com',
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://localhost:8081/auth/google/callback'
+    callbackURL: 'https://localhost:8081/google/callback',
+    passReqToCallback : true,
   },
-  (accessToken, refreshToken, profile, done) => {
+  (req, accessToken, refreshToken, profile, done) => {
+
+    // TODO: When the user logins via email and has a google account then hide all other buttons and only show a google login button with a specific path which will eventually become req.query.state here
+    console.log('actionToTake:', req.query.state);
+
     User.findOne({ googleId: profile.id }, (err, user) => {
       console.log('Google user found in DB!', user._id);
       return done(err, user);
     });
   }
 ));
+app.get('/auth/google/:actionToTake', (req, res, next) => {
+  const { actionToTake } = req.params;
+  passport.authenticate('google', 
+  { scope: [
+    'https://www.googleapis.com/auth/plus.login',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/userinfo.email' ],
+    state: actionToTake
+  })(req, res, next);
+});
+
+
+
 
 // Passport Local middleware
 passport.use(new LocalStrategy(
@@ -121,8 +140,23 @@ passport.use(new LocalStrategy(
 app.post('/api/login', passport.authenticate('local'), (req, res) => {
   console.log('local login success');
   console.log('userOrmessage', req.user);
-  if (/gmail\.com$/.test(req.user.email)) console.log('Is google email and might need transfer');
-  res.json(req.user);
+
+  let actionToTake;
+  if (/gmail\.com$/.test(req.user.email)) {
+    console.log('Is google email and might need transfer');
+
+    if (req.user.hasBeenConsolidated) {
+      actionToTake = 'Already consolidated';
+    } else {
+      actionToTake = 'Check for duplicate accounts';
+    }
+  }
+
+  res.json({
+    userID: req.user._id,
+    errMessage: req.user.errMessage,
+    actionToTake
+  });
 });
 
 
@@ -145,19 +179,14 @@ app.use((req, res, next) => {
 
 
 
-app.get('/auth/google', passport.authenticate('google', 
-  { scope: [
-    'https://www.googleapis.com/auth/plus.login',
-    'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email' ]
-  })
-);
+
+
 app.get('/auth/facebook', passport.authenticate('facebook', 
   { scope: ['email'] }
 ));
 
 
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
+app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
   console.log('all good google!', res.locals.user);
   res.redirect('/');
 });

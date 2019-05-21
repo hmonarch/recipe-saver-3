@@ -19,7 +19,7 @@
               <div class="icon-block"><icon name="facebook"/></div>
               <div class="login-strategy-text">Log In With Facebook</div>
             </a>
-            <a class="login-strategy google" href="#">
+            <a class="login-strategy google" href="/auth/google/default">
               <div class="icon-block"><icon name="google"/></div>
               <div class="login-strategy-text">Log In With Google</div>
             </a>
@@ -38,6 +38,8 @@
             </div>
             <input type="submit" hidden>
           </form>
+
+          <div v-show="message" class="message">{{ message }}</div>
         </div>
       </div>
 
@@ -62,6 +64,8 @@ export default {
     return {
       email: '',
       password: '',
+      message: '',
+      actionToTake: null,
     };
   },
   methods: {
@@ -71,10 +75,33 @@ export default {
     removeHighlight(e) {
       e.target.closest('.login-strategy').classList.remove('highlight');
     },
+    pulseGoogle() {
+      const googleBtn = document.querySelector('.login-strategy.google');
+      googleBtn.classList.remove('pulse');
+      setTimeout(() => {
+        googleBtn.classList.add('pulse');
+      }, 100);
+    },
+    isValid() {
+      return this.email.trim().length && this.password.trim().length;
+    },
     async login() {
+      if (!this.isValid()) return console.log('not valid');
+      this.message = '';
       const response = await AuthService.login({ email: this.email.toLowerCase().trim(), password: this.password });
       console.log(response.data);
-    }
+      
+      this.actionToTake = response.data.actionToTake;
+      if (this.actionToTake === 'Already consolidated') {
+        this.message = 'Please click "Log in with Google" to continue.';
+        this.pulseGoogle();
+      }
+
+      if (this.actionToTake === 'Check for duplicate accounts') {
+        this.message = 'We\'ve updated the login system since you last visted! Since you\'re using a Google email, please click "Log in with Google" above to proceed.';
+        this.pulseGoogle();
+      }
+    },
   },
 }
 </script>
@@ -172,6 +199,10 @@ export default {
             }
           }
 
+          &.google.pulse {
+            animation: pulse 5s;
+          }
+
           &.email,
           &.password {
             border: solid 1px #e5e5e5;
@@ -258,6 +289,15 @@ export default {
       }
     }
 
+    .message {
+      text-align: left;
+      margin-top: 10px;
+      color: #fff;
+      padding: 10px;
+      line-height: 18px;
+      background-color: #673ab7;
+    }
+
     .login-footer {
       cursor: pointer;
       box-sizing: border-box;
@@ -283,6 +323,20 @@ export default {
       }
     }
   }
+}
+
+@keyframes pulse {
+  0% { }
+  1% {
+    transform: scale(1);
+  }
+  5% { 
+    transform: scale(1.20);
+  }
+  10% {
+    transform: scale(1);
+  }
+  100% { }
 }
 </style>
 
