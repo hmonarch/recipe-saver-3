@@ -1,7 +1,11 @@
 <template>
   <div id="login">
 
-    <div class="login-box">
+    <div :class="{ 
+      'login-box': true,
+      'already-consolidated': actionToTake === 'Already consolidated',
+      'check-for-dupes': actionToTake === 'Check for duplicate accounts'
+      }">
       <div class="login-header">
         <img class="login-logo" src="../assets/logo-150x150.png">
         <div class="logo-text">Recipe Saver</div>
@@ -20,6 +24,10 @@
               <div class="login-strategy-text">Log In With Facebook</div>
             </a>
             <a class="login-strategy google" href="/auth/google/default">
+              <div class="icon-block"><icon name="google"/></div>
+              <div class="login-strategy-text">Log In With Google</div>
+            </a>
+            <a class="login-strategy google check-for-dupes" :href="`/auth/google/check-${importFrom}`">
               <div class="icon-block"><icon name="google"/></div>
               <div class="login-strategy-text">Log In With Google</div>
             </a>
@@ -65,6 +73,7 @@ export default {
       email: '',
       password: '',
       message: '',
+      importFrom: '',
       actionToTake: null,
     };
   },
@@ -76,10 +85,10 @@ export default {
       e.target.closest('.login-strategy').classList.remove('highlight');
     },
     pulseGoogle() {
-      const googleBtn = document.querySelector('.login-strategy.google');
-      googleBtn.classList.remove('pulse');
+      const googleBtns = document.querySelectorAll('.login-strategy.google');
+      [...googleBtns].forEach(btn => btn.classList.remove('pulse'));
       setTimeout(() => {
-        googleBtn.classList.add('pulse');
+        [...googleBtns].forEach(btn => btn.classList.add('pulse'));
       }, 100);
     },
     isValid() {
@@ -93,12 +102,13 @@ export default {
       
       this.actionToTake = response.data.actionToTake;
       if (this.actionToTake === 'Already consolidated') {
-        this.message = 'Please click "Log in with Google" to continue.';
+        this.message = 'Please use "Log in with Google" from now on.';
         this.pulseGoogle();
       }
 
       if (this.actionToTake === 'Check for duplicate accounts') {
-        this.message = 'We\'ve updated the login system since you last visted! Since you\'re using a Google email, please click "Log in with Google" above to proceed.';
+        this.message = 'We\'ve updated the login system since you last visited. Please use click "Log in with Google" and sign in using your Google account with the same email to proceed.';
+        this.importFrom = response.data.userID;
         this.pulseGoogle();
       }
     },
@@ -114,6 +124,33 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  .login-box {
+    &.already-consolidated,
+    &.check-for-dupes {
+      .login-body {
+        .mode-controller,
+        .login-strategy.facebook, 
+        .or,
+        .default-login-form {
+          display: none;
+        }
+      }
+    }
+
+    &.check-for-dupes {
+      .login-body {
+        .login-strategies {
+          .login-strategy.google:not(.check-for-dupes) {
+            display: none;
+          }
+          .login-strategy.google.check-for-dupes {
+            display: flex;
+          }
+        }
+      }
+    }
+  }
 
   .login-box {
     box-sizing: border-box;
@@ -197,6 +234,10 @@ export default {
             .icon-block {
               background-color: #d02b1d;
             }
+          }
+
+          &.google.check-for-dupes {
+            display: none;
           }
 
           &.google.pulse {
@@ -294,7 +335,7 @@ export default {
       margin-top: 10px;
       color: #fff;
       padding: 10px;
-      line-height: 18px;
+      line-height: 20px;
       background-color: #673ab7;
     }
 

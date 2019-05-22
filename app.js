@@ -73,11 +73,23 @@ app.use(session({
   saveUninitialized: true,
   store: new MongoStore(mongoStoreOptions)
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+app.use((req, res, next) => {
+  res.locals.user = req.user;
+  next();
+});
 // TODO: Investigate if this is needed in production
 app.use(cors());
 
 
-app.use(passport.initialize());
+
 // Passport Facebook middleware
 passport.use(new FacebookStrategy({
     clientID: '299096254361478',
@@ -100,14 +112,27 @@ passport.use(new GoogleStrategy({
   },
   (req, accessToken, refreshToken, profile, done) => {
 
-    // TODO: When the user logins via email and has a google account then hide all other buttons and only show a google login button with a specific path which will eventually become req.query.state here
     console.log('actionToTake:', req.query.state);
+    console.log(req.query.state.replace(/-.+/, ''));
+    if (req.query.state.replace(/-.+/, '') === 'check') {
+      User.findOne({ googleId: profile.id }, (err, user) => {
+        if (user) {
+          console.log('omg, there\'s a user with google recipes! - need to merge recipes');
+          console.log('googleID', user.googleId);
+        } else {
+          console.log('this user had no google recipes');
+        }
+        return done(err, user);
+      });
+    } else {
+      User.findOne({ googleId: profile.id }, (err, user) => {
+        console.log('Google user found in DB!', user._id);
+        return done(err, user);
+      });
+    }
+
     // If we need to consolidate then get the current gmail email and search Users for that have that email
 
-    User.findOne({ googleId: profile.id }, (err, user) => {
-      console.log('Google user found in DB!', user._id);
-      return done(err, user);
-    });
   }
 ));
 app.get('/auth/google/:actionToTake', (req, res, next) => {
@@ -128,6 +153,7 @@ app.get('/auth/google/:actionToTake', (req, res, next) => {
 passport.use(new LocalStrategy(
   { usernameField : 'email', passwordField : 'password', passReqToCallback : true },
   (req, email, password, done) => {
+
     User.findOne({ email }, (err, user) => {
       if (err) return done(null, { errMessage: 'Something went wrong. Please try again.' });
       if (!user) return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
@@ -147,6 +173,7 @@ app.post('/api/login', passport.authenticate('local'), (req, res) => {
     console.log('Is google email and might need transfer');
 
     if (req.user.hasBeenConsolidated) {
+      // Use should always login with Google
       actionToTake = 'Already consolidated';
     } else {
       actionToTake = 'Check for duplicate accounts';
@@ -156,30 +183,9 @@ app.post('/api/login', passport.authenticate('local'), (req, res) => {
   res.json({
     userID: req.user._id,
     errMessage: req.user.errMessage,
-    actionToTake
+    actionToTake,
   });
 });
-
-
-
-
-
-app.use(passport.initialize());
-app.use(passport.session());
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
-});
-
-
-
-
 
 
 app.get('/auth/facebook', passport.authenticate('facebook', 
@@ -196,6 +202,7 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRe
   console.log('all good fb!', res.locals.user);
   res.redirect('/');
 });
+
 
 
 

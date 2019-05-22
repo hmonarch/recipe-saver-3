@@ -9,7 +9,7 @@ const UserSchema = new Schema({
 	facebookId: String,
 	googleId: String,
 	subscription: String,
-	hasBeenConsolidated: Boolean,
+	hasBeenConsolidated: String, // email address of merged account
   creationDate: {type: Date, default: Date.now},
   lastLogin: String,
   resetPasswordToken: String,

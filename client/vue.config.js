@@ -29,6 +29,10 @@ module.exports = {
         target: 'https://localhost:8081',
         changeOrigin: true
       },
+      '/testyo': {
+        target: 'https://localhost:8081',
+        changeOrigin: true
+      },
     }
   }
 };
