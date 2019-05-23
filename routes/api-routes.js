@@ -18,10 +18,18 @@ const cloudinaryOptions = { quality: 60, gravity: 'center', height: 570, width: 
 
 module.exports = function(app) {
 
-  // Fetch all recipes
-  app.get('/api/recipes/all', (req, res) => {
+  function loggedIn(req, res, next) {
+    if (req.session && req.session.passport && req.session.passport.user && req.session.passport.user._id) {
+      next();
+    } else {
+      res.sendStatus(401);
+    }
+  }
 
-    Recipe.find({user_id}, 'title creationDate image', (err, recipes) => {
+  // Fetch all recipes
+  app.get('/api/recipes/all', loggedIn, (req, res) => {
+
+    Recipe.find({user_id: req.session.passport.user._id}, 'title creationDate image', (err, recipes) => {
       if (err) console.error(err);
       res.send(recipes);
     })
@@ -32,8 +40,8 @@ module.exports = function(app) {
 
 
   // Fetch favorites recipes
-  app.get('/api/recipes/favorites', (req, res) => {
-    Recipe.find({user_id, favorite: true}, 'title creationDate image', (err, recipes) => {
+  app.get('/api/recipes/favorites', loggedIn, (req, res) => {
+    Recipe.find({user_id: req.session.passport.user._id, favorite: true}, 'title creationDate image', (err, recipes) => {
       if (err) console.error(err);
       res.send(recipes);
     })
@@ -43,8 +51,8 @@ module.exports = function(app) {
 
 
   // Fetch untagged recipes
-  app.get('/api/recipes/untagged', (req, res) => {
-    Recipe.find({user_id, tags: {$size: 0}}, 'title creationDate image', (err, recipes) => {
+  app.get('/api/recipes/untagged', loggedIn, (req, res) => {
+    Recipe.find({user_id: req.session.passport.user._id, tags: {$size: 0}}, 'title creationDate image', (err, recipes) => {
       if (err) console.error(err);
       res.send(recipes);
     })
@@ -54,10 +62,10 @@ module.exports = function(app) {
 
 
   // Fetch tag
-  app.get('/api/recipes/tag/:tagName', (req, res) => {
+  app.get('/api/recipes/tag/:tagName', loggedIn, (req, res) => {
     const { tagName } = req.params;
 
-    Recipe.find({user_id, tags: { '$elemMatch': { 'name': tagName }}}, 'title creationDate image', (err, recipes) => {
+    Recipe.find({user_id: req.session.passport.user._id, tags: { '$elemMatch': { 'name': tagName }}}, 'title creationDate image', (err, recipes) => {
         if (err) console.error(err);
         res.send(recipes);
     })
@@ -67,10 +75,10 @@ module.exports = function(app) {
 
 
   // Change tag color
-  app.post('/api/tag-color', (req, res) => {
+  app.post('/api/tag-color', loggedIn, (req, res) => {
     const { tagToUpdate, newColor } = req.body;
 
-    Recipe.find({user_id, 'tags.name': tagToUpdate}, (err, recipes) => {
+    Recipe.find({user_id: req.session.passport.user._id, 'tags.name': tagToUpdate}, (err, recipes) => {
 
       saveRecipes(recipes);
     
@@ -98,11 +106,11 @@ module.exports = function(app) {
 
 
   // Fetch tags
-  app.get('/api/tags', (req, res) => {
+  app.get('/api/tags', loggedIn, (req, res) => {
 
     const { search } = req.query;
 
-    Recipe.find({user_id}, (err, recipes) => {
+    Recipe.find({user_id: req.session.passport.user._id}, (err, recipes) => {
       if (err) console.error(err);
 
       let tags = [];
@@ -136,10 +144,10 @@ module.exports = function(app) {
 
 
   // Get single recipe
-  app.get('/api/recipe/:recipeID', (req, res) => {
+  app.get('/api/recipe/:recipeID', loggedIn, (req, res) => {
     const { recipeID } = req.params;
 
-    Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
+    Recipe.findOne({ user_id: req.session.passport.user._id, _id: recipeID}, (err, recipe) => {
       if (err) console.error(err);
       res.send(recipe);
     });
@@ -147,11 +155,11 @@ module.exports = function(app) {
 
 
   // Search for recipes/tags 
-  app.get('/api/search/:term', (req, res) => {
+  app.get('/api/search/:term', loggedIn, (req, res) => {
 
     const { term } = req.params;
 
-    Recipe.find({ user_id }, 'id title tags', { sort: { title: 1 }}, (err, recipes) => {
+    Recipe.find({ user_id: req.session.passport.user._id }, 'id title tags', { sort: { title: 1 }}, (err, recipes) => {
       if (err) console.error(err);
 
       const recipeResults = [];
@@ -198,18 +206,18 @@ module.exports = function(app) {
 
 
   // Update recipe
-  app.post('/api/recipe/:recipeID', upload.fields([{ name: 'image-asset' }]),(req, res) => {
+  app.post('/api/recipe/:recipeID', loggedIn, upload.fields([{ name: 'image-asset' }]),(req, res) => {
     const { recipeID } = req.params;
-    const { title, url, description, tags, favorite, image } = req.body;
+    const { title, url, description, tags, favorite, image, removeImage } = req.body;
 
     const imageAsset = req.files['image-asset'] && req.files['image-asset'][0].path;
 
     if (recipeID === 'new') {
       const newRecipe = new Recipe();
-      newRecipe.user_id = user_id;
+      newRecipe.user_id = req.session.passport.user._id;
       addRecipe(newRecipe);
     } else {
-      Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
+      Recipe.findOne({ user_id: req.session.passport.user._id, _id: recipeID}, (err, recipe) => {
         if (err) console.error(err);
         addRecipe(recipe);
       });
@@ -221,14 +229,20 @@ module.exports = function(app) {
       recipe.url = url;
       recipe.description = description;
       recipe.tags = JSON.parse(tags);
-
-
-      cloudinary.uploader.upload(imageAsset || image, result => {
-        if (imageAsset) fs.unlink(imageAsset, err => {});
-        recipe.image = result.secure_url;
+      if (removeImage) recipe.image = '';
+    
+      if (imageAsset || image) {
+        cloudinary.uploader.upload(imageAsset || image, result => {
+          if (imageAsset) fs.unlink(imageAsset, err => {});
+          console.log('cloudinary upload:', result.secure_url);
+          recipe.image = result.secure_url;
+          saveRecipe(recipe);
+        },
+        cloudinaryOptions);
+      } else {
         saveRecipe(recipe);
-      },
-      cloudinaryOptions);
+      }
+
 
       function saveRecipe(recipe) {
         recipe.save((err, recipe) => {
@@ -241,7 +255,7 @@ module.exports = function(app) {
 
 
   // Delete recipe
-  app.delete('/api/recipe/:recipeID', (req, res) => {
+  app.delete('/api/recipe/:recipeID', loggedIn, (req, res) => {
     const { recipeID } = req.params;
 
     Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {

@@ -13,11 +13,11 @@ module.exports = {
         target: 'https://localhost:8081',
         secure: false,
       },
-      '/callback': {
-        target: 'http://localhost:8081',
-        secure: false,
-      },
       '/test': {
+        target: 'https://localhost:8081',
+        changeOrigin: true
+      },
+      '/auth/google/callback/*': {
         target: 'https://localhost:8081',
         changeOrigin: true
       },

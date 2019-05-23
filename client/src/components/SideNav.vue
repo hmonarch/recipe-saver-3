@@ -32,7 +32,7 @@
           <span>Untagged</span>
         </router-link>
       </li>
-			<li id="side-nav-menu-tags" :class="{ open : tagListOpen === true }">
+			<li v-show="tags.length" id="side-nav-menu-tags" :class="{ open : tagListOpen === true }">
         <a @click.prevent="toggleTagList()">
           <img class="side-nav-menu-icon" src="../assets/icon-tag.png">
           <span>Tags</span>

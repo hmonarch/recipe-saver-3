@@ -1,11 +1,7 @@
 <template>
   <div id="login">
 
-    <div :class="{ 
-      'login-box': true,
-      'already-consolidated': actionToTake === 'Already consolidated',
-      'check-for-dupes': actionToTake === 'Check for duplicate accounts'
-      }">
+    <div class="login-box">
       <div class="login-header">
         <img class="login-logo" src="../assets/logo-150x150.png">
         <div class="logo-text">Recipe Saver</div>
@@ -23,11 +19,7 @@
               <div class="icon-block"><icon name="facebook"/></div>
               <div class="login-strategy-text">Log In With Facebook</div>
             </a>
-            <a class="login-strategy google" href="/auth/google/default">
-              <div class="icon-block"><icon name="google"/></div>
-              <div class="login-strategy-text">Log In With Google</div>
-            </a>
-            <a class="login-strategy google check-for-dupes" :href="`/auth/google/check-${importFrom}`">
+            <a class="login-strategy google" href="/auth/google">
               <div class="icon-block"><icon name="google"/></div>
               <div class="login-strategy-text">Log In With Google</div>
             </a>
@@ -73,8 +65,10 @@ export default {
       email: '',
       password: '',
       message: '',
-      importFrom: '',
-      actionToTake: null,
+      errorMessages: {
+        'not-recognized': 'Sorry, we have no record for this account. If you wish to sign up please click the Sign Up tab above.',
+        'login-again': 'Please login again.'
+      }
     };
   },
   methods: {
@@ -84,13 +78,6 @@ export default {
     removeHighlight(e) {
       e.target.closest('.login-strategy').classList.remove('highlight');
     },
-    pulseGoogle() {
-      const googleBtns = document.querySelectorAll('.login-strategy.google');
-      [...googleBtns].forEach(btn => btn.classList.remove('pulse'));
-      setTimeout(() => {
-        [...googleBtns].forEach(btn => btn.classList.add('pulse'));
-      }, 100);
-    },
     isValid() {
       return this.email.trim().length && this.password.trim().length;
     },
@@ -99,20 +86,20 @@ export default {
       this.message = '';
       const response = await AuthService.login({ email: this.email.toLowerCase().trim(), password: this.password });
       console.log(response.data);
-      
-      this.actionToTake = response.data.actionToTake;
-      if (this.actionToTake === 'Already consolidated') {
-        this.message = 'Please use "Log in with Google" from now on.';
-        this.pulseGoogle();
-      }
-
-      if (this.actionToTake === 'Check for duplicate accounts') {
-        this.message = 'We\'ve updated the login system since you last visited. Please use click "Log in with Google" and sign in using your Google account with the same email to proceed.';
-        this.importFrom = response.data.userID;
-        this.pulseGoogle();
+      if (response.data.errMessage) this.message = response.data.errMessage;
+      if (response.data.userID) {
+        this.$router.push('/recipes/all');
       }
     },
+    checkLoginError(errorStr) {
+      if (this.$route.query[errorStr]) {
+        this.message = this.errorMessages[this.$route.query[errorStr]];
+      }
+    }
   },
+  mounted() {
+    this.checkLoginError('login-error');
+  }
 }
 </script>
 
@@ -124,33 +111,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  .login-box {
-    &.already-consolidated,
-    &.check-for-dupes {
-      .login-body {
-        .mode-controller,
-        .login-strategy.facebook, 
-        .or,
-        .default-login-form {
-          display: none;
-        }
-      }
-    }
-
-    &.check-for-dupes {
-      .login-body {
-        .login-strategies {
-          .login-strategy.google:not(.check-for-dupes) {
-            display: none;
-          }
-          .login-strategy.google.check-for-dupes {
-            display: flex;
-          }
-        }
-      }
-    }
-  }
 
   .login-box {
     box-sizing: border-box;
@@ -234,14 +194,6 @@ export default {
             .icon-block {
               background-color: #d02b1d;
             }
-          }
-
-          &.google.check-for-dupes {
-            display: none;
-          }
-
-          &.google.pulse {
-            animation: pulse 5s;
           }
 
           &.email,
@@ -364,20 +316,6 @@ export default {
       }
     }
   }
-}
-
-@keyframes pulse {
-  0% { }
-  1% {
-    transform: scale(1);
-  }
-  5% { 
-    transform: scale(1.20);
-  }
-  10% {
-    transform: scale(1);
-  }
-  100% { }
 }
 </style>
 

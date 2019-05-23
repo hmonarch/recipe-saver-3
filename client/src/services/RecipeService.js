@@ -16,7 +16,7 @@ export default {
   searchRecipes(term) {
     return Api().get(`search/${term}`);
   },
-  updateRecipe(id, recipe) {
+  updateRecipe(id, recipe, updateImage, removeImage) {
 
     const fd = new FormData();
     fd.append('favorite', recipe.favorite);
@@ -24,11 +24,20 @@ export default {
     fd.append('url', recipe.url);
     fd.append('description', recipe.description);
     fd.append('tags', JSON.stringify(recipe.tags));
-    if (typeof(recipe.image) === 'object') {
-      fd.append('image-asset', recipe.image);
-    } else {
-      fd.append('image', recipe.image);
+
+    if (removeImage) {
+      fd.append('removeImage', true);
+      console.log('removing image');
     }
+
+    if (updateImage) {
+      if (typeof(recipe.image) === 'object') {
+        fd.append('image-asset', recipe.image);
+      } else {
+        fd.append('image', recipe.image);
+      }
+    }
+
 
     return Api().post(`recipe/${id ? id : 'new'}`, fd, {
       headers: {

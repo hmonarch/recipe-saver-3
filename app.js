@@ -65,7 +65,7 @@ db.once('open', () => console.log('Mongo connection succeeded'));
 const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static(`${__dirname}/client/dist`));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '5mb' }));
 app.use(session({
   secret: 'cj-the-cat',
   cookie: {},
@@ -85,8 +85,13 @@ app.use((req, res, next) => {
   res.locals.user = req.user;
   next();
 });
+
 // TODO: Investigate if this is needed in production
-app.use(cors());
+app.use(cors({
+  origin: ['https://localhost:8080', 'https://localhost:8081'],
+  methods: ['GET','POST'],
+  credentials: true 
+}));
 
 
 
@@ -94,11 +99,11 @@ app.use(cors());
 passport.use(new FacebookStrategy({
     clientID: '299096254361478',
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: 'https://localhost:8081/auth/facebook/callback',
+    callbackURL: 'https://localhost:8080/auth/facebook/callback',
     profileFields: ['id', 'emails', 'name']
   },
   (accessToken, refreshToken, profile, done) => {
-    console.log('profile');
+    console.log('profile', profile);
     return done(null, profile);
   }
 ));
@@ -107,46 +112,34 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: '906915295802-ut89lg3pkgiv6t566r06imtq45d40ltl.apps.googleusercontent.com',
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://localhost:8081/google/callback',
+    callbackURL: 'https://localhost:8080/auth/google/callback',
     passReqToCallback : true,
   },
   (req, accessToken, refreshToken, profile, done) => {
-
-    console.log('actionToTake:', req.query.state);
-    console.log(req.query.state.replace(/-.+/, ''));
-    if (req.query.state.replace(/-.+/, '') === 'check') {
-      User.findOne({ googleId: profile.id }, (err, user) => {
-        if (user) {
-          console.log('omg, there\'s a user with google recipes! - need to merge recipes');
-          console.log('googleID', user.googleId);
+    User.findOne({ googleId: profile.id }, (err, user) => {
+      if (!user) {
+        return done(null, { notRecognized: 'Hmm, we don\'t recognize that email. Please try again.' });
+      } else {
+        if (!user.email && profile._json.email) {
+          user.email = profile._json.email;
+          user.save((err, record) => {
+            return done(err, user);
+          });
         } else {
-          console.log('this user had no google recipes');
+          return done(err, user);
         }
-        return done(err, user);
-      });
-    } else {
-      User.findOne({ googleId: profile.id }, (err, user) => {
-        console.log('Google user found in DB!', user._id);
-        return done(err, user);
-      });
-    }
-
-    // If we need to consolidate then get the current gmail email and search Users for that have that email
-
+      }
+    });
   }
 ));
-app.get('/auth/google/:actionToTake', (req, res, next) => {
-  const { actionToTake } = req.params;
+app.get('/auth/google', (req, res, next) => {
   passport.authenticate('google', 
   { scope: [
     'https://www.googleapis.com/auth/plus.login',
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email' ],
-    state: actionToTake
   })(req, res, next);
 });
-
-
 
 
 // Passport Local middleware
@@ -158,32 +151,17 @@ passport.use(new LocalStrategy(
       if (err) return done(null, { errMessage: 'Something went wrong. Please try again.' });
       if (!user) return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
       if (!bcrypt.compareSync(password, user.password)) return done(null, { errMessage: 'Incorrect password. Please try again.' });
-      console.log('User found and authenticated', user);
       return done(null, user);
     });
   }
 ));
 
 app.post('/api/login', passport.authenticate('local'), (req, res) => {
-  console.log('local login success');
   console.log('userOrmessage', req.user);
-
-  let actionToTake;
-  if (/gmail\.com$/.test(req.user.email)) {
-    console.log('Is google email and might need transfer');
-
-    if (req.user.hasBeenConsolidated) {
-      // Use should always login with Google
-      actionToTake = 'Already consolidated';
-    } else {
-      actionToTake = 'Check for duplicate accounts';
-    }
-  }
-
   res.json({
     userID: req.user._id,
     errMessage: req.user.errMessage,
-    actionToTake,
+    notRecognized: req.user.notRecognized
   });
 });
 
@@ -193,9 +171,13 @@ app.get('/auth/facebook', passport.authenticate('facebook',
 ));
 
 
-app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
-  console.log('all good google!', res.locals.user);
-  res.redirect('/');
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
+  console.log('all good google!');
+  if (req.user.notRecognized) {
+    res.redirect('/login?login-error=not-recognized');
+  } else {
+    res.redirect('/recipes');
+  }
 });
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login-f' }), (req, res) => {
@@ -204,7 +186,10 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRe
 });
 
 
-
+app.get('/test', (req, res) => {
+  console.log('/test', req.session);
+  res.sendStatus(200);
+});
 
 
 // Initialize API router
@@ -223,12 +208,6 @@ app.get(['/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) 
   res.sendFile(`${__dirname}/client/dist/app.html`);
 });
 
-
-app.get('/test', (req, res) => {
-  // console.log('/test', res.locals.user);
-  console.log('/test');
-  res.sendStatus(200);
-});
 
 
 // Listen on port 8081

@@ -296,11 +296,13 @@ export default {
     },
     async saveRecipe(message = 'was saved!') {
       this.savingOverlayActive = true;
-      if (this.imageAsset === 'remove') {
-        this.recipe.image = '';
-      } else {
-        this.recipe.image = this.imageAsset || this.recipe.image;
+
+      let updateImage = false;
+      if (this.imageAsset !== false && this.imageAsset !== 'remove') {
+        updateImage = true;
       }
+
+      this.recipe.image = this.imageAsset || this.recipe.image;
 
       if (this.recipe.title.trim() === '') {
         this.savingOverlayActive = false;
@@ -318,7 +320,7 @@ export default {
       });
       this.removeTagStatus();
       delete this.recipe.newEntry;
-      const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe);
+      const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe, updateImage, this.imageAsset === 'remove');
       this.recipe.image = response.data.image;
       this.removeEditMode();
       this.savingOverlayActive = false;
