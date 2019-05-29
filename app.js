@@ -165,6 +165,11 @@ app.post('/api/login', passport.authenticate('local'), (req, res) => {
   });
 });
 
+app.post('/api/logout', (req, res) => {
+  req.session.destroy();
+  res.sendStatus(200);
+});
+
 
 app.get('/auth/facebook', passport.authenticate('facebook', 
   { scope: ['email'] }

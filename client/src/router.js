@@ -15,6 +15,11 @@ export default new Router({
       name: 'Home',
       component: Home
     },
+    {
+      path: '/account',
+      name: 'Account',
+      component: () => import('./components/Account.vue')
+    },
     { 
       path: '/recipes',
       redirect: '/recipes/all'

@@ -3,7 +3,7 @@
 
     <div class="login-box">
       <div class="login-header">
-        <img class="login-logo" src="../assets/logo-150x150.png">
+        <img class="login-logo" src="../assets/logo-255x255.png">
         <div class="logo-text">Recipe Saver</div>
       </div>
       <div class="login-body">
