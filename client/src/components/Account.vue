@@ -3,7 +3,13 @@
     <Header></Header>
     <div id="account-container">
       <div class="account-left">
-        <img id="profile-image" src="../assets/logo-255x255.png">
+        <div :class=" { 'saving': imageIsSaving, 'profile-image-container': true }">
+          <img id="profile-image" src="../assets/logo-255x255.png">
+          <input type="file" id="profile-image-input" accept="image/*" onchange="this.value = null; return false;" hidden @input="handleImage" ref="profileImageInput">
+          <div @click="triggerUpload" id="profile-image-overlay">
+            <button class="new-profile-image-btn">Update Image</button>
+          </div>
+        </div>
       </div>
       <div class="account-right">
         <div class="account-name">Stephanie Kearney</div>
@@ -46,11 +52,17 @@ export default {
   },
   data() {
     return {
-
+      imageIsSaving: false,
     };
   },
   methods: {
-
+    triggerUpload() {
+      this.$refs.profileImageInput.click();
+    },
+    handleImage() {
+      console.log('handleImage');
+      this.imageIsSaving = true;
+    }
   },
   created() {
 
@@ -85,10 +97,61 @@ export default {
     position: relative;
 
     .account-left {
-      #profile-image {
+      position: relative;
+
+      .profile-image-container:hover,
+      .profile-image-container.saving {
+        #profile-image-overlay {
+          display: block;
+        }
+      }
+
+      .profile-image-container.saving {
+        #profile-image-overlay {
+          background-image: url(../assets/spinner.gif);
+          background-color: rgba(255, 255, 255, 0.9);
+          background-repeat: no-repeat;
+          background-position: center center;
+
+          .new-profile-image-btn {
+            display: none;
+          }
+        }
+      }
+
+      #profile-image,
+      #profile-image-overlay {
         border-radius: 50%;
         width: 215px;
         height: 215px;
+      }
+
+      #profile-image-overlay {
+        display: none;
+        background-color: rgba(52, 51, 51, 0.67);
+        position: absolute;
+        top: 0;
+        left: 4px;
+        z-index: 5;
+        cursor: pointer;
+
+        &:hover {
+          .new-profile-image-btn {
+            background-color: #23d82f;
+          }
+        }
+
+        .new-profile-image-btn {
+          cursor: pointer;
+          background-color: #089de3;
+          display: inline-block;
+          padding: 12px;
+          font-size: 15px;
+          outline: none;
+          border: none;
+          color: #fff;
+          margin-top: 90px;
+        }
       }
     }
 
