@@ -42,6 +42,19 @@
         </li>
       </ul>
     </div>
+
+    <div :class="{ 'active' : showMessage === true, 'error': isError === true }" id="message-box" class="box">
+      <div class="message-inner">
+        <div class="message-block">
+          <span class="message-subject">{{ messageSubject }}</span>
+          <span class="message-verb">{{ messageVerb }}</span>
+        </div>
+        <div @click="showMessage = false" class="message-icon">
+          <icon name="close"/>
+        </div>
+      </div>
+    </div>
+
   </header>
 </template>
 
@@ -64,6 +77,11 @@ export default {
       tagSearchResults: [],
       searchResultsVisible: false,
       fullScreen: false,
+
+      showMessage: false,
+      messageSubject: null,
+      messageVerb: null,
+      isError: false,
     };
   },
   mixins: [utils],
@@ -101,6 +119,19 @@ export default {
     EventBus.$on('LISTOPEN_HEADER', listOpen => {
       this.fullScreen = !listOpen;
     });
+    EventBus.$on('MESSAGE', (title, message, isError, timeout = 3000) => {
+      if (isError) this.isError = true;
+      this.showMessage = false;
+      clearInterval(window.messageTimer);
+      window.messageTimer = setTimeout(() => {
+        this.showMessage = false;
+        this.isError = false;
+      }, timeout);
+
+      this.messageSubject = title;
+      this.messageVerb = ` ${message}`;
+      this.showMessage = true;
+    });
   }
 }
 </script>
@@ -132,6 +163,7 @@ header {
 
         a.router-link-active {
           color: #000;
+          font-weight: bold;
           border-bottom: solid 3px #e4ad3e;
         }
         
@@ -232,6 +264,59 @@ header {
           border-top: solid 1px #eee;
           margin-top: 6px;
           padding-top: 8px;
+        }
+      }
+    }
+  }
+
+  #message-box {
+    position: fixed;
+    box-sizing: border-box;
+    z-index: 100;
+    background-color: white;
+    max-width: 500px;
+    bottom: 10px;
+    right: 10px;
+    padding: 20px;
+    border-top: solid 5px #23d82f;
+    line-height: 20px;
+    right: -500px;
+    transition: 1s;
+    text-align: left;
+
+    &.active {
+      right: 20px;
+    }
+
+    &.error {
+      border-top: solid 5px #f00;
+    }
+
+    .message-inner {
+      .message-block {
+        padding-right: 20px;
+
+        .message-subject {
+          font-weight: bold;
+        }
+
+        .message-verb {
+          margin-right: 10px;
+        }
+      }
+      .message-icon {
+        display: inline-block;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+
+        .icon--close {
+          svg {
+            fill: #4d4d4d;
+            cursor: pointer;
+            height: 22px;
+            width: 22px;
+          }
         }
       }
     }

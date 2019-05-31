@@ -89,7 +89,7 @@ app.use((req, res, next) => {
 // TODO: Investigate if this is needed in production
 app.use(cors({
   origin: ['https://localhost:8080', 'https://localhost:8081'],
-  methods: ['GET','POST'],
+  methods: ['GET', 'POST', 'DELETE'],
   credentials: true 
 }));
 

@@ -43,6 +43,7 @@
 import Header from '@/components/Header.vue';
 import EventBus from '@/EventBus';
 import AuthService from '@/services/AuthService';
+import MiscService from '@/services/MiscService';
 import Icon from '@/components/Icons';
 
 export default {
@@ -59,9 +60,21 @@ export default {
     triggerUpload() {
       this.$refs.profileImageInput.click();
     },
-    handleImage() {
-      console.log('handleImage');
+    async handleImage(e) {
       this.imageIsSaving = true;
+      const image = e.target.files[0];
+
+      if (image.size > 3000000) {
+        this.imageIsSaving = false;
+        EventBus.$emit('MESSAGE', 'Error Uploading Photo', 'Image must be 3MB or less', true, 6000);
+        return;
+      }
+
+      const response = await MiscService.uploadImage(image);
+      console.log(response);
+      document.querySelector('#profile-image').setAttribute('src', response.data.profileImage);
+      this.imageIsSaving = false;
+    
     }
   },
   created() {
@@ -131,7 +144,7 @@ export default {
         background-color: rgba(52, 51, 51, 0.67);
         position: absolute;
         top: 0;
-        left: 4px;
+        left: 3px;
         z-index: 5;
         cursor: pointer;
 

@@ -1,6 +1,7 @@
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const Recipe = require('../models/recipe');
+const User = require('../models/user');
 const cloudinary = require('cloudinary');
 const fs = require('fs');
 
@@ -13,7 +14,9 @@ cloudinary.config({
   api_key: '778489856867779', 
   api_secret: cloudinarySecret 
 });
-const cloudinaryOptions = { quality: 60, gravity: 'center', height: 570, width: 570, crop: 'fill', tags: ['recipe_saver'] };
+const cloudinaryOptionsRecipe = { quality: 60, gravity: 'center', height: 570, width: 570, crop: 'fill', tags: ['recipe_saver'] };
+const cloudinaryOptionsProfile = Object.assign(cloudinaryOptionsRecipe, { tags: 'rs_profile_img' });
+
 
 
 module.exports = function(app) {
@@ -238,7 +241,7 @@ module.exports = function(app) {
           recipe.image = result.secure_url;
           saveRecipe(recipe);
         },
-        cloudinaryOptions);
+        cloudinaryOptionsRecipe);
       } else {
         saveRecipe(recipe);
       }
@@ -256,9 +259,10 @@ module.exports = function(app) {
 
   // Delete recipe
   app.delete('/api/recipe/:recipeID', loggedIn, (req, res) => {
+    console.log('dete recipe');
     const { recipeID } = req.params;
 
-    Recipe.findOne({ user_id, _id: recipeID}, (err, recipe) => {
+    Recipe.findOne({ user_id: req.session.passport.user._id, _id: recipeID}, (err, recipe) => {
       if (err) console.error(err);
       if (!recipe) return res.sendStatus(404);
 
@@ -266,6 +270,44 @@ module.exports = function(app) {
         if (err) console.error(err);
         res.json(data);
       });
+    });
+  });
+
+
+  // Upload profile image
+  app.post('/api/account-image-upload', loggedIn, upload.fields([{ name: 'image-file' }]), (req, res) => {
+
+    const imageFile = req.files['image-file'][0].path;
+
+    User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
+      if (err) console.error(err);
+
+      // If the user has a profile image already then delete it
+      if (user.profileImage) {
+        const subStrPos = user.profileImage.lastIndexOf('/') + 1;
+        const imageID = user.profileImage.substr(subStrPos).replace('.jpg', '');
+        cloudinary.uploader.destroy(imageID, result => {
+          saveImage();
+        });
+      } else {
+        saveImage()
+      }
+
+      function saveImage() {
+        cloudinary.uploader.upload(imageFile, result => {
+          if (imageFile) fs.unlink(imageFile, err => {});
+          user.profileImage = result.secure_url;
+
+          user.save((err, record) => {
+            if (err) console.error(err);
+            res.json({
+              profileImage: result.secure_url
+            });
+          });
+        },
+        cloudinaryOptionsProfile);
+      }
+
     });
   });
 

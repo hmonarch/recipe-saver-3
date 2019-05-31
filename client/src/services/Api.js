@@ -13,8 +13,11 @@ export default function() {
 
   axiosAPI.interceptors.response.use(response => {
     return response;
-  }, error => {
-    window.location = '/login?login-error=login-again';
+  }, (error, x) => {
+    console.error('Axios error:', error);
+    if (error.status === 401) {
+      window.location = '/login?login-error=login-again';
+    }
     return Promise.reject(error);
   });
 
