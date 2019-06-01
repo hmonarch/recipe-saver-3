@@ -97,25 +97,43 @@ app.use(cors({
 
 // Passport Facebook middleware
 passport.use(new FacebookStrategy({
-    clientID: '299096254361478',
+    clientID: '264292990672562',
     clientSecret: FACEBOOK_APP_SECRET,
     callbackURL: 'https://localhost:8080/auth/facebook/callback',
-    profileFields: ['id', 'emails', 'name']
+    profileFields: ['id', 'emails', 'name'],
+    passReqToCallback : true,
   },
-  (accessToken, refreshToken, profile, done) => {
-    console.log('profile', profile);
-    return done(null, profile);
+  (req, accessToken, refreshToken, profile, done) => {
+
+    console.log('PROFILE', profile);
+    User.findOne({ facebookId: profile.id }, (err, user) => {
+      if (!user) {
+        return done(null, { notRecognized: 'Hmm, we don\'t recognize that email. Please try again.' });
+      } else {
+        if (!user.email && profile._json.email) {
+          user.email = profile._json.email;
+          user.save((err, record) => {
+            return done(err, user);
+          });
+        } else {
+          return done(err, user);
+        }
+      }
+    });
   }
 ));
 
+
+
 // Passport Google middleware
 passport.use(new GoogleStrategy({
-    clientID: '906915295802-ut89lg3pkgiv6t566r06imtq45d40ltl.apps.googleusercontent.com',
+    clientID: '906915295802-pq35f3ve2mubddbul0hab46s8tok9nom.apps.googleusercontent.com',
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: 'https://localhost:8080/auth/google/callback',
     passReqToCallback : true,
   },
   (req, accessToken, refreshToken, profile, done) => {
+    console.log('googleId', profile.id);
     User.findOne({ googleId: profile.id }, (err, user) => {
       if (!user) {
         return done(null, { notRecognized: 'Hmm, we don\'t recognize that email. Please try again.' });
@@ -186,8 +204,11 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 });
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login-f' }), (req, res) => {
-  console.log('all good fb!', res.locals.user);
-  res.redirect('/');
+  if (req.user.notRecognized) {
+    res.redirect('/login?login-error=not-recognized');
+  } else {
+    res.redirect('/recipes');
+  }
 });
 
 

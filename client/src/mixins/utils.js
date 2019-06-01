@@ -23,6 +23,10 @@ export default {
       if (!tag) return;
       const color = (window.tagColorMap && window.tagColorMap[tag.name]) ? window.tagColorMap[tag.name] : tag.color;
       return `background-color: ${color}`;
-    }
+    },
+
+    formatDate(data) {
+      return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
+    },
   }
 }

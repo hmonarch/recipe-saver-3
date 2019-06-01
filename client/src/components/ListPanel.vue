@@ -177,9 +177,6 @@ export default {
         }
       });
     },
-    formatDate(data) {
-      return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
-    },
     async retrieveRecipes() {
       const response = await RecipeService.getRecipes(this.sortBy);
       this.recipes = response.data;

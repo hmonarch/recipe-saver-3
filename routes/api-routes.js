@@ -31,6 +31,8 @@ module.exports = function(app) {
 
   // Fetch all recipes
   app.get('/api/recipes/all', loggedIn, (req, res) => {
+    
+
 
     Recipe.find({user_id: req.session.passport.user._id}, 'title creationDate image', (err, recipes) => {
       if (err) console.error(err);
@@ -273,6 +275,13 @@ module.exports = function(app) {
     });
   });
 
+
+  app.get('/api/user-data', /*loggedIn,*/ (req, res) => {
+    User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
+      if (err) console.error(err);
+      res.json(user);
+    });
+  });
 
   // Upload profile image
   app.post('/api/account-image-upload', loggedIn, upload.fields([{ name: 'image-file' }]), (req, res) => {

@@ -4,7 +4,7 @@
     <div id="account-container">
       <div class="account-left">
         <div :class=" { 'saving': imageIsSaving, 'profile-image-container': true }">
-          <img id="profile-image" src="../assets/logo-255x255.png">
+          <img id="profile-image" :src="getUserImg()">
           <input type="file" id="profile-image-input" accept="image/*" onchange="this.value = null; return false;" hidden @input="handleImage" ref="profileImageInput">
           <div @click="triggerUpload" id="profile-image-overlay">
             <button class="new-profile-image-btn">Update Image</button>
@@ -16,15 +16,15 @@
         <ul class="account-info">
           <li>
             <label>Account Type</label>
-            <div class="account-info-value">Full</div>
+            <div class="account-info-value">{{ user.subscription }}</div>
           </li>
           <li>
             <label>You Login Via</label>
-            <div class="account-info-value">Email (wcoloe@gmail.com)</div>
+            <div class="account-info-value">{{ loginMethod }}</div>
           </li>
           <li>
             <label>Member Since</label>
-            <div class="account-info-value">1/25/19</div>
+            <div class="account-info-value">{{ formatDate(user.creationDate) }}</div>
           </li>
         </ul>
       </div>
@@ -45,20 +45,42 @@ import EventBus from '@/EventBus';
 import AuthService from '@/services/AuthService';
 import MiscService from '@/services/MiscService';
 import Icon from '@/components/Icons';
+import utils from '@/mixins/utils';
 
 export default {
   components: {
     Header,
     Icon
   },
+  mixins: [utils],
   data() {
     return {
+      user: {},
       imageIsSaving: false,
     };
+  },
+  computed: {
+    loginMethod() {
+      let method;
+      if (this.user.googleId) method = 'Google';
+      else if (this.user.facebookId) method = 'Facebook';
+      else method = 'Email';
+
+      const emailStr = ` (${this.user.email})`;
+      return `${method}${method === 'Email' ? emailStr : '' }`;
+    }
   },
   methods: {
     triggerUpload() {
       this.$refs.profileImageInput.click();
+    },
+    getUserImg() {
+      return this.user.profileImage;
+    },
+    async getUserData() {
+      const response = await AuthService.getUserData();
+      console.log('response', response);
+      this.user = response.data;
     },
     async handleImage(e) {
       this.imageIsSaving = true;
@@ -74,11 +96,10 @@ export default {
       console.log(response);
       document.querySelector('#profile-image').setAttribute('src', response.data.profileImage);
       this.imageIsSaving = false;
-    
     }
   },
   created() {
-
+    this.getUserData();
   }
 }
 </script>

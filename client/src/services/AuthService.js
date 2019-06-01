@@ -6,5 +6,8 @@ export default {
   },
   logout() {
     return Api().post('/logout');
+  },
+  getUserData() {
+    return Api().get('/user-data');
   }
 }

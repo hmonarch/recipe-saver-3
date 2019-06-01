@@ -15,9 +15,9 @@ export default function() {
     return response;
   }, (error, x) => {
     console.error('Axios error:', error);
-    if (error.status === 401) {
-      window.location = '/login?login-error=login-again';
-    }
+    // if (error.response.status === 401) {
+    //   window.location = '/login?login-error=login-again';
+    // }
     return Promise.reject(error);
   });
 
