@@ -228,8 +228,8 @@ export default {
       }
     }
 
-    #upgrade-account,
-    #delete-account {
+    .upgrade-account,
+    .delete-account {
       align-self: end;
       text-decoration: underline;
       display: inline-block;

@@ -14,6 +14,7 @@
             <li v-show="!editMode" @click="editRecipe()" class="action-edit">Edit Recipe</li>
             <li v-show="editMode" @click="cancel()" class="action-cancel">Cancel</li>
             <li @click="toggleScreen()" class="action-toggle-screen">{{ screenModeText }}</li>
+            <li v-show="!editMode" @click="shareRecipe()" class="action-share">Share Recipe</li>
             <li @click="print()" class="action-print">Print</li>
             <li v-if="!confirmActive" @click="confirmActive = true" class="action-delete">Delete Recipe</li>
             <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
@@ -249,6 +250,14 @@ export default {
       this.actionsVisible = false;
       this.editMode = true;
       this.editor.setOptions({editable: true});
+    },
+    async shareRecipe() {
+      console.log('sharing');
+      const response = await RecipeService.shareRecipe(this.recipe._id);
+      console.log(response.data);
+      const shareLink = `https://localhost:8080/share/${decodeURIComponent(response.data.result)}`;
+      console.log('shareLink', shareLink);
+
     },
     print() {
       this.actionsVisible = false;

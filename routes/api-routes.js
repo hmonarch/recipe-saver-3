@@ -31,8 +31,6 @@ module.exports = function(app) {
 
   // Fetch all recipes
   app.get('/api/recipes/all', loggedIn, (req, res) => {
-    
-
 
     Recipe.find({user_id: req.session.passport.user._id}, 'title creationDate image', (err, recipes) => {
       if (err) console.error(err);

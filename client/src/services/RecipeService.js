@@ -16,6 +16,9 @@ export default {
   searchRecipes(term) {
     return Api().get(`search/${term}`);
   },
+  shareRecipe(id) {
+    return Api().get(`share-recipe/${id}`);
+  },
   updateRecipe(id, recipe, updateImage, removeImage) {
 
     const fd = new FormData();

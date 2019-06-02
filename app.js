@@ -11,6 +11,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const https = require('https');
 const bcrypt = require('bcrypt');
 
+
 const User = require('./models/user');
 const Recipe = require('./models/recipe');
 
@@ -20,12 +21,11 @@ const uriUtil = require('mongodb-uri');
 const MongoStore = require('connect-mongo')(session);
 
 // Middleware
-const userInViews = require('./middleware/userInViews');
+const loggedIn = require('./middleware/loggedIn');
 
 // Global constants
 const GOOGLE_CLIENT_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/google_client_secret.txt`).toString();
 const FACEBOOK_APP_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/facebook_app_secret.txt`).toString();
-
 
 
 // DB setup
@@ -220,6 +220,10 @@ app.get('/test', (req, res) => {
 
 // Initialize API router
 require('./routes/api-routes')(app);
+
+// Sharing route
+require('./routes/sharing')(app);
+
 
 // Get base page
 // The webpack output html file should not be the same as the index route otherwise the Express static directory will immediately return the same-named file in the director and this custom Express route will never run so that's why '/' will return 'app.html' and not 'index.html'
