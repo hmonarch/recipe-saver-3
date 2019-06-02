@@ -10,9 +10,7 @@
 
     <ul id="side-nav-menu">
       <li class="mobile account">
-        <a href="#">
-          Account
-        </a>
+        <router-link :to="{ path: '/account' }">Account</router-link>
       </li>
 			<li>
         <router-link :class="{ active : view === 'all' }" :to="{ path: '/recipes/all' }">

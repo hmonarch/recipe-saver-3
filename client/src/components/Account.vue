@@ -1,5 +1,7 @@
 <template>
   <div id="account">
+
+    <SideNav></SideNav>
     <Header></Header>
     <div id="account-container">
       <div class="account-left">
@@ -12,7 +14,7 @@
         </div>
       </div>
       <div class="account-right">
-        <div class="account-name">Stephanie Kearney</div>
+        <div class="account-name">{{ user.name }}</div>
         <ul class="account-info">
           <li>
             <label>Account Type</label>
@@ -29,10 +31,10 @@
         </ul>
       </div>
 
-      <div id="upgrade-account">
+      <div class="upgrade-account">
         <a href="#">Upgrade</a>
       </div>
-      <div id="delete-account">
+      <div class="delete-account">
         <a href="#">Delete Account</a>
       </div>
     </div>
@@ -46,11 +48,13 @@ import AuthService from '@/services/AuthService';
 import MiscService from '@/services/MiscService';
 import Icon from '@/components/Icons';
 import utils from '@/mixins/utils';
+import SideNav from '@/components/SideNav.vue';
 
 export default {
   components: {
     Header,
-    Icon
+    Icon,
+    SideNav
   },
   mixins: [utils],
   data() {
@@ -114,6 +118,18 @@ export default {
       #nav li.search-container {
         display: none;
       }
+    }
+  }
+
+  #side-nav {
+    display: none;
+
+    #add-recipe {
+      display: none;
+    }
+
+    #side-nav-menu {
+      margin-top: 40px;
     }
   }
 
@@ -224,7 +240,7 @@ export default {
     }
 
 
-    #upgrade-account {
+    .upgrade-account {
       text-align: left;
 
       a {
@@ -232,7 +248,7 @@ export default {
       }
     }
 
-    #delete-account {
+    .delete-account {
       text-align: right;
 
       a {
@@ -241,5 +257,7 @@ export default {
     }
   }
 }
+
+@import '@/styles/_account-mobile.scss';
 </style>
 
