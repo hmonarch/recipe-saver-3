@@ -43,11 +43,16 @@
       </ul>
     </div>
 
-    <div :class="{ 'active' : showMessage === true, 'error': isError === true }" id="message-box" class="box">
+    <div :class="{ 'active' : showMessage === true, 'error': isError === true, 'share-link': isShareLink }" id="message-box" class="box">
       <div class="message-inner">
         <div class="message-block">
           <span class="message-subject">{{ messageSubject }}</span>
-          <span class="message-verb">{{ messageVerb }}</span>
+          <span v-if="!isShareLink" class="message-verb">{{ messageVerb }}</span>
+          <span v-else class="message-verb">
+            <div @click="copySharedLink()"><icon name="copy"/></div>
+            <input type="text" :value="messageVerb">
+          </span>
+          
         </div>
         <div @click="showMessage = false" class="message-icon">
           <icon name="close"/>
@@ -77,11 +82,12 @@ export default {
       tagSearchResults: [],
       searchResultsVisible: false,
       fullScreen: false,
-
+      
       showMessage: false,
       messageSubject: null,
       messageVerb: null,
       isError: false,
+      isShareLink: false,
     };
   },
   mixins: [utils],
@@ -102,6 +108,10 @@ export default {
     async logout() {
       const response = await AuthService.logout();
       this.$router.push('/');
+    },
+    copySharedLink() {
+      document.querySelector('.message-verb input').select();
+      document.execCommand('copy');
     }
   },
   created() {
@@ -119,8 +129,9 @@ export default {
     EventBus.$on('LISTOPEN_HEADER', listOpen => {
       this.fullScreen = !listOpen;
     });
-    EventBus.$on('MESSAGE', (title, message, isError, timeout = 3000) => {
-      if (isError) this.isError = true;
+    EventBus.$on('MESSAGE', ({ title, message, isError = false, isShareLink = false, timeout = 3000 }) => {
+      this.isError = isError;
+      this.isShareLink = isShareLink;
       this.showMessage = false;
       clearInterval(window.messageTimer);
       window.messageTimer = setTimeout(() => {
@@ -290,6 +301,51 @@ header {
 
     &.error {
       border-top: solid 5px #f00;
+    }
+
+    &.share-link {
+      border-top: solid 5px #089de3;
+
+      .message-inner {
+        .message-block {
+          padding-right: 0;
+          display: block;
+
+          .message-verb {
+            display: block;
+            margin-top: 10px;
+            float: right;
+            width: 100%;
+            clear: both;
+            margin-right: 0;
+
+            .icon--copy {
+              height: 30px;
+              width: 30px;
+              margin: 4px 8px 0 8px;
+              margin-right: 8px;
+              float: left;
+              cursor: pointer;
+
+              &:hover {
+                fill: #089de3;
+              }
+            }
+
+            input {
+              border: dashed 0.5px black;
+              width: 380px;
+              font-weight: 300;
+              padding: 10px;
+              overflow-y: auto;
+              height: 18px;
+              line-height: 18px;
+              background-color: #f5f5f5;
+            }
+          }
+        }
+      }
+
     }
 
     .message-inner {

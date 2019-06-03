@@ -92,7 +92,11 @@ export default {
 
       if (image.size > 3000000) {
         this.imageIsSaving = false;
-        EventBus.$emit('MESSAGE', 'Error Uploading Photo', 'Image must be 3MB or less', true, 6000);
+        EventBus.$emit('MESSAGE', {
+          title: 'Error Uploading Photo',
+          message: 'Image must be 3MB or less',
+          isError: true,
+        });
         return;
       }
 

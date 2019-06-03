@@ -50,5 +50,9 @@
         top: 34px;
       }
     }
+
+    #message-box.share-link .message-inner .message-block .message-verb input {
+      width: calc(100% - 68px);
+    }
   }
 }

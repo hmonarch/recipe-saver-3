@@ -255,9 +255,14 @@ export default {
       console.log('sharing');
       const response = await RecipeService.shareRecipe(this.recipe._id);
       console.log(response.data);
-      const shareLink = `https://localhost:8080/share/${decodeURIComponent(response.data.result)}`;
+      const shareLink = `https://localhost:8080/share/${encodeURIComponent(response.data.result)}`;
       console.log('shareLink', shareLink);
-
+      EventBus.$emit('MESSAGE', {
+        title: 'Share Link:',
+        message: shareLink,
+        isShareLink: true,
+        timeout: 40000
+      });
     },
     print() {
       this.actionsVisible = false;
@@ -275,7 +280,10 @@ export default {
       if (response.status !== 200) return console.log('Error deleting recipe');
 
       this.closeDetails();
-      EventBus.$emit('MESSAGE', recipeTitle, 'deleted');
+      EventBus.$emit('MESSAGE', {
+        title: recipeTitle,
+        message: 'deleted'
+      });
       EventBus.$emit('RECALUCATE_TAGS');
 
       const query = Object.assign({}, this.$route.query);
@@ -315,12 +323,22 @@ export default {
 
       if (this.recipe.title.trim() === '') {
         this.savingOverlayActive = false;
-        return EventBus.$emit('MESSAGE', this.recipe.title, 'Recipe must have a title', true, 6000);
+        return EventBus.$emit('MESSAGE', {
+          title: this.recipe.title,
+          message: 'Recipe must have a title',
+          isError: true,
+          timeout: 6000
+        });
       }
 
       if (this.imageAsset && this.imageAsset.size > 3000000) {
         this.savingOverlayActive = false;
-        return EventBus.$emit('MESSAGE', this.recipe.title, 'Cannot save - Image must be 3MB or less', true, 6000);
+        return EventBus.$emit('MESSAGE', {
+          title: this.recipe.title,
+          message: 'Cannot save - Image must be 3MB or less',
+          isError: true,
+          timeout: 6000
+        });
       }
 
       this.saveDescription();
@@ -336,7 +354,11 @@ export default {
 
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('RECALUCATE_TAGS');
-      EventBus.$emit('MESSAGE', this.recipe.title, message);
+      EventBus.$emit('MESSAGE', {
+        title: this.recipe.title,
+        message: message,
+      });
+
     },
     debounceInput: debounce(function(e) {
       this.fetchTags(e);
