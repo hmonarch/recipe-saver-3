@@ -39,5 +39,10 @@ export default new Router({
       name: 'Login',
       component: () => import('./components/Login.vue')
     },
+    {
+      path: '/share/:recipe',
+      name: 'Share',
+      component: () => import('./components/Share.vue')
+    }
   ]
 })

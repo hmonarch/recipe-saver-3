@@ -19,6 +19,9 @@ export default {
   shareRecipe(id) {
     return Api().get(`share-recipe/${id}`);
   },
+  retrieveSharedRecipe(ciperText) {
+    return Api().get(`share/${ciperText}`);
+  },
   updateRecipe(id, recipe, updateImage, removeImage) {
 
     const fd = new FormData();
