@@ -20,7 +20,10 @@ export default {
     return Api().get(`share-recipe/${id}`);
   },
   retrieveSharedRecipe(ciperText) {
-    return Api().get(`share/${ciperText}`);
+    return Api().get(`get-shared/${ciperText}`);
+  },
+  addSharedRecipe(id) {
+    return Api().get(`add-shared/${id}`);
   },
   updateRecipe(id, recipe, updateImage, removeImage) {
 

@@ -33,22 +33,43 @@ module.exports = function(app) {
   });
 
   // Retrieve shared recipe
-  app.get('/api/share/:recipeCipher',  (req, res) => {
+  app.get('/api/get-shared/:recipeCipher',  (req, res) => {
 
     // Encrypt recipe id
-    const { recipeCipher } = req.params;
-    console.log('recipeCipher', recipeCipher);
-
-    // Decrypt
-    const bytes = CryptoJS.Rabbit.decrypt(recipeCipher, CRYPTOJS_SECRET);
-    const recipeID = bytes.toString(CryptoJS.enc.Utf8);
-
-    console.log('Final id', recipeID);
-
-    Recipe.findOne({  _id: recipeID }, (err, recipe) => {
+    let { recipeCipher } = req.params;
+    
+    Recipe.findOne({  _id: getDecryptedID(recipeCipher) }, (err, recipe) => {
       if (err) console.error(err);
       res.json(recipe);
     });
   });
 
+  // Add shared recipe
+  app.get('/api/add-shared/:recipeCipher',  (req, res) => {
+
+    // Encrypt recipe id
+    let { recipeCipher } = req.params;
+    const recipeID = getDecryptedID(recipeCipher)
+    const userID = req && req.session && req.session.passport && req.session.passport.user && req.session.passport.user._id;
+
+    console.log(userID);
+
+    User.findOne({ _id: userID }, (err, user) => {
+      if (!user) {
+        return res.json({
+          error: 'User not logged in'
+        });
+      } else {
+        console.log(user);
+      }
+    });
+
+  });
+
 };
+
+
+function getDecryptedID(recipeCipher) {
+  const bytes = CryptoJS.Rabbit.decrypt(decodeURIComponent(recipeCipher), CRYPTOJS_SECRET);
+  return bytes.toString(CryptoJS.enc.Utf8);
+}
