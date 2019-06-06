@@ -2,6 +2,7 @@ const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const Recipe = require('../models/recipe');
 const User = require('../models/user');
+const mongoose = require('mongoose');
 
 const CRYPTOJS_SECRET = process.env.PORT ? process.env.CRYPTOJS_SECRET : fs.readFileSync(`${__dirname}/../private/cryptojs_secret.txt`).toString();
 
@@ -52,18 +53,28 @@ module.exports = function(app) {
     const recipeID = getDecryptedID(recipeCipher)
     const userID = req && req.session && req.session.passport && req.session.passport.user && req.session.passport.user._id;
 
-    console.log(userID);
-
     User.findOne({ _id: userID }, (err, user) => {
       if (!user) {
         return res.json({
           error: 'User not logged in'
         });
       } else {
-        console.log(user);
+        Recipe.findOne({ _id: recipeID }, (err, recipe) => {
+          const recipeClone = recipe;
+          recipeClone._id = mongoose.Types.ObjectId();
+          recipeClone.isNew = true;
+          recipeClone.user_id = user._id;
+          recipeClone.favorite = false;
+          recipeClone.tags = [];
+          recipeClone.creationDate = new Date();
+          recipeClone.save((err, record) => {
+            return res.json({
+              recipeID: record._id 
+            });
+          });
+        });
       }
     });
-
   });
 
 };

@@ -3,8 +3,18 @@
     <div id="share-container">
 
       <div class="actions">
-        <div @click="addToMyRecipes()" class="add">Add To My Recipes</div>
-        <div v-show="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <div v-if="!importedRecipeID" @click="addToMyRecipes()" class="add">Add To My Recipes</div>
+        <div v-else class="added-block">
+          <icon name="checkCircle"/>
+          <span class="recipe-added">Recipe added to your collection!</span>
+          <router-link class="recipe-added-link" :to="{ path: `/recipes/all?id=${importedRecipeID}` }">Go to recipe</router-link>
+        </div>
+        <div v-show="errorMessage" class="error-message">
+          <icon name="info"/>
+          <router-link class="error-message-text" :to="{ path: '/login' }">
+            Please login to save this recipe
+          </router-link>
+        </div>
       </div>
 
       <div class="panel">
@@ -25,16 +35,18 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue';
 import Icon from '@/components/Icons';
-import SideNav from '@/components/SideNav.vue';
 import RecipeService from '@/services/RecipeService';
 
 export default {
+  components: {
+    Icon
+  },
   data() {
     return {
       recipe: {},
       errorMessage: null,
+      importedRecipeID: null,
     };
   },
   computed: {
@@ -52,11 +64,12 @@ export default {
       this.errorMessage = null;
       const recipeID = encodeURIComponent(this.$route.params.recipe);
       const response = await RecipeService.addSharedRecipe(recipeID);
-      console.log(response.data);
 
       if (response.data.error === 'User not logged in') {
-        this.errorMessage = 'Please login to save this recipe';
-      }
+        return this.errorMessage = 'Please login to save this recipe';
+      } 
+
+      this.importedRecipeID = response.data.recipeID;
     }
   },
   created() {
@@ -86,6 +99,12 @@ export default {
     margin-bottom: 20px;
     text-align: left;
 
+    .icon {
+      height: 30px;
+      width: 30px;
+      margin-right: 6px;
+    }
+
     .add {
       color: #fff;
       display: inline-block;
@@ -102,11 +121,37 @@ export default {
       }
     }
 
+    .added-block,
     .error-message {
-      color: #fff;
-      background-color: #673ab7;
-      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      font-weight: bold;
       padding: 10px;
+
+      a:hover {
+        text-decoration: none;
+      }
+    }
+
+    .added-block {
+      background-color: #b0f8b0;
+      color: #04a41f;
+      margin-top: 3px;
+
+      .recipe-added-link {
+        margin-left: 10px;
+        color: #14a2bc;
+      }
+    }
+
+    .error-message {
+      color: #ff0000;
+      background-color: #ffd1d0;
+      margin-top: 12px;
+
+      a {
+        color: #ff0000;
+      }
     }
   }
 
