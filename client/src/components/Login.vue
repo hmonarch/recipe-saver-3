@@ -9,33 +9,49 @@
       <div class="login-body">
         
         <div class="mode-controller">
-          <div class="mode-controller-btn active">Log In</div>
-          <div class="mode-controller-btn">Sign Up</div>
+          <div :class="{ 'active': isLoginView, 'mode-controller-btn': true }" @click="isLoginView = true">Log In</div>
+          <div :class="{ 'active': !isLoginView, 'mode-controller-btn': true }" @click="isLoginView = false">Sign Up</div>
         </div>
 
         <div class="login-body-padding">
           <div class="login-strategies">
-            <a class="login-strategy facebook" href="/auth/facebook">
+            <a class="login-strategy facebook" :href="getLoginOrRegisterURL('facebook')">
               <div class="icon-block"><icon name="facebook"/></div>
-              <div class="login-strategy-text">Log In With Facebook</div>
+              <div v-if="isLoginView" class="login-strategy-text">Log In With Facebook</div>
+              <div v-else class="login-strategy-text">Sign Up With Facebook</div>
             </a>
-            <a class="login-strategy google" href="/auth/google">
+            <a class="login-strategy google" :href="getLoginOrRegisterURL('google')">
               <div class="icon-block"><icon name="google"/></div>
-              <div class="login-strategy-text">Log In With Google</div>
+              <div v-if="isLoginView" class="login-strategy-text">Log In With Google</div>
+              <div v-else class="login-strategy-text">Sign Up With Google</div>
             </a>
           </div>
 
           <div class="or">or</div>
 
-          <form class="default-login-form" @submit.prevent="login()">
+          <form class="email-form" @submit.prevent="login()">
+            <div v-if="!isLoginView" class="register-fields">
+              <div class="login-register-label">Register with Email</div>
+              <div class="login-strategy full-name">
+                <div class="icon-block"><icon name="avatar"/></div>
+                <input id="full-name" class="login-input" type="text" placeholder="Full Name" v-model="fullName" @focus="addHighlight($event)" @blur="removeHighlight($event)">
+              </div>
+            </div>
+            <div v-if="isLoginView" class="login-register-label">Log In with Email</div>
             <div class="login-strategy email">
               <div class="icon-block"><icon name="email"/></div>
-              <input id="email" class="login-input" type="email" placeholder="yours@example.com" v-model="email" @focus="addHighlight($event)" @blur="removeHighlight($event)">
+              <input id="email" class="login-input" type="email" placeholder="email@example.com" v-model="email" @focus="addHighlight($event)" @blur="removeHighlight($event)">
             </div>
             <div class="login-strategy password">
-              <div class="icon-block"><icon name="password"/></div>
-              <input id="password" class="login-input" type="password" placeholder="your password" v-model="password" @focus="addHighlight($event)" @blur="removeHighlight($event)">
+              <div v-if="isLoginView" class="icon-block"><icon name="password"/></div>
+              <div v-else class="icon-block"><icon name="key"/></div>
+              <input id="password" class="login-input" type="password" placeholder="Password" v-model="password" @focus="addHighlight($event)" @blur="removeHighlight($event)">
             </div>
+            <div v-if="!isLoginView" class="login-strategy password-confirm">
+              <div class="icon-block"><icon name="password"/></div>
+              <input id="password-confirm" class="login-input" type="password" placeholder="Confirm password" v-model="passwordConfirm" @focus="addHighlight($event)" @blur="removeHighlight($event)">
+            </div>
+
             <input type="submit" hidden>
           </form>
 
@@ -44,7 +60,8 @@
       </div>
 
       <div class="login-footer" @click="login()">
-        <span>Log In</span>
+        <span v-if="isLoginView">Log In</span>
+        <span v-else>Register</span>
         <icon name="caret"/>
       </div>
     </div>
@@ -64,7 +81,10 @@ export default {
     return {
       email: '',
       password: '',
+      passwordConfirm: '',
       message: '',
+      fullName: '',
+      isLoginView: false,
       errorMessages: {
         'not-recognized': 'Sorry, we have no record for this account. If you wish to sign up please click the Sign Up tab above.',
         'login-again': 'Please login again.'
@@ -72,6 +92,10 @@ export default {
     };
   },
   methods: {
+    getLoginOrRegisterURL(strategy) {
+      if (this.isLoginView) return `/auth/${strategy}`;
+      else return  `/register/${strategy}`;
+    },
     addHighlight(e) {
       e.target.closest('.login-strategy').classList.add('highlight');
     },
@@ -82,7 +106,10 @@ export default {
       return this.email.trim().length && this.password.trim().length;
     },
     async login() {
-      if (!this.isValid()) return console.log('not valid');
+      if (!this.isValid()) {
+        this.message = 'Invalid login - please try again.';
+        return;
+      }
       this.message = '';
       const response = await AuthService.login({ email: this.email.toLowerCase().trim(), password: this.password });
       console.log(response.data);
@@ -154,6 +181,7 @@ export default {
 
           &.active {
             border-bottom: solid 1px #000;
+            font-weight: bold;
           }
         }
       }
@@ -163,7 +191,12 @@ export default {
       }
 
       .login-strategies,
-      .default-login-form {
+      .email-form {
+        .login-register-label {
+          margin-bottom: 10px;
+          font-weight: bold;
+        }
+
         .login-strategy {
           width: 100%;
           display: block;
@@ -196,24 +229,28 @@ export default {
             }
           }
 
+          &.full-name,
           &.email,
-          &.password {
+          &.password,
+          &.password-confirm {
             border: solid 1px #e5e5e5;
 
             &:hover {
               filter: none;
             }
 
-          &.highlight {
-            border: solid 1px #a6c8ff;
-          }
+            &.highlight {
+              border: solid 1px #a6c8ff;
+            }
 
             .icon-block {
               background-color: #e5e5e5;
             }
           }
 
-          &.email {
+          &.full-name,
+          &.email,
+          &.password {
             margin-bottom: 10px;
           }
 
@@ -243,12 +280,22 @@ export default {
               height: 24px;
             }
 
+            .icon--avatar svg {
+              height: 22px;
+              fill: #888;
+            }
+
             .icon--email svg {
               height: 12px;
 
               path {
                 fill: #888;
               }
+            }
+
+            .icon--key svg {
+              height: 23px;
+              fill: #888;
             }
 
             .icon--password svg {
@@ -263,8 +310,10 @@ export default {
             letter-spacing: 0.3px;
           }
 
+          #full-name, 
           #email,
-          #password {
+          #password,
+          #password-confirm {
             height: 40px;
             box-sizing: border-box;
             width: 100%;
@@ -300,6 +349,7 @@ export default {
       border-radius: 0 0 6px 6px;
       text-transform: uppercase;
       font-size: 18px;
+      border-bottom: solid 1px #089de3;
       letter-spacing: 0.5px;
 
       &:hover {
