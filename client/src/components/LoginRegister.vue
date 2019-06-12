@@ -1,19 +1,19 @@
 <template>
-  <div id="login">
+  <div id="login-register">
 
-    <div class="login-box">
-      <div class="login-header">
-        <img class="login-logo" src="../assets/logo-255x255.png">
+    <div class="main-box">
+      <div class="main-header">
+        <img class="logo" src="../assets/logo-255x255.png">
         <div class="logo-text">Recipe Saver</div>
       </div>
-      <div class="login-body">
+      <div class="main-body">
         
         <div class="mode-controller">
-          <div :class="{ 'active': isLoginView, 'mode-controller-btn': true }" @click="isLoginView = true">Log In</div>
-          <div :class="{ 'active': !isLoginView, 'mode-controller-btn': true }" @click="isLoginView = false">Sign Up</div>
+          <div :class="{ 'active': isLoginView, 'mode-controller-btn': true }" @click="changeView(true)">Log In</div>
+          <div :class="{ 'active': !isLoginView, 'mode-controller-btn': true }" @click="changeView(false)">Sign Up</div>
         </div>
 
-        <div class="login-body-padding">
+        <div class="main-body-padding">
           <div class="login-strategies">
             <a class="login-strategy facebook" :href="getLoginOrRegisterURL('facebook')">
               <div class="icon-block"><icon name="facebook"/></div>
@@ -29,7 +29,7 @@
 
           <div class="or">or</div>
 
-          <form class="email-form" @submit.prevent="login()">
+          <form class="email-form" @submit.prevent="loginOrRegister()">
             <div v-if="!isLoginView" class="register-fields">
               <div class="login-register-label">Register with Email</div>
               <div class="login-strategy full-name">
@@ -55,11 +55,11 @@
             <input type="submit" hidden>
           </form>
 
-          <div v-show="message" class="message">{{ message }}</div>
+          <div v-show="message" v-html="message" class="message"></div>
         </div>
       </div>
 
-      <div class="login-footer" @click="login()">
+      <div class="main-footer" @click="loginOrRegister()">
         <span v-if="isLoginView">Log In</span>
         <span v-else>Register</span>
         <icon name="caret"/>
@@ -84,7 +84,8 @@ export default {
       passwordConfirm: '',
       message: '',
       fullName: '',
-      isLoginView: false,
+      isLoginView: true,
+      errors: [],
       errorMessages: {
         'not-recognized': 'Sorry, we have no record for this account. If you wish to sign up please click the Sign Up tab above.',
         'login-again': 'Please login again.'
@@ -94,7 +95,11 @@ export default {
   methods: {
     getLoginOrRegisterURL(strategy) {
       if (this.isLoginView) return `/auth/${strategy}`;
-      else return  `/register/${strategy}`;
+      else return `/auth/${strategy}`;
+    },
+    changeView(isLoginView) {
+      this.message = '';
+      this.isLoginView = isLoginView;
     },
     addHighlight(e) {
       e.target.closest('.login-strategy').classList.add('highlight');
@@ -102,17 +107,59 @@ export default {
     removeHighlight(e) {
       e.target.closest('.login-strategy').classList.remove('highlight');
     },
-    isValid() {
+    isValidLogin() {
       return this.email.trim().length && this.password.trim().length;
     },
+    isValidEmail(email) {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    },
+    isValidRegistration() {
+      this.errors = [];
+
+      if (!this.fullName.length) this.errors.push('Name required');
+      else if (this.fullName.length > 50) this.errors.push('Name must be less than 50 characters');
+
+      if (!this.email.length) this.errors.push('Email required');
+      else if (!this.isValidEmail(this.email)) this.errors.push('Invalid email');
+      else if (this.email.length > 60) this.errors.push('Email must be less than 60 characters');
+
+      if (!this.password.length) this.errors.push('Password required');
+      else if (this.password !== this.passwordConfirm) this.errors.push('Passwords must match');
+      else if (this.password.length < 8) this.errors.push('Password must be 8 or more characters');
+      else if (this.password.length > 30) this.errors.push('Password must be 30 characters or less'); 
+
+      if (!this.errors.length) return true;
+    },
+    loginOrRegister() {
+      if (this.isLoginView) this.login();
+      else this.register();
+    },
     async login() {
-      if (!this.isValid()) {
+      if (!this.isValidLogin()) {
         this.message = 'Invalid login - please try again.';
         return;
       }
       this.message = '';
       const response = await AuthService.login({ email: this.email.toLowerCase().trim(), password: this.password });
       console.log(response.data);
+      if (response.data.errMessage) this.message = response.data.errMessage;
+      if (response.data.userID) {
+        this.$router.push('/recipes/all');
+      }
+    },
+    async register() {
+      if (!this.isValidRegistration()) {
+        this.message = this.errors.join('<br>');
+        return;
+      }
+
+      this.message = '';
+      const response = await AuthService.register({ 
+        fullName: this.fullName,
+        email: this.email.toLowerCase().trim(),
+        password: this.password
+      });
       if (response.data.errMessage) this.message = response.data.errMessage;
       if (response.data.userID) {
         this.$router.push('/recipes/all');
@@ -131,7 +178,7 @@ export default {
 </script>
 
 <style lang="scss">
-#login {
+#login-register {
   background: linear-gradient(45deg, #23d82f 0%,#00adff 100%);
   height: 100%;
   position: relative;
@@ -139,7 +186,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  .login-box {
+  .main-box {
     box-sizing: border-box;
     width: 350px;
     border-radius: 6px;
@@ -148,12 +195,12 @@ export default {
     z-index: 1;
     background-color: #fff;
 
-    .login-header {
+    .main-header {
       background-color: rgba(223, 222, 222, 0.8);
       border-radius: 6px 6px 0 0;
       padding: 20px;
 
-      .login-logo {
+      .logo {
         width: 75px;
         margin-bottom: 12px;
         border: solid 1px black;
@@ -167,7 +214,7 @@ export default {
       }
     }
 
-    .login-body {
+    .main-body {
       .mode-controller {
         display: flex;
         flex-direction: row;
@@ -186,7 +233,7 @@ export default {
         }
       }
 
-      .login-body-padding {
+      .main-body-padding {
         padding: 20px;
       }
 
@@ -194,7 +241,6 @@ export default {
       .email-form {
         .login-register-label {
           margin-bottom: 10px;
-          font-weight: bold;
         }
 
         .login-strategy {
@@ -340,7 +386,7 @@ export default {
       background-color: #673ab7;
     }
 
-    .login-footer {
+    .main-footer {
       cursor: pointer;
       box-sizing: border-box;
       background-color: #089de3;

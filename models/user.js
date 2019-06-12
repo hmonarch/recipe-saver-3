@@ -11,7 +11,7 @@ const UserSchema = new Schema({
 	subscription: String,
 	profileImage: String,
   creationDate: {type: Date, default: Date.now},
-  lastLogin: String,
+  lastLogin: {type: Date, default: Date.now},
   resetPasswordToken: String,
   resetPasswordExpires: String,
 });

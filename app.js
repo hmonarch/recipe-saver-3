@@ -165,16 +165,35 @@ passport.use(new LocalStrategy(
   { usernameField : 'email', passwordField : 'password', passReqToCallback : true },
   (req, email, password, done) => {
 
-    User.findOne({ email }, (err, user) => {
-      if (err) return done(null, { errMessage: 'Something went wrong. Please try again.' });
-      if (!user) return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
-      if (!bcrypt.compareSync(password, user.password)) return done(null, { errMessage: 'Incorrect password. Please try again.' });
-      return done(null, user);
-    });
+    const { actionToTake } = req.params;
+
+    if (actionToTake === 'login') {
+      User.findOne({ email }, (err, user) => {
+        if (err) return done(null, { errMessage: 'Something went wrong. Please try again.' });
+        if (!user) return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
+        if (!bcrypt.compareSync(password, user.password)) return done(null, { errMessage: 'Incorrect password. Please try again.' });
+        return done(null, user);
+      });
+    } else if (actionToTake === 'register') {
+      User.findOne({ 'email':  email }, (err, user) => {
+        if (user) return done(null, { errMessage: 'Email already registered' });
+        const hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+        const newUser = new User({
+          email,
+          password: hash,
+          name: req.body.name,
+          subscription: 'Basic'
+        });
+        newUser.save(function(err) {
+          if (err) console.error(err);
+          return done(null, newUser);
+        });
+      });
+    } else return done(null, { errMessage: 'Something went wrong. Please try again.' });
   }
 ));
 
-app.post('/api/login', passport.authenticate('local'), (req, res) => {
+app.post('/api/local/:actionToTake', passport.authenticate('local'), (req, res) => {;
   console.log('userOrmessage', req.user);
   res.json({
     userID: req.user._id,
