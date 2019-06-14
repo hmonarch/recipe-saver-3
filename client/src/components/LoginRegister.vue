@@ -88,14 +88,15 @@ export default {
       errors: [],
       errorMessages: {
         'not-recognized': 'Sorry, we have no record for this account. If you wish to sign up please click the Sign Up tab above.',
-        'login-again': 'Please login again.'
+        'login-again': 'Please login again.',
+        'already-registered': 'This account is already registered. Please login',
       }
     };
   },
   methods: {
     getLoginOrRegisterURL(strategy) {
-      if (this.isLoginView) return `/auth/${strategy}`;
-      else return `/auth/${strategy}`;
+      if (this.isLoginView) return `/auth/${strategy}/${this.isLoginView ? 'login' : 'register'}`;
+      else return `/auth/${strategy}/${this.isLoginView ? 'login' : 'register'}`;
     },
     changeView(isLoginView) {
       this.message = '';
@@ -165,14 +166,14 @@ export default {
         this.$router.push('/recipes/all');
       }
     },
-    checkLoginError(errorStr) {
+    checkLoginRegError(errorStr) {
       if (this.$route.query[errorStr]) {
         this.message = this.errorMessages[this.$route.query[errorStr]];
       }
     }
   },
   mounted() {
-    this.checkLoginError('login-error');
+    this.checkLoginRegError('login-reg-error');
   }
 }
 </script>

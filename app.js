@@ -129,33 +129,53 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: '906915295802-pq35f3ve2mubddbul0hab46s8tok9nom.apps.googleusercontent.com',
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://localhost:8080/auth/google/callback',
+    callbackURL: 'https://localhost:8080/auth/google/login/callback',
     passReqToCallback : true,
   },
   (req, accessToken, refreshToken, profile, done) => {
-    console.log('googleId', profile.id);
-    User.findOne({ googleId: profile.id }, (err, user) => {
-      if (!user) {
-        return done(null, { notRecognized: 'Hmm, we don\'t recognize that email. Please try again.' });
-      } else {
-        if (!user.email && profile._json.email) {
-          user.email = profile._json.email;
-          user.save((err, record) => {
-            return done(err, user);
-          });
+    const actionToTake = req.query.state;
+
+    if (actionToTake === 'login') {
+      User.findOne({ googleId: profile.id }, (err, user) => {
+        if (!user) {
+          return done(null, { notRecognized: 'Hmm, we don\'t recognize that email. Please try again.' });
         } else {
-          return done(err, user);
+          if (!user.email && profile._json.email) {
+            user.email = profile._json.email;
+            user.save((err, record) => {
+              return done(err, user);
+            });
+          } else {
+            return done(err, user);
+          }
         }
-      }
-    });
+      });
+    } else if (actionToTake === 'register') {
+      User.findOne({ 'googleId':  profile.id }, (err, user) => {
+        if (user) return done(null, { errMessage: 'Email already registered' });
+        const newUser = new User({
+          email: profile._json.email,
+          name: profile.displayName,
+          subscription: 'Basic'
+        });
+        newUser.save(function(err) {
+          if (err) console.error(err);
+          console.log('GOogle user saved');
+          return done(null, newUser);
+        });
+      });
+    } else return done(null, { errMessage: 'Something went wrong. Please try again.' });
   }
 ));
-app.get('/auth/google', (req, res, next) => {
+app.get('/auth/google/:actionToTake', (req, res, next) => {
+  const { actionToTake } = req.params;
+
   passport.authenticate('google', 
   { scope: [
     'https://www.googleapis.com/auth/plus.login',
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email' ],
+    state: actionToTake
   })(req, res, next);
 });
 
@@ -198,7 +218,6 @@ app.post('/api/local/:actionToTake', passport.authenticate('local'), (req, res) 
   res.json({
     userID: req.user._id,
     errMessage: req.user.errMessage,
-    notRecognized: req.user.notRecognized
   });
 });
 
@@ -213,10 +232,11 @@ app.get('/auth/facebook', passport.authenticate('facebook',
 ));
 
 
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
-  console.log('all good google!');
+app.get(['/auth/google/login/callback', '/auth/google/register/callback'], passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
   if (req.user.notRecognized) {
-    res.redirect('/login?login-error=not-recognized');
+    res.redirect('/login?login-reg-error=not-recognized');
+  } else if (req.user.errMessage === 'Email already registered') {
+    res.redirect('/login?login-reg-error=already-registered');
   } else {
     res.redirect('/recipes');
   }
@@ -224,7 +244,7 @@ app.get('/auth/google/callback', passport.authenticate('google', { failureRedire
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login-f' }), (req, res) => {
   if (req.user.notRecognized) {
-    res.redirect('/login?login-error=not-recognized');
+    res.redirect('/login?login-reg-error=not-recognized');
   } else {
     res.redirect('/recipes');
   }

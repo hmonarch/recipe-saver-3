@@ -79,7 +79,7 @@ export default {
       this.$refs.profileImageInput.click();
     },
     getUserImg() {
-      return this.user.profileImage;
+      return this.user.profileImage || 'https://res.cloudinary.com/dormh2fvt/image/upload/v1559367596/logo-255x255_r72o7i.png';
     },
     async getUserData() {
       const response = await AuthService.getUserData();
