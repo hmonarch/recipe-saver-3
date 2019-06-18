@@ -89,7 +89,8 @@ export default {
       errorMessages: {
         'not-recognized': 'Sorry, we have no record for this account. If you wish to sign up please click the Sign Up tab above.',
         'login-again': 'Please login again.',
-        'already-registered': 'This account is already registered. Please login',
+        'already-registered': 'This account is already registered. Please login.',
+        'fb-already-registered': 'This account is already registered. To register a new Facebook account please log into your account at Facebook and try again.'
       }
     };
   },

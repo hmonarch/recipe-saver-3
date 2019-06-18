@@ -99,29 +99,65 @@ app.use(cors({
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: 'https://localhost:8080/auth/facebook/callback',
+    callbackURL: 'https://localhost:8080/auth/facebook/login/callback',
     profileFields: ['id', 'emails', 'name'],
     passReqToCallback : true,
   },
   (req, accessToken, refreshToken, profile, done) => {
+    const actionToTake = req.query.state;
 
-    console.log('PROFILE', profile);
-    User.findOne({ facebookId: profile.id }, (err, user) => {
-      if (!user) {
-        return done(null, { notRecognized: 'Hmm, we don\'t recognize that email. Please try again.' });
-      } else {
-        if (!user.email && profile._json.email) {
-          user.email = profile._json.email;
-          user.save((err, record) => {
-            return done(err, user);
-          });
+    if (actionToTake === 'login') {
+      User.findOne({ facebookId: profile.id }, (err, user) => {
+        if (!user) {
+          return done(null, { notRecognized: 'Hmm, we don\'t recognize that email. Please try again.' });
         } else {
-          return done(err, user);
+          if (!user.email && profile._json.email) {
+            user.email = profile._json.email;
+            user.save((err, record) => {
+              return done(err, user);
+            });
+          } else {
+            return done(err, user);
+          }
         }
-      }
-    });
+      });
+    } else if (actionToTake === 'register') {
+      User.findOne({ 'facebookId':  profile.id }, (err, user) => {
+        if (user) return done(null, { errMessage: 'Account already registered' });
+        const newUser = new User({
+          facebookId: profile.id,
+          email: profile._json.email,
+          name: `${profile._json.first_name} ${profile._json.last_name}`,
+          subscription: 'Basic'
+        });
+        newUser.save(function(err) {
+          if (err) console.error(err);
+          console.log('Facebook user saved');
+          return done(null, newUser);
+        });
+      });
+    } else return done(null, { errMessage: 'Something went wrong. Please try again.' });
   }
 ));
+
+app.get('/auth/facebook/:actionToTake', (req, res, next) => {
+  const { actionToTake } = req.params;
+
+  passport.authenticate('facebook', 
+  { scope: ['email'],
+    state: actionToTake  
+  })(req, res, next);
+});
+
+app.get('/auth/facebook/login/callback', passport.authenticate('facebook', { failureRedirect: '/login-f' }), (req, res) => {
+  if (req.user.notRecognized) {
+    res.redirect('/login?login-reg-error=not-recognized');
+  } else if (req.user.errMessage === 'Account already registered') {
+    res.redirect('/login?login-reg-error=fb-already-registered');
+  } else {
+    res.redirect('/recipes');
+  }
+});
 
 
 
@@ -154,19 +190,21 @@ passport.use(new GoogleStrategy({
       User.findOne({ 'googleId':  profile.id }, (err, user) => {
         if (user) return done(null, { errMessage: 'Email already registered' });
         const newUser = new User({
+          googleId: profile.id,
           email: profile._json.email,
           name: profile.displayName,
           subscription: 'Basic'
         });
         newUser.save(function(err) {
           if (err) console.error(err);
-          console.log('GOogle user saved');
+          console.log('Google user saved');
           return done(null, newUser);
         });
       });
     } else return done(null, { errMessage: 'Something went wrong. Please try again.' });
   }
 ));
+
 app.get('/auth/google/:actionToTake', (req, res, next) => {
   const { actionToTake } = req.params;
 
@@ -177,6 +215,16 @@ app.get('/auth/google/:actionToTake', (req, res, next) => {
     'https://www.googleapis.com/auth/userinfo.email' ],
     state: actionToTake
   })(req, res, next);
+});
+
+app.get(['/auth/google/login/callback', '/auth/google/register/callback'], passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
+  if (req.user.notRecognized) {
+    res.redirect('/login?login-reg-error=not-recognized');
+  } else if (req.user.errMessage === 'Email already registered') {
+    res.redirect('/login?login-reg-error=already-registered');
+  } else {
+    res.redirect('/recipes');
+  }
 });
 
 
@@ -226,29 +274,6 @@ app.post('/api/logout', (req, res) => {
   res.sendStatus(200);
 });
 
-
-app.get('/auth/facebook', passport.authenticate('facebook', 
-  { scope: ['email'] }
-));
-
-
-app.get(['/auth/google/login/callback', '/auth/google/register/callback'], passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
-  if (req.user.notRecognized) {
-    res.redirect('/login?login-reg-error=not-recognized');
-  } else if (req.user.errMessage === 'Email already registered') {
-    res.redirect('/login?login-reg-error=already-registered');
-  } else {
-    res.redirect('/recipes');
-  }
-});
-
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login-f' }), (req, res) => {
-  if (req.user.notRecognized) {
-    res.redirect('/login?login-reg-error=not-recognized');
-  } else {
-    res.redirect('/recipes');
-  }
-});
 
 
 app.get('/test', (req, res) => {
