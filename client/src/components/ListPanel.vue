@@ -52,6 +52,13 @@
       </li>
     </ul>
 
+    <div v-show="showWelcome" id="welcome-overlay">
+      <div class="welcome-overlay-body">To start adding recipes to your collection, click "New Recipe"</div>
+      <div class="welcome-overlay-footer">
+        Don't forget, you can also use the <a href="https://chrome.google.com/webstore/detail/recipe-saver/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a> to automatically save recipes directly to this page.
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -70,6 +77,7 @@ export default {
       recipes: [],
       selectedTag: {},
       tagColorMenuVisible: false,
+      showWelcome: false,
       tagColors: [
         {
           color: '#ff0000',
@@ -180,6 +188,8 @@ export default {
     async retrieveRecipes() {
       const response = await RecipeService.getRecipes(this.sortBy);
       this.recipes = response.data;
+      if (!this.recipes.length && this.$route.path === '/recipes/all') this.showWelcome = true;
+      else this.showWelcome = false;
     },
   },
   mounted() {
@@ -542,6 +552,21 @@ export default {
           background: -moz-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
           background: linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
         }
+      }
+    }
+  }
+
+  #welcome-overlay {
+    color: white;
+    background-color: #089de3;
+    padding: 10px;
+    line-height: 22px;
+
+    a {
+      color: #000;
+
+      &:hover {
+        text-decoration: none;
       }
     }
   }

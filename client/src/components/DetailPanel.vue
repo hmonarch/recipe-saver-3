@@ -252,11 +252,8 @@ export default {
       this.editor.setOptions({editable: true});
     },
     async shareRecipe() {
-      console.log('sharing');
       const response = await RecipeService.shareRecipe(this.recipe._id);
-      console.log(response.data);
       const shareLink = `https://localhost:8080/share/${encodeURIComponent(response.data.result)}`;
-      console.log('shareLink', shareLink);
       EventBus.$emit('MESSAGE', {
         title: 'Share Link:',
         message: shareLink,

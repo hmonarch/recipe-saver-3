@@ -54,7 +54,6 @@ export default {
     EventBus.$on('NEW_RECIPE', () => {
       this.listOpen = false;
       this.detailsOpen = true;
-      console.log('NEW_RECIPE, closed list, opened details')
 
       EventBus.$emit('LISTOPEN_HEADER', false);
     });

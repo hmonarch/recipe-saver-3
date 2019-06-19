@@ -226,10 +226,17 @@ export default {
 
 @media (max-width: 767px) {
   #share {
-    padding: 20px;
+    padding: 10px;
 
     #share-container {
       width: 100%;
+    }
+
+    .panel {
+      .image {
+        height: 100%;
+        width: 100%;
+      }
     }
   }
 }
