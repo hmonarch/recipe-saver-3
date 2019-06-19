@@ -4,8 +4,8 @@
     <SideNav :class="{ 'full-screen-hide': !listOpen }"></SideNav>
     <Header></Header>
     <section id="panels">
-      <ListPanel :class="{ 'list-open': listOpen, 'full-width' : detailsOpen === false }"></ListPanel>
-      <DetailPanel :class="{ 'full-width' : listOpen === false, 'close': !detailsOpen, 'open': detailsOpen }" :screenModeText="screenModeText"></DetailPanel>
+      <ListPanel :class="{ 'list-open': listOpen, 'full-width': !detailsOpen }"></ListPanel>
+      <DetailPanel :class="{ 'full-width': !listOpen, 'close': !detailsOpen, 'open': detailsOpen }" :screenModeText="screenModeText"></DetailPanel>
     </section>
 
   </div>

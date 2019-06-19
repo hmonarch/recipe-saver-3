@@ -172,7 +172,7 @@ header {
       > li:not(.mobile) {
         display: inline-block;
 
-        a.router-link-active {
+        > a.router-link-active {
           color: #000;
           font-weight: bold;
           border-bottom: solid 3px #e4ad3e;
