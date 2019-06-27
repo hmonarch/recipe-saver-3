@@ -18,25 +18,44 @@
           <a href="#">Account</a>
         </div>
         <div class="nav-item">
-          <a href="#">Login / Register</a>
+          <a href="https://localhost:8080/login">Login / Register</a>
         </div>
       </nav>
     </header>
 
-    <div class="hero">
-      <div class="center-logo logo">
-        <img class="logo-image" src="../assets/logo-255x255.png">
-        <span class="logo-text">Recipe Saver</span>
+    <div class="wrapper hero-wrapper">
+      <div class="hero">
+        <div class="center-logo logo">
+          <img class="logo-image" src="../assets/logo-255x255.png">
+          <span class="logo-text">Recipe Saver</span>
+        </div>
+
+        <h1 class="headline">It's never been easier to save recipes online!</h1>
+
+        <img class="hero-image" src="https://www.docz.site/static/img/builtin-components.7e0b25ad.png">
+
+          <a class="main-cta" href="/login">10 Second Sign Up!</a>
       </div>
-
-      <h1 class="headline">It's never been easier to save recipes online!</h1>
-
-      <img class="hero-image" src="https://www.docz.site/static/img/builtin-components.7e0b25ad.png">
     </div>
 
+    <div class="white-boxes">
 
+      <div class="white-box">
+        <div class="white-box-icon">
+          <Icon name="paper"/>
+        </div>
+        <div class="White-box-headline">Clip Recipes Online</div>
+        <div class="white-box-text">Several top recipes sites are integrated with our Chrome extension so you can easily save any recipe you find online directly to your account. For nonintegrated sites we'll save the basic page info to your collection whether it be a video, blog post, or text recipe.</div>
+      </div>
 
-    <a href="https://localhost:8080/login">Regular Login!</a>
+      <div class="white-box">
+        <div class="white-box-icon">
+          <Icon name="folder"/>
+        </div>
+        <div class="White-box-headline">Stay Organized</div>
+        <div class="white-box-text">Recipe Saver lets you customize your recipe collection any way you want! Add recipes to your Favorites or add your own custom-named tags. You can search by name, or sort by name or date so you can get on with creating your culinary masterpieces.</div>
+      </div>
+    </div>
 
 
 
@@ -47,11 +66,13 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
+import Icon from '@/components/Icons';
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    HelloWorld,
+    Icon
   }
 }
 </script>
@@ -59,6 +80,8 @@ export default {
 <style lang="scss">
 .home {
   color: #000;
+  font-family: 'Raleway', Arial;
+  padding-bottom: 100px;
 
   .logo {
     display: flex;
@@ -79,7 +102,6 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: 'Open Sans', Arial;
 
     .header-logo {
       width: 202px;
@@ -118,9 +140,18 @@ export default {
     }
   }
 
+  .hero-wrapper {
+    background-image: url(../assets/bg-food.jpg);
+  }
+
+  .hero,
+  .white-boxes {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+
   .hero {
     padding: 50px 40px;
-    background-image: url(../assets/bg-food.jpg);
 
     .center-logo {
       margin-bottom: 20px;
@@ -142,10 +173,98 @@ export default {
     }
 
     .hero-image {
-      width: 70%;
+      width: 100%;
+      margin: 0 auto 40px auto;
+      display: block;
       box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
+    }
+
+    .main-cta {
+      display: inline-block;
+      color: #fff;
+      text-decoration: none;
+      font-size: 18px;
+      padding: 20px 60px 20px 20px;
+      background-color: #089de3;
+      background-image: url(../assets/arrow-long.png);
+      background-repeat: no-repeat;
+      background-position: right 20px center;
+      text-align: left;
+      transition: 280ms;
+
+      &:hover {
+        background-color: #23d82f;
+      }
     }
   }
 
+  .white-boxes {
+    background-color: #fff;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    .white-box {
+      padding: 70px;
+      border-bottom: solid 1px#f2f2f2;
+      text-align: left;
+
+      &:first-child {
+        border-right: solid 1px #f2f2f2;
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+
+      .white-box-icon {
+        margin-bottom: 20px;
+
+        .icon {
+          border-radius: 50%;
+          padding: 12px;
+          background-color: #b9f4bc;
+          width: 40px;
+          height: 40px;
+          fill: #1ab877;
+          -webkit-animation-name: wiggle;
+          -ms-animation-name: wiggle;
+          -ms-animation-duration: 4s;
+          -webkit-animation-duration: 4s;
+          -webkit-animation-iteration-count: 30;
+          -ms-animation-iteration-count: 30;
+          -webkit-animation-timing-function: ease-in-out;
+          -ms-animation-timing-function: ease-in-out;
+        }
+      }
+
+      .White-box-headline {
+        color: #24b47e;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 19px;
+        margin-bottom: 20px;
+      }
+
+      .white-box-text {
+        font-size: 17px;
+        line-height: 28px;
+      }
+
+
+    }
+  }
+
+}
+
+
+@keyframes wiggle {
+  0% {transform: rotate(0deg);}
+  65% {transform: rotate(0deg);}
+  66% {transform: rotate(10deg);}
+  74% {transform: rotate(-10deg);}
+  82% {transform: rotate(20deg);}
+  91% {transform: rotate(-5deg);}
+  100% {transform: rotate(0deg);}
 }
 </style>
