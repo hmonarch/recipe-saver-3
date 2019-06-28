@@ -55,6 +55,14 @@
         <div class="White-box-headline">Stay Organized</div>
         <div class="white-box-text">Recipe Saver lets you customize your recipe collection any way you want! Add recipes to your Favorites or add your own custom-named tags. You can search by name, or sort by name or date so you can get on with creating your culinary masterpieces.</div>
       </div>
+
+      <ul class="integrations">
+        <li><img src="../assets/integration-allrecipes.png"></li>
+        <li><img src="../assets/integration-chowhound.png"></li>
+        <li><img src="../assets/integration-foodnetwork.png"></li>
+        <li><img src="../assets/integration-epicurious.png"></li>
+        <li><img src="../assets/integration-tasty.png"></li>
+      </ul>
     </div>
 
 
@@ -250,8 +258,30 @@ export default {
         font-size: 17px;
         line-height: 28px;
       }
+    }
 
+    .integrations {
+      padding: 40px 0;
+      grid-column: 1/3;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      transition: 1s cubic-bezier(.19,1,.22,1);
 
+      &:hover {
+        filter: blur(10px);
+        transform: scale(.95);
+        opacity: .7;
+      }
+
+      li {
+        display: inline-block;
+        filter: grayscale(100%);
+
+        img {
+          width: 80%;
+        }
+      }
     }
   }
 
