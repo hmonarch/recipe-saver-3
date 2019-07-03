@@ -56,15 +56,30 @@
         <div class="white-box-text">Recipe Saver lets you customize your recipe collection any way you want! Add recipes to your Favorites or add your own custom-named tags. You can search by name, or sort by name or date so you can get on with creating your culinary masterpieces.</div>
       </div>
 
-      <ul class="integrations">
-        <li><img src="../assets/integration-allrecipes.png"></li>
-        <li><img src="../assets/integration-chowhound.png"></li>
-        <li><img src="../assets/integration-foodnetwork.png"></li>
-        <li><img src="../assets/integration-epicurious.png"></li>
-        <li><img src="../assets/integration-tasty.png"></li>
-      </ul>
+      <div class="integrations">
+
+        <h2>Chrome Extension integrations</h2>
+
+        <ul>
+          <li><img src="../assets/integration-allrecipes.png"></li>
+          <li><img src="../assets/integration-chowhound.png"></li>
+          <li><img src="../assets/integration-foodnetwork.png"></li>
+          <li><img src="../assets/integration-epicurious.png"></li>
+          <li><img src="../assets/integration-tasty.png"></li>
+        </ul>
+
+        <a href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank" class="integrations-label">Get Chrome Extension</a>
+      </div>
     </div>
 
+    <div class="horizontal-box-section">
+      <div class="horizontal-box">
+        <a href="/login">Start Now</a>
+        <div class="horizontal-box-text">
+          Use SQL to explore your business’ payments and revenue data, build and run custom reports, get insights, and more.
+        </div>
+      </div>
+    </div>
 
 
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
@@ -153,7 +168,8 @@ export default {
   }
 
   .hero,
-  .white-boxes {
+  .white-boxes,
+  .horizontal-box-section {
     max-width: 1040px;
     margin: 0 auto;
   }
@@ -210,6 +226,7 @@ export default {
     background-color: #fff;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    margin-bottom: 28px;
 
     .white-box {
       padding: 70px;
@@ -246,7 +263,7 @@ export default {
         }
       }
 
-      .White-box-headline {
+      .white-box-headline {
         color: #24b47e;
         font-weight: bold;
         text-transform: uppercase;
@@ -261,27 +278,75 @@ export default {
     }
 
     .integrations {
-      padding: 40px 0;
+      position: relative;
+      padding: 84px 0 40px 0;
       grid-column: 1/3;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      transition: 1s cubic-bezier(.19,1,.22,1);
+
+      h2 {
+        position: absolute;
+        top: 30px;
+        color: #24b47e;
+        font-weight: bold;
+        font-size: 22px;
+      }
 
       &:hover {
-        filter: blur(10px);
-        transform: scale(.95);
-        opacity: .7;
-      }
+        ul {
+          filter: blur(10px);
+          transform: scale(.95);
+          opacity: .7;
+        }
 
-      li {
-        display: inline-block;
-        filter: grayscale(100%);
-
-        img {
-          width: 80%;
+        .integrations-label {
+          opacity: 1;
         }
       }
+
+      ul,
+      .integrations-label {
+        transition: 1s cubic-bezier(.19,1,.22,1);
+      }
+
+      ul {        
+        li {
+          display: inline-block;
+          filter: grayscale(100%);
+
+          img {
+            width: 80%;
+          }
+        }
+      }
+
+      .integrations-label {
+        opacity: 0;
+        background-color: #089de3;
+        z-index: 5;
+        position: absolute;
+        top: 110px;
+        color: #fff;
+        padding: 13px 30px;
+        text-decoration: none;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #23d82f;
+        }
+      }
+
+    }
+  }
+
+  .horizontal-box-section {
+    background-color: #fff;
+
+    .horizontal-box {
+      box-shadow: 0 13px 27px -5px rgba(50,50,93,.25), 0 8px 16px -8px rgba(0,0,0,.3), 0 -6px 16px -6px rgba(0,0,0,.025);
+      padding: 40px 40px 40px 120px;
+      border-radius: 8px;
     }
   }
 
