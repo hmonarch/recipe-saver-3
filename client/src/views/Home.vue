@@ -44,7 +44,7 @@
         <div class="white-box-icon">
           <Icon name="paper"/>
         </div>
-        <div class="White-box-headline">Clip Recipes Online</div>
+        <div class="white-box-headline">Clip Recipes Online</div>
         <div class="white-box-text">Several top recipes sites are integrated with our Chrome extension so you can easily save any recipe you find online directly to your account. For nonintegrated sites we'll save the basic page info to your collection whether it be a video, blog post, or text recipe.</div>
       </div>
 
@@ -52,13 +52,13 @@
         <div class="white-box-icon">
           <Icon name="folder"/>
         </div>
-        <div class="White-box-headline">Stay Organized</div>
+        <div class="white-box-headline">Stay Organized</div>
         <div class="white-box-text">Recipe Saver lets you customize your recipe collection any way you want! Add recipes to your Favorites or add your own custom-named tags. You can search by name, or sort by name or date so you can get on with creating your culinary masterpieces.</div>
       </div>
 
       <div class="integrations">
 
-        <h2>Chrome Extension integrations</h2>
+        <h2>Chrome Extension Integrations</h2>
 
         <ul>
           <li><img src="../assets/integration-allrecipes.png"></li>
@@ -73,12 +73,13 @@
     </div>
 
     <div class="horizontal-box-section">
-      <div class="horizontal-box">
-        <a href="/login">Start Now</a>
+      <a class="horizontal-box" href="/login">
+        <span class="horizontal-box-title">Start Now</span>
+        <Icon name="shortArrow"/>
         <div class="horizontal-box-text">
-          Use SQL to explore your business’ payments and revenue data, build and run custom reports, get insights, and more.
+          Use Recipe Saver to create your own recipe collection, add custom tags, share your favorite recipes and more!
         </div>
-      </div>
+      </a>
     </div>
 
 
@@ -268,7 +269,7 @@ export default {
         font-weight: bold;
         text-transform: uppercase;
         font-size: 19px;
-        margin-bottom: 20px;
+        margin-bottom: 15px;
       }
 
       .white-box-text {
@@ -307,7 +308,7 @@ export default {
 
       ul,
       .integrations-label {
-        transition: 1s cubic-bezier(.19,1,.22,1);
+        transition: 2s cubic-bezier(.19,1,.22,1);
       }
 
       ul {        
@@ -344,9 +345,53 @@ export default {
     background-color: #fff;
 
     .horizontal-box {
+      display: block;
       box-shadow: 0 13px 27px -5px rgba(50,50,93,.25), 0 8px 16px -8px rgba(0,0,0,.3), 0 -6px 16px -6px rgba(0,0,0,.025);
-      padding: 40px 40px 40px 120px;
+      padding: 40px 40px 40px 170px;
       border-radius: 8px;
+      text-align: left;
+      background-image: url(../assets/icon-tableware.png);
+      background-repeat: no-repeat;
+      background-position: 30px center;
+      text-decoration: none;
+      transition: .5s;
+
+
+      &:hover {
+        box-shadow: 0 30px 60px -12px rgba(50,50,93,.25), 0 18px 36px -18px rgba(0,0,0,.3), 0 -12px 36px -8px rgba(0,0,0,.025);
+        transform: translateY(-2px);
+        filter: grayscale(65%);
+
+        .icon--shortArrow {
+          transform: translateX(3px);
+        }
+      }
+
+      .horizontal-box-title {
+        color: #089de3;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 19px;
+        display: inline-block;
+        margin-bottom: 22px;
+      }
+
+      .icon--shortArrow {
+        transition-duration: .15s;
+        height: 28px;
+        width: 28px;
+        position: relative;
+        top: -2px;
+        left: 2px;
+
+        svg {
+          fill: #089de3;
+        }
+      }
+
+      .horizontal-box-text {
+        line-height: 24px;
+      }
     }
   }
 
