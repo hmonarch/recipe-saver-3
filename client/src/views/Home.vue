@@ -23,18 +23,44 @@
       </nav>
     </header>
 
+    <div class="wrapper title-wrapper">
+      <div class="center-logo logo">
+        <img class="logo-image" src="../assets/logo-255x255.png">
+        <span class="logo-text">Recipe Saver</span>
+      </div>
+      <h1 class="headline">It's never been easier to save recipes online!</h1>
+    </div>
+
     <div class="wrapper hero-wrapper">
       <div class="hero">
-        <div class="center-logo logo">
-          <img class="logo-image" src="../assets/logo-255x255.png">
-          <span class="logo-text">Recipe Saver</span>
+        <div class="hero-benefits">
+          <div class="hero-benefits-left">
+            <ul class="hero-benefits-list">
+              <li>
+                <h5>Organize your recipes</h5>
+                <div class="benefit-description">
+                  Add recipes from any site or add your own custom recipes from scratch!
+                </div>
+              </li>
+              <li>
+                <h5>Any device</h5>
+                <div class="benefit-description">
+                  Access your recipes from any device. Bring your laptop, mobile or tablet device to the kitchen and follow along with your favorite recipe.
+                </div>
+              </li>
+              <li>
+                <h5>Organize your recipes</h5>
+                <div class="benefit-description">
+                  Add recipes from any site on or add your own custom recipes from scratch!
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div class="hero-benefits-right">
+            <img class="hero-image" src="../assets/tilt.jpg">
+          </div>
         </div>
-
-        <h1 class="headline">It's never been easier to save recipes online!</h1>
-
-        <img class="hero-image" src="https://www.docz.site/static/img/builtin-components.7e0b25ad.png">
-
-          <a class="main-cta" href="/login">10 Second Sign Up!</a>
+        <!-- <a class="main-cta" href="/login">10 Second Sign Up!</a> -->
       </div>
     </div>
 
@@ -209,7 +235,7 @@ export default {
   }
 
   .hero-wrapper {
-    background-image: url(../assets/bg-food.jpg);
+    // background-image: url(../assets/bg-food.jpg);
   }
 
   .hero,
@@ -219,10 +245,9 @@ export default {
     margin: 0 auto;
   }
 
-  .hero {
-    padding: 50px 40px;
-
+  .title-wrapper {
     .center-logo {
+      margin-top: 40px;
       margin-bottom: 20px;
 
       .logo-image {
@@ -240,29 +265,82 @@ export default {
       font-size: 30px;
       margin-bottom: 40px;
     }
+  }
 
-    .hero-image {
-      width: 100%;
-      margin: 0 auto 40px auto;
-      display: block;
-      box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
-    }
+  .hero-wrapper {
+    background-color: #f6f9fc;
 
-    .main-cta {
-      display: inline-block;
-      color: #fff;
-      text-decoration: none;
-      font-size: 18px;
-      padding: 20px 60px 20px 20px;
-      background-color: #089de3;
-      background-image: url(../assets/arrow-long.png);
-      background-repeat: no-repeat;
-      background-position: right 20px center;
-      text-align: left;
-      transition: 280ms;
+    .hero {
+      .hero-benefits {
+        display: grid;
+        grid-template-columns: 40% 1fr;
+        grid-gap: 40px;
 
-      &:hover {
-        background-color: #23d82f;
+        .hero-benefits-left {
+          padding: 50px 0;
+
+          .hero-benefits-list {
+            padding-left: 44px;
+            text-align: left;
+
+            li {
+              margin-bottom: 30px;
+              position: relative;
+
+              &::before {
+                content: '';
+                background-image: url(../assets/icon-radish.png);
+                height: 34px;
+                width: 34px;
+                display: inline-block;
+                background-size: 34px 34px;
+                position: absolute;
+                left: -44px;
+                top: -8px;
+              }
+
+              h5 {
+                font-size: 19px;
+                font-weight: bold;
+                letter-spacing: 0.2px;
+                margin-bottom: 15px;
+              }
+
+              .benefit-description {
+                line-height: 28px;
+              }
+            }
+          }
+        }
+
+        .hero-benefits-right {
+          position: relative;
+        }
+      }
+
+      .hero-image {
+        width: 100%;
+        box-shadow: 34.3px 62.5px 125px -25px rgba(50,50,93,.5), 20.6px 37.5px 75px -37.5px rgba(0,0,0,.6);
+        transform: rotate3d(0.5,-0.866,0,19deg);
+        border-radius: 6px;
+      }
+
+      .main-cta {
+        display: inline-block;
+        color: #fff;
+        text-decoration: none;
+        font-size: 18px;
+        padding: 20px 60px 20px 20px;
+        background-color: #089de3;
+        background-image: url(../assets/arrow-long.png);
+        background-repeat: no-repeat;
+        background-position: right 20px center;
+        text-align: left;
+        transition: 280ms;
+
+        &:hover {
+          background-color: #23d82f;
+        }
       }
     }
   }
