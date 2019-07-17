@@ -34,7 +34,10 @@
     <div class="wrapper hero-wrapper">
       <div class="hero">
         <div class="hero-benefits">
-          <div class="hero-benefits-left">
+          <div class="hero-benefits-top">
+            <img class="hero-image" src="../assets/home-hero.jpg">
+          </div>
+          <div class="hero-benefits-bottom">
             <ul class="hero-benefits-list">
               <li>
                 <h5>Organize your recipes</h5>
@@ -55,9 +58,6 @@
                 </div>
               </li>
             </ul>
-          </div>
-          <div class="hero-benefits-right">
-            <img class="hero-image" src="../assets/tilt.jpg">
           </div>
         </div>
         <!-- <a class="main-cta" href="/login">10 Second Sign Up!</a> -->
@@ -246,24 +246,25 @@ export default {
   }
 
   .title-wrapper {
+    background-color: #f6f9fc;
+
     .center-logo {
-      margin-top: 40px;
-      margin-bottom: 20px;
+      padding-top: 40px;
+      padding-bottom: 20px;
 
       .logo-image {
-        width: 80px;
+        width: 40px;
       }
 
       .logo-text {
-        font-size: 58px;
+        font-size: 34px;
         font-weight: bold;
         margin-left: 12px;
       }
     }
 
     .headline {
-      font-size: 30px;
-      margin-bottom: 40px;
+      font-size: 28px;
     }
   }
 
@@ -272,13 +273,13 @@ export default {
 
     .hero {
       .hero-benefits {
-        display: grid;
-        grid-template-columns: 40% 1fr;
-        grid-gap: 40px;
+        padding: 40px 0 40px 0;
 
-        .hero-benefits-left {
-          padding: 50px 0;
+        .hero-benefits-top {
+          margin-bottom: 80px;
+        }
 
+        .hero-benefits-bottom {
           .hero-benefits-list {
             padding-left: 44px;
             text-align: left;
@@ -312,16 +313,11 @@ export default {
             }
           }
         }
-
-        .hero-benefits-right {
-          position: relative;
-        }
       }
 
       .hero-image {
-        width: 100%;
+        width: 80%;
         box-shadow: 34.3px 62.5px 125px -25px rgba(50,50,93,.5), 20.6px 37.5px 75px -37.5px rgba(0,0,0,.6);
-        transform: rotate3d(0.5,-0.866,0,19deg);
         border-radius: 6px;
       }
 
