@@ -37,7 +37,7 @@
           <div class="hero-benefits-top">
             <img class="hero-image" src="../assets/home-hero.jpg">
           </div>
-          <div class="hero-benefits-bottom">
+          <!-- <div class="hero-benefits-bottom">
             <ul class="hero-benefits-list">
               <li>
                 <h5>Organize your recipes</h5>
@@ -58,9 +58,9 @@
                 </div>
               </li>
             </ul>
-          </div>
+          </div> -->
         </div>
-        <!-- <a class="main-cta" href="/login">10 Second Sign Up!</a> -->
+        <a class="main-cta" href="/login">10 Second Sign Up!</a>
       </div>
     </div>
 
@@ -80,6 +80,33 @@
         </div>
         <div class="white-box-headline">Stay Organized</div>
         <div class="white-box-text">Recipe Saver lets you customize your recipe collection any way you want! Add recipes to your Favorites or add your own custom-named tags. You can search by name, or sort by name or date so you can get on with creating your culinary masterpieces.</div>
+      </div>
+
+      <div class="plans">
+        <div class="plan">
+          <div class="plan-left">
+            <div class="plan-title">Lite</div>
+            <div class="plan-subtitle">
+              The best way to save and organize online recipes
+            </div>
+            <ul class="plan-benefits">
+              <li>Save up to 50 recipes</li>
+              <li>Add custom notes and images</li>
+              <li>Recipe Saver Chrome extension</li>
+              <li>Create personalized tags</li>
+            </ul>
+          </div>
+          <div class="plan-right">
+            <div class="plan-cost">Free</div>
+            <div class="plan-cost-details">
+              - upgrade later to save 50+ recipes
+            </div>
+            <a class="plan-cta" href="#">
+              <span class="plan-cta-text">10 second sign up</span>
+              <Icon name="shortArrow"/>
+            </a>
+          </div>
+        </div>
       </div>
 
       <div class="integrations">
@@ -393,6 +420,131 @@ export default {
       .white-box-text {
         font-size: 17px;
         line-height: 28px;
+      }
+    }
+
+    .plans {
+      padding: 40px 0;
+      grid-column: 1/3;
+
+      .plan {
+        display: grid;
+        grid-template-columns: 75% 25%;
+        text-align: left;
+        padding: 40px 40px 40px 100px;
+        box-shadow: 0 6px 12px -2px rgba(50,50,93,.25), 0 3px 7px -3px rgba(0,0,0,.3);
+
+        .plan-left {
+          border-right: solid 1px #e6ebf1;
+
+          .plan-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            position: relative;
+
+            &::before {
+              content: '';
+              background-image: url(../assets/icon-emerald.png);
+              background-repeat: no-repeat;
+              background-position: center center;
+              height: 51px;
+              width: 51px;
+              display: inline-block;
+              background-size: 28px 35px;
+              position: absolute;
+              left: -70px;
+              top: -14px;
+              background-color: #bffbf6;
+              border-radius: 50%;
+            }
+          }
+
+          .plan-subtitle {
+            margin-bottom: 32px;
+          }
+
+          .plan-benefits {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            li {
+              margin-bottom: 22px;
+              padding-left: 34px;
+              position: relative;
+              color: #6b7c93;
+
+              &:nth-child(3),
+              &:nth-child(4) {
+                margin-bottom: 0;
+              }
+
+              &::before {
+                content: '';
+                background-image: url(../assets/icon-radish.png);
+                height: 28px;
+                width: 28px;
+                display: inline-block;
+                background-size: 28px 28px;
+                position: absolute;
+                left: -5px;
+                top: -8px;
+              }
+            }
+          }
+        }
+
+        .plan-right {
+          padding-left: 30px;
+          padding-top: 13px;
+
+          .plan-cost {
+            font-size: 24px;
+            color: #24b47e;
+            font-weight: bold;
+            margin-bottom: 12px;
+          }
+
+          .plan-cost-details {
+            color: #6b7c93;
+            line-height: 26px;
+            margin-bottom: 10px;
+          }
+
+          .plan-cta {
+            color: #6772e5;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+
+            &:hover {
+              color: #000;
+
+              .icon--shortArrow {
+                left: 6px;
+                
+                svg {
+                  fill: #000;
+                }
+              }
+            }
+
+            .icon--shortArrow {
+              transition-duration: .25s;
+              height: 18px;
+              width: 18px;
+              position: relative;
+              top: 0px;
+              left: 3px;
+
+              svg {
+                fill: #1627e3;
+              }
+            }
+          }
+        }
+
       }
     }
 
