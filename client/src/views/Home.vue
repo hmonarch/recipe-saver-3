@@ -37,7 +37,9 @@
           <div class="hero-benefits-top">
             <img class="hero-image" src="../assets/home-hero.jpg">
           </div>
-          <!-- <div class="hero-benefits-bottom">
+          <!-- 
+            use block image found https://stripe.com/customers with this text:
+            <div class="hero-benefits-bottom">
             <ul class="hero-benefits-list">
               <li>
                 <h5>Organize your recipes</h5>
@@ -82,8 +84,15 @@
         <div class="white-box-text">Recipe Saver lets you customize your recipe collection any way you want! Add recipes to your Favorites or add your own custom-named tags. You can search by name, or sort by name or date so you can get on with creating your culinary masterpieces.</div>
       </div>
 
+
+
+
       <div class="plans">
-        <div class="plan">
+
+        <div class="plans-headline">What's Included</div>
+        <div class="plans-subheadline">Choose just the basics or the get the full tool</div>
+
+        <div class="plan lite">
           <div class="plan-left">
             <div class="plan-title">Lite</div>
             <div class="plan-subtitle">
@@ -99,10 +108,35 @@
           <div class="plan-right">
             <div class="plan-cost">Free</div>
             <div class="plan-cost-details">
-              - upgrade later to save 50+ recipes
+              Upgrade later to save 50+ recipes
             </div>
             <a class="plan-cta" href="#">
               <span class="plan-cta-text">10 second sign up</span>
+              <Icon name="shortArrow"/>
+            </a>
+          </div>
+        </div>
+
+        <div class="plan full">
+          <div class="plan-left">
+            <div class="plan-title">Full</div>
+            <div class="plan-subtitle">
+              
+            </div>
+            <ul class="plan-benefits">
+              <li>All the benefits of the Lite plan</li>
+              <li>Save unlimited recipes</li>
+              <li>Share recipes with friends and family</li>
+              <li>Create grocery lists (coming soon)</li>
+            </ul>
+          </div>
+          <div class="plan-right">
+            <div class="plan-cost">$5</div>
+            <div class="plan-cost-details">
+              One time charge (not annual)
+            </div>
+            <a class="plan-cta" href="#">
+              <span class="plan-cta-text">Get full plan</span>
               <Icon name="shortArrow"/>
             </a>
           </div>
@@ -134,6 +168,8 @@
         </div>
       </a>
     </div>
+
+    <div class="footer-bar"></div>
 
     <footer>
       <div id="footer-inner">
@@ -427,12 +463,34 @@ export default {
       padding: 40px 0;
       grid-column: 1/3;
 
+      .plans-headline {
+        font-size: 36px;
+        margin-bottom: 20px;
+      }
+
+      .plans-subheadline {
+        font-size: 22px;
+        margin-bottom: 40px;
+        color: #424770;
+      }
+
       .plan {
         display: grid;
         grid-template-columns: 75% 25%;
         text-align: left;
         padding: 40px 40px 40px 100px;
         box-shadow: 0 6px 12px -2px rgba(50,50,93,.25), 0 3px 7px -3px rgba(0,0,0,.3);
+
+        &.full {
+          margin-top: 40px;
+          .plan-left {
+            .plan-title::before {
+              background-image: url(../assets/icon-ruby.png);
+              background-size: 28px 28px;
+              background-color: #fed0e0;
+            }
+          }
+        }
 
         .plan-left {
           border-right: solid 1px #e6ebf1;
@@ -665,8 +723,13 @@ export default {
     }
   }
 
-  footer {
+  .footer-bar {
     margin-top: 55px;
+    background-size: cover;
+    background-image: url(../assets/ingredients-cover.png);  height: 166px;
+  }
+
+  footer {
     background-color: #444444;
     color: white;
 
@@ -818,6 +881,13 @@ export default {
     
   }
 
+}
+
+
+@media only screen and (min-width: 1484px) {
+  .cover {
+    border: solid 1px red;
+  }
 }
 
 
