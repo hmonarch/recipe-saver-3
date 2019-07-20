@@ -37,30 +37,6 @@
           <div class="hero-benefits-top">
             <img class="hero-image" src="../assets/home-hero.jpg">
           </div>
-          <!-- 
-            use block image found https://stripe.com/customers with this text:
-            <div class="hero-benefits-bottom">
-            <ul class="hero-benefits-list">
-              <li>
-                <h5>Organize your recipes</h5>
-                <div class="benefit-description">
-                  Add recipes from any site or add your own custom recipes from scratch!
-                </div>
-              </li>
-              <li>
-                <h5>Any device</h5>
-                <div class="benefit-description">
-                  Access your recipes from any device. Bring your laptop, mobile or tablet device to the kitchen and follow along with your favorite recipe.
-                </div>
-              </li>
-              <li>
-                <h5>Organize your recipes</h5>
-                <div class="benefit-description">
-                  Add recipes from any site on or add your own custom recipes from scratch!
-                </div>
-              </li>
-            </ul>
-          </div> -->
         </div>
         <a class="main-cta" href="/login">10 Second Sign Up!</a>
       </div>
@@ -143,8 +119,16 @@
         </div>
       </div>
 
-      <div class="integrations">
+      <div class="kitchen-image-section">
+        <blockquote>
+          <h2>Save Any Recipe</h2>
+          <p>
+            With Recipe Saver you can add recipes from any site or add your own custom recipes from scratch. You can access them with any device - bring your laptop, mobile or tablet device to the kitchen and follow along with your favorite recipe!
+          </p>
+        </blockquote>
+      </div>
 
+      <div class="integrations">
         <h2>Chrome Extension Integrations</h2>
 
         <ul>
@@ -306,6 +290,7 @@ export default {
   .horizontal-box-section {
     max-width: 1040px;
     margin: 0 auto;
+    padding: 0 20px;
   }
 
   .title-wrapper {
@@ -408,7 +393,7 @@ export default {
     background-color: #fff;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    margin-bottom: 28px;
+    margin-bottom: 40px;
 
     .white-box {
       padding: 70px;
@@ -460,7 +445,7 @@ export default {
     }
 
     .plans {
-      padding: 40px 0;
+      padding: 80px 0;
       grid-column: 1/3;
 
       .plans-headline {
@@ -606,6 +591,73 @@ export default {
       }
     }
 
+    .kitchen-image-section {
+      grid-column: 1/3;
+      background-image: url(../assets/kitchen-girl.jpg);
+      background-position-x: 40px;
+      background-repeat: no-repeat;
+      height: 390px;
+      border-radius: 4px;
+      display: flex;
+      margin-bottom: 60px;
+
+      blockquote {
+        max-width: 46%;
+        box-sizing: border-box;
+        position: relative;
+        text-align: left;
+        padding: 62px 75px;
+
+        h2,
+        p {
+          position: relative;
+          z-index: 1;
+          color: #fff;
+        }
+
+        h2 {
+          font-family: 'Merriweather', serif;
+          font-size: 26px;
+          margin-bottom: 26px;
+        }
+
+        p {
+          font-style: italic;
+          font-size: 19px;
+          line-height: 28px;
+        }
+
+        &::before {
+          content: '';
+          display: block;
+          background: #794ff3;
+          position: absolute;
+          z-index: 0;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 126px;
+          border-radius: 4px 0 0 4px;
+        }
+
+        &::after {
+          content: '';
+          display: block;
+          z-index: 0;
+          position: absolute;
+          width: 206px;
+          height: 100%;
+          background: url(../assets/pink-curves.svg);
+          background-size: 100% 100%;
+          left: auto;
+          right: -80px;
+          top: 0;
+          bottom: 0;
+          filter: hue-rotate(298deg);
+        }
+      }
+    }
+
     .integrations {
       position: relative;
       padding: 84px 0 40px 0;
@@ -724,7 +776,7 @@ export default {
   }
 
   .footer-bar {
-    margin-top: 55px;
+    margin-top: 80px;
     background-size: cover;
     background-image: url(../assets/ingredients-cover.png);  height: 166px;
   }
@@ -740,7 +792,7 @@ export default {
 
     #footer-inner {
       margin: 0 auto;
-      padding: 32px 0;
+      padding: 32px 20px;
       overflow: auto;
     }
 
