@@ -35,22 +35,17 @@
       <div class="hero">
         <div class="hero-benefits">
           <div class="hero-benefits-top">
-            <img class="hero-image" src="../assets/home-hero.jpg">
+            <img class="hero-image" src="../assets/dashboard-homepage.jpg">
           </div>
         </div>
-        <a class="main-cta" href="/login">10 Second Sign Up!</a>
+        <div class="ctas">
+          <a @click.prevent="scrollToPlans()" class="secondary-cta" href="#">See Plans</a>
+          <a class="main-cta" href="/login">Set Up Now</a>
+        </div>
       </div>
     </div>
 
     <div class="white-boxes">
-
-      <div class="white-box">
-        <div class="white-box-icon">
-          <Icon name="paper"/>
-        </div>
-        <div class="white-box-headline">Clip Recipes Online</div>
-        <div class="white-box-text">Several top recipes sites are integrated with our Chrome extension so you can easily save any recipe you find online directly to your account. For nonintegrated sites we'll save the basic page info to your collection whether it be a video, blog post, or text recipe.</div>
-      </div>
 
       <div class="white-box">
         <div class="white-box-icon">
@@ -60,8 +55,13 @@
         <div class="white-box-text">Recipe Saver lets you customize your recipe collection any way you want! Add recipes to your Favorites or add your own custom-named tags. You can search by name, or sort by name or date so you can get on with creating your culinary masterpieces.</div>
       </div>
 
-
-
+      <div class="white-box">
+        <div class="white-box-icon">
+          <Icon name="paper"/>
+        </div>
+        <div class="white-box-headline">Clip Recipes Online</div>
+        <div class="white-box-text">Several top recipes sites are integrated with our Chrome extension so you can easily save any recipe you find online directly to your account. For nonintegrated sites we'll save the basic page info to your collection whether it be a video, blog post, or text recipe.</div>
+      </div>
 
       <div class="plans">
 
@@ -215,6 +215,14 @@ export default {
   components: {
     HelloWorld,
     Icon
+  },
+  methods: {
+    scrollToPlans() {
+      console.log(1);
+      document.querySelector('.plans').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
   }
 }
 </script>
@@ -237,7 +245,7 @@ export default {
   header {
     position: relative;
     padding: 14px;
-    background: linear-gradient(45deg, #92fe9d 0%,#44e2d2 50%, #00b2e1 100%);
+    background: linear-gradient(45deg, #92fe9d 0%,#44e2d2 30%, #00b2e1 100%);
     box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 3px 0px;
     overflow: auto;
     display: flex;
@@ -272,6 +280,7 @@ export default {
           text-rendering: optimizelegibility;
           -webkit-font-smoothing: antialiased;
           transition: 280ms;
+          font-weight: 500;
 
           &:hover {
             color: #000;
@@ -279,10 +288,6 @@ export default {
         }
       }
     }
-  }
-
-  .hero-wrapper {
-    // background-image: url(../assets/bg-food.jpg);
   }
 
   .hero,
@@ -318,13 +323,14 @@ export default {
 
   .hero-wrapper {
     background-color: #f6f9fc;
+    padding-bottom: 60px;
 
     .hero {
       .hero-benefits {
         padding: 40px 0 40px 0;
 
         .hero-benefits-top {
-          margin-bottom: 80px;
+          margin-bottom: 10px;
         }
 
         .hero-benefits-bottom {
@@ -364,26 +370,43 @@ export default {
       }
 
       .hero-image {
-        width: 80%;
+        width: 75%;
         box-shadow: 34.3px 62.5px 125px -25px rgba(50,50,93,.5), 20.6px 37.5px 75px -37.5px rgba(0,0,0,.6);
         border-radius: 6px;
       }
 
-      .main-cta {
-        display: inline-block;
-        color: #fff;
-        text-decoration: none;
-        font-size: 18px;
-        padding: 20px 60px 20px 20px;
-        background-color: #089de3;
-        background-image: url(../assets/arrow-long.png);
-        background-repeat: no-repeat;
-        background-position: right 20px center;
-        text-align: left;
-        transition: 280ms;
+      .ctas {
+        a {
+          display: inline-block;
+          color: #fff;
+          text-decoration: none;
+          font-size: 16px;
+          padding: 15px 20px;
+          background-color: #089de3;
+          background-repeat: no-repeat;
+          background-position: right 20px center;
+          text-align: left;
+          transition: all .15s ease;
+          letter-spacing: 0.9px;
+          border: solid 1px #089de3;
+          box-shadow: 0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08);
 
-        &:hover {
-          background-color: #23d82f;
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+          }
+        }
+
+        .secondary-cta {
+          margin-right: 24px;
+          color: #069de3;
+          background-color: #fff;
+          border: solid 1px #069de3;
+        }
+
+        .main-cta {
+          padding: 15px 60px 15px 20px;
+          background-image: url(../assets/arrow-long.png);
         }
       }
     }
@@ -396,7 +419,7 @@ export default {
     margin-bottom: 40px;
 
     .white-box {
-      padding: 70px;
+      padding: 40px 70px 40px 70px;
       border-bottom: solid 1px#f2f2f2;
       text-align: left;
 
@@ -445,7 +468,7 @@ export default {
     }
 
     .plans {
-      padding: 80px 0;
+      padding: 40px 0 80px 0;
       grid-column: 1/3;
 
       .plans-headline {
@@ -630,7 +653,7 @@ export default {
         &::before {
           content: '';
           display: block;
-          background: #794ff3;
+          background: #7750f3;
           position: absolute;
           z-index: 0;
           top: 0;
@@ -771,6 +794,7 @@ export default {
 
       .horizontal-box-text {
         line-height: 24px;
+        color: #000;
       }
     }
   }
@@ -932,16 +956,9 @@ export default {
     }
     
   }
-
 }
 
-
-@media only screen and (min-width: 1484px) {
-  .cover {
-    border: solid 1px red;
-  }
-}
-
+@import '@/styles/_home-mobile.scss';
 
 @keyframes wiggle {
   0% {transform: rotate(0deg);}
