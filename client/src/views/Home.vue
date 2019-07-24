@@ -35,7 +35,7 @@
       <div class="hero">
         <div class="hero-benefits">
           <div class="hero-benefits-top">
-            <img class="hero-image" src="../assets/dashboard-homepage.jpg">
+            <div id="hero-image"></div>
           </div>
         </div>
         <div class="ctas">
@@ -97,7 +97,7 @@
           <div class="plan-left">
             <div class="plan-title">Full</div>
             <div class="plan-subtitle">
-              
+              The ultimate recipe organization tool and more
             </div>
             <ul class="plan-benefits">
               <li>All the benefits of the Lite plan</li>
@@ -331,6 +331,17 @@ export default {
 
         .hero-benefits-top {
           margin-bottom: 10px;
+
+          #hero-image {
+            border-radius: 6px;
+            box-shadow: 34.3px 62.5px 125px -25px rgba(50,50,93,.5), 20.6px 37.5px 75px -37.5px rgba(0,0,0,.6);
+            height: 550px;
+            width: 100%;
+            background-image: url(../assets/dashboard-homepage.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: top center;
+          }
         }
 
         .hero-benefits-bottom {
@@ -502,6 +513,7 @@ export default {
 
         .plan-left {
           border-right: solid 1px #e6ebf1;
+          padding-right: 10px;
 
           .plan-title {
             font-size: 24px;
@@ -540,6 +552,7 @@ export default {
               padding-left: 34px;
               position: relative;
               color: #6b7c93;
+              line-height: 20px;
 
               &:nth-child(3),
               &:nth-child(4) {
