@@ -7,7 +7,14 @@
         <span class="logo-text">Recipe Saver</span>
       </div>
 
-      <nav>
+      <div class="burger-menu" @click="openMenu()">
+        <Icon name="burger"/>
+      </div>
+
+      <nav :class=" { 'open': menuOpen }">
+        <div class="nav-close" @click="closeMenu()">
+          <Icon name="close"/>
+        </div>
         <div class="nav-item">
           <a href="#">My Recipes</a>
         </div>
@@ -216,14 +223,36 @@ export default {
     HelloWorld,
     Icon
   },
+  data() {
+    return {
+      menuOpen: false
+    };
+  },
   methods: {
+    openMenu() {
+      this.menuOpen = true;
+    },
+    closeMenu() {
+      this.menuOpen = false;
+    },
     scrollToPlans() {
-      console.log(1);
       document.querySelector('.plans').scrollIntoView({
         behavior: 'smooth'
       });
     }
-  }
+  },
+  created() {
+    document.addEventListener('click', e => {
+      // Main Menu
+      const isBurgerIcon = e.target.closest('.burger-menu') || e.target.matches('.burger-menu');
+      if (isBurgerIcon) return;
+
+      const isChildOfNav = e.target.closest('nav') || e.target.matches('nav');
+      if (!isChildOfNav) {
+        this.menuOpen = false;
+      }
+    });
+  },
 }
 </script>
 
@@ -266,9 +295,17 @@ export default {
       }
     }
 
+    .burger-menu {
+      display: none;
+    }
+
     nav {
       display: flex;
       justify-content: space-around;
+
+      .nav-close {
+        display: none;
+      }
 
       .nav-item {
         padding: 0 11px;
