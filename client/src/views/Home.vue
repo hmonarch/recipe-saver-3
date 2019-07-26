@@ -52,9 +52,24 @@
       </div>
     </div>
 
+    <div class="site-preview">
+      <div class="stripes">
+        <span></span>
+        <span></span>
+      </div>
+      <div class="site-preview-inner">
+        <div class="site-preview-heading">
+          Stay Organized Your Way
+        </div>
+        <div class="site-preview-subheading">
+          Recipe Saver is designed to let you define how you want to organize your recipes
+        </div>
+      </div>
+    </div>
+
     <div class="white-boxes">
 
-      <div class="white-box">
+      <!-- <div class="white-box">
         <div class="white-box-icon">
           <Icon name="folder"/>
         </div>
@@ -68,7 +83,7 @@
         </div>
         <div class="white-box-headline">Clip Recipes Online</div>
         <div class="white-box-text">Several top recipes sites are integrated with our Chrome extension so you can easily save any recipe you find online directly to your account. For nonintegrated sites we'll save the basic page info to your collection whether it be a video, blog post, or text recipe.</div>
-      </div>
+      </div> -->
 
       <div class="plans">
 
@@ -456,6 +471,96 @@ export default {
           padding: 15px 60px 15px 20px;
           background-image: url(../assets/arrow-long.png);
         }
+      }
+    }
+  }
+
+  .site-preview {
+    background: linear-gradient(-12deg,#7795f8 50%,#6772e5 80%,#555abf);
+    height: 500px;
+    overflow: hidden;
+    position: relative;
+
+    // &::after {
+    //   content: '';
+    //   background: url(https://i.ibb.co/gwBSL8t/fish.jpg);
+    //   background-size: cover;
+    //   background-position: center center;
+    //   opacity: 0.1;
+    //   top: 0;
+    //   left: 0;
+    //   bottom: 0;
+    //   right: 0;
+    //   position: absolute;
+    //   z-index: 0;
+    //   background-repeat: no-repeat;
+    // }
+
+    .stripes {
+      width: 100%;
+      display: grid;
+      transform: skewY(-12deg);
+      z-index: 0;
+      grid: repeat(2,200px)/1fr repeat(4,minmax(0,calc((1040px - 20px * 2) / 4))) 1fr;
+      height: 100%;
+      transform-origin: 100% 100%;
+      margin-top: 140px;
+      position: absolute;
+
+      span:first-child {
+        background: linear-gradient(100grad,rgba(103,114,229,0),rgba(103,114,229,.3) 50%,#6772e5);
+      }
+
+      span:last-child {
+        grid-column-start: span 2;
+        background: linear-gradient(100grad,rgba(143,239,251,0),rgba(143,239,251,.3) 50%,rgba(143,239,251,.55) 75%,rgba(143,239,251,.9));
+      }
+
+      span {
+        grid-column-end: -1;
+      }
+    }
+
+    .site-preview-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 60px 0;
+      text-align: left;
+
+      .site-preview-heading,
+      .site-preview-subheading {
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        padding-left: 80px;
+      }
+
+      .site-preview-heading {
+        font-size: 21px;
+        color: #fff;
+        margin-bottom: 20px;
+        position: relative;
+
+        &::before {
+          content: '';
+          background-image: url(../assets/icon-groceries.png);
+          background-repeat: no-repeat;
+          background-position: center center;
+          height: 72px;
+          width: 72px;
+          display: inline-block;
+          background-size: 45px 45px;
+          position: absolute;
+          left: -20px;
+          top: -9px;
+          background-color: #6bd5f8;
+          border-radius: 50%;
+        }
+      }
+
+      .site-preview-subheading {
+        color: #8feffb;
+        font-size: 15px;
       }
     }
   }
