@@ -62,8 +62,10 @@
           Stay Organized Your Way
         </div>
         <div class="site-preview-subheading">
-          Recipe Saver is designed to let you define how you want to organize your recipes
+          Recipe Saver is designed to let you choose how you want to organize your recipes
         </div>
+
+        <SitePreviewBox></SitePreviewBox>
       </div>
     </div>
 
@@ -231,12 +233,14 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import Icon from '@/components/Icons';
+import SitePreviewBox from '@/components/SitePreviewBox.vue';
 
 export default {
   name: 'home',
   components: {
     HelloWorld,
-    Icon
+    Icon,
+    SitePreviewBox
   },
   data() {
     return {
@@ -477,7 +481,6 @@ export default {
 
   .site-preview {
     background: linear-gradient(-12deg,#7795f8 50%,#6772e5 80%,#555abf);
-    height: 500px;
     overflow: hidden;
     position: relative;
 
@@ -561,6 +564,7 @@ export default {
       .site-preview-subheading {
         color: #8feffb;
         font-size: 15px;
+        margin-bottom: 50px;
       }
     }
   }
