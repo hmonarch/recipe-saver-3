@@ -14,6 +14,7 @@
 
     <ul id="recipe-list">
       <li v-for="recipe in recipes" :key="recipe.title" class="recipe-entry">
+        <img :src="recipe.image">
         <span class="recipe-entry-left">{{ recipe.title }}</span>
         <span class="recipe-entry-right">{{ recipe.date }}</span>
       </li>
@@ -24,7 +25,6 @@
 
 <script>
 
-
 export default {
   name: 'site-preview-box',
   data() {
@@ -33,62 +33,62 @@ export default {
         {
           title: '4-Flavor Pork Belly',
           date: '6/7/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893332/akepkkrhkbgwbbtk33zd.jpg'
         },
         {
           title: 'Grilled Corn on the Cob with Garlic Butter',
           date: '2/4/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893333/cs1yzzvmdu1syynjvtek.jpg'
         },
         {
           title: 'Shack Shack Burger',
           date: '12/10/18',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893333/qrtnjlmgl9im9alvpwfm.jpg'
         },
         {
           title: 'Tartine with Grilled Peaches',
           date: '8/30/18',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893336/weogavskynzrifbruoxu.jpg'
         },
         {
           title: 'Avocado on Toast with Lemon Zest',
           date: '8/1/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/jursvzqdn2ajcdlnv6ec.jpg'
         },
         {
           title: 'Fluffy Pancakes',
           date: '8/16/10',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/rqknuttkdlkpiyll8ik7.jpg'
         },
         {
           title: 'Oven-Roasted Sweet Potato Wedges',
           date: '1/2/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893341/yldit66vd9m4tzhcw6qv.jpg'
         },
         {
-          title: 'Groument Steak Burgers',
+          title: 'Gourmet Steak Burgers',
           date: '3/3/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893343/lwqztod0hlbrj3mv3kll.jpg'
         },
         {
           title: 'Vegan Jalapeno Poppers',
           date: '3/15/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893354/u4w5fgckko9hirt5nzo3.jpg'
         },
         {
           title: 'Roasted Rack of Lamb',
           date: '1/20/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893355/ry6fcpzt4npsbp9nhc2i.jpg'
         },
         {
           title: 'Eggplant with Spicy Garlic Sauce',
           date: '4/16/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893504/qynou8arpuajdyrnbzek.jpg'
         },
         {
           title: 'Panna Cotta',
           date: '2/25/19',
-          image: ''
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893478/ptpkfxujscwg2a7eaush.jpg'
         }
       ]
     }
