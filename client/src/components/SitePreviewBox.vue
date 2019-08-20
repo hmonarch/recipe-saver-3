@@ -1,31 +1,49 @@
 <template>
   <div id="site-preview-box">
-    <div id="heading-and-sort">
-      <div class="heading">All Recipes</div>
-      <div class="sort-section">
-        <div id="sort" @click="sortVisible = true">
-          <span>Sort by: </span>
-          <span id="sort-selection">{{ sortBy }}</span>
+
+    <div id="list-mode" v-if="listMode">
+      <div id="heading-and-sort">
+        <div class="heading">All Recipes</div>
+        <div class="sort-section">
+          <div id="sort" @click="sortVisible = true">
+            <span>Sort by: </span>
+            <span id="sort-selection">{{ sortBy }}</span>
+          </div>
+          <img v-if="imageView" @click="toggleImageView(false)" class="layout-icon list-icon" src="../assets/layout-list-icon.svg">
+          <img v-else @click="toggleImageView(true)" class="layout-icon image-icon" src="../assets/layout-image-icon.svg">
         </div>
-        <img v-if="imageView" @click="toggleImageView(false)" class="layout-icon list-icon" src="../assets/layout-list-icon.svg">
-        <img v-else @click="toggleImageView(true)" class="layout-icon image-icon" src="../assets/layout-image-icon.svg">
+
+        <ul id="sort-options" v-show="sortVisible">
+          <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">a - z</li>
+          <li class="sort-option" @click="sortRecipes($event, 'title', '1')">z - a</li>
+          <li class="sort-option" @click="sortRecipes($event, 'date', '1')">newest</li>
+          <li class="sort-option" @click="sortRecipes($event, 'date', '-1')">oldest</li>
+        </ul>
       </div>
 
-      <ul id="sort-options" v-show="sortVisible">
-        <li class="sort-option" @click="sortRecipes($event, 'title', '-1')">a - z</li>
-        <li class="sort-option" @click="sortRecipes($event, 'title', '1')">z - a</li>
-        <li class="sort-option" @click="sortRecipes($event, 'date', '1')">newest</li>
-        <li class="sort-option" @click="sortRecipes($event, 'date', '-1')">oldest</li>
+      <ul id="recipe-list" :class="{ 'image-view': imageView }">
+        <li v-for="recipe in recipes" :key="recipe.title" class="recipe-entry" @click="showDetail(recipe.title)">
+          <img :src="recipe.image">
+          <span class="recipe-entry-left">{{ recipe.title }}</span>
+          <span class="recipe-entry-right">{{ formatDate(recipe.date) }}</span>
+        </li>
       </ul>
-		</div>
+    </div>
 
-    <ul id="recipe-list" :class="{ 'image-view': imageView }">
-      <li v-for="recipe in recipes" :key="recipe.title" class="recipe-entry">
-        <img :src="recipe.image">
-        <span class="recipe-entry-left">{{ recipe.title }}</span>
-        <span class="recipe-entry-right">{{ formatDate(recipe.date) }}</span>
-      </li>
-    </ul>
+    <div id="recipe-detail" v-else>
+      <div class="top-bar">top bar</div>
+      <div class="recipe-title">All-American Bacon Cheeseburgers Recipe</div>
+      <div class="recipe-url">https://www.tasteofhome.com/recipes/all-american-bacon-cheeseburgers/</div>
+      <ul class="recipe-tags">
+        <li>dinner</li>
+      </ul>
+      <ul class="recipe-ingredients">
+        <li>one</li>
+        <li>two</li>
+      </ul>
+      <div class="recipe-description">description</div>
+      <img class="recipe-image" src="https://res.cloudinary.com/dormh2fvt/image/upload/v1563930457/p0tq00fdoeoa0lh12tyk.jpg">
+    </div>
 
   </div>
 </template>
@@ -38,69 +56,84 @@ export default {
   mixins: [utils],
   data() {
     return {
+      listMode: false,
       imageView: false,
       sortVisible: false,
       sortBy: 'Newest',
       recipes: [
         {
-          "title": "Gourmet Steak Burgers",
-          "date": 1565063396975,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893343/lwqztod0hlbrj3mv3kll.jpg"
+          'title': 'Gourmet Steak Burgers',
+          'date': 1565063396975,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893343/lwqztod0hlbrj3mv3kll.jpg',
+          'ingredients': [
+            '2 pieces white sandwich bread, crusts removed and cut into 1/4-inch pieces',
+            '1/3 cup low fat milk',
+            '2-1/2 teaspoons kosher salt',
+            '1 teaspoon freshly ground black pepper',
+            '3 garlic cloves, minced',
+            '1-1/2 tablespoons Worcestershire sauce',
+            '2 tablespoons ketchup',
+            '3 pounds 85% lean ground beef',
+            '3 scallions, finely sliced (optional)',
+            'Non-flammable cooking spray to grease grill',
+            '10 hamburger buns'
+          ],
+          'description': 'In a large bowl, mash the bread and milk together with a fork until it forms a chunky paste. Add the salt, pepper, garlic, Worcestershire sauce and ketchup and mix well. Add the ground beef and scallions and break the meat up with your hands. Gently mix everything together until just combined. Do not overmix. Divide the mixture into ten equal portions and form loose balls. Flatten the balls into 3/4-inch patties about 4-1/2 inches around. Form a slight depression in the center of each patty to prevent the burgers from puffing up on the grill. Grease the grill with non-flammable cooking spray. Grill the burgers, covered, until nicely browned on the first side, 2-4 minutes. Flip burgers and continue cooking for a few minutes more until desired doneness is reached. Before serving, toast the buns on the cooler side of the grill if desired.'
         },
         {
-          "title": "Grilled Corn on the Cob with Garlic Butter",
-          "date": 1562052210948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893333/cs1yzzvmdu1syynjvtek.jpg"
+          'title': 'Grilled Corn on the Cob with Garlic Butter',
+          'date': 1562052210948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893333/cs1yzzvmdu1syynjvtek.jpg'
         },
         {
-          "title": "Panna Cotta",
-          "date": 1561062610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893478/ptpkfxujscwg2a7eaush.jpg"
+          'title': 'Panna Cotta',
+          'date': 1561062610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893478/ptpkfxujscwg2a7eaush.jpg'
         },
         {
-          "title": "Fluffy Pancakes",
-          "date": 1560062610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/rqknuttkdlkpiyll8ik7.jpg"
+          'title': 'Fluffy Pancakes',
+          'date': 1560062610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/rqknuttkdlkpiyll8ik7.jpg'
         },
         {
-          "title": "Avocado on Toast with Lemon Zest",
-          "date": 1555062610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/jursvzqdn2ajcdlnv6ec.jpg"
+          'title': 'Avocado on Toast with Lemon Zest',
+          'date': 1555062610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/jursvzqdn2ajcdlnv6ec.jpg'
         },
         {
-          "title": "Roasted Rack of Lamb",
-          "date": 1550062610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893355/ry6fcpzt4npsbp9nhc2i.jpg"
+          'title': 'Roasted Rack of Lamb',
+          'date': 1550062610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893355/ry6fcpzt4npsbp9nhc2i.jpg'
         },
         {
-          "title": "Eggplant with Spicy Garlic Sauce",
-          "date": 1541002610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893504/qynou8arpuajdyrnbzek.jpg"
+          'title': 'Eggplant with Spicy Garlic Sauce',
+          'date': 1541002610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893504/qynou8arpuajdyrnbzek.jpg'
         },
         {
-          "title": "4-Flavor Pork Belly",
-          "date": 1535252610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893332/akepkkrhkbgwbbtk33zd.jpg"
+          'title': '4-Flavor Pork Belly',
+          'date': 1535252610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893332/akepkkrhkbgwbbtk33zd.jpg'
         },
         {
-          "title": "Oven-Roasted Sweet Potato Wedges",
-          "date": 1530062610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893341/yldit66vd9m4tzhcw6qv.jpg"
+          'title': 'Oven-Roasted Sweet Potato Wedges',
+          'date': 1530062610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893341/yldit66vd9m4tzhcw6qv.jpg'
         },
         {
-          "title": "Shack Shack Burger",
-          "date": 1515062610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893333/qrtnjlmgl9im9alvpwfm.jpg"
+          'title': 'Shack Shack Burger',
+          'date': 1515062610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893333/qrtnjlmgl9im9alvpwfm.jpg'
         },
         {
-          "title": "Tartine with Grilled Peaches",
-          "date": 1505062610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893336/weogavskynzrifbruoxu.jpg"
+          'title': 'Tartine with Grilled Peaches',
+          'date': 1505062610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893336/weogavskynzrifbruoxu.jpg'
         },
         {
-          "title": "Vegan Jalapeno Poppers",
-          "date": 1501062610948,
-          "image": "https://res.cloudinary.com/dormh2fvt/image/upload/v1564893354/u4w5fgckko9hirt5nzo3.jpg"
+          'title': 'Vegan Jalapeno Poppers',
+          'date': 1501062610948,
+          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893354/u4w5fgckko9hirt5nzo3.jpg'
         }
       ]
     }
@@ -114,18 +147,21 @@ export default {
       this.sortBy = e.target.innerText;
 
       this.recipes.sort((a, b) => {
-        const oppositeOrder = (order == -1) ? 1 : -1;	
-        let itemA = a[critea];	
-        let itemB = b[critea];	
-        if (critea === 'title') {	
-          itemA = itemA.toLowerCase();	
-          itemB = itemB.toLowerCase();	
+        const oppositeOrder = (order == -1) ? 1 : -1;
+        let itemA = a[critea];
+        let itemB = b[critea];
+        if (critea === 'title') {
+          itemA = itemA.toLowerCase();
+          itemB = itemB.toLowerCase();
         }	
         	
         if (itemA < itemB) return Number(order);	
         else if (itemA > itemB) return Number(oppositeOrder);	
         else return 0;	
       });
+    },
+    showDetail(title) {
+      console.log('test', title);
     }
   },
   created() {
