@@ -1,5 +1,5 @@
 <template>
-  <div id="site-preview-box">
+  <div id="site-preview-box" :class="{ 'detail': !listMode }">
 
     <div id="list-mode" v-if="listMode">
       <div id="heading-and-sort">
@@ -31,11 +31,20 @@
     </div>
 
     <div id="recipe-detail" v-else>
-      <div class="top-bar">top bar</div>
+      <div class="top-bar">
+        <div class="top-bar-icon" @click="toggleFavorite()">
+          <Icon v-if="isFavorite" name="starFilled"/>
+          <Icon v-else name="star"/>
+        </div>
+        <div class="top-bar-icon">
+          <Icon name="close"/>
+        </div>
+      </div>
       <div class="recipe-title">All-American Bacon Cheeseburgers Recipe</div>
       <div class="recipe-url">https://www.tasteofhome.com/recipes/all-american-bacon-cheeseburgers/</div>
       <ul class="recipe-tags">
         <li>dinner</li>
+        <li>burgers</li>
       </ul>
       <ul class="recipe-ingredients">
         <li>one</li>
@@ -50,13 +59,18 @@
 
 <script>
 import utils from '@/mixins/utils';
+import Icon from '@/components/Icons';
 
 export default {
   name: 'site-preview-box',
+  components: {
+    Icon
+  },
   mixins: [utils],
   data() {
     return {
       listMode: false,
+      isFavorite: false,
       imageView: false,
       sortVisible: false,
       sortBy: 'Newest',
@@ -154,11 +168,13 @@ export default {
           itemA = itemA.toLowerCase();
           itemB = itemB.toLowerCase();
         }	
-        	
         if (itemA < itemB) return Number(order);	
         else if (itemA > itemB) return Number(oppositeOrder);	
         else return 0;	
       });
+    },
+    toggleFavorite() {
+      this.isFavorite = !this.isFavorite;
     },
     showDetail(title) {
       console.log('test', title);
@@ -179,6 +195,8 @@ export default {
 
 <style lang="scss">
 #site-preview-box {
+  position: relative;
+  z-index: 10;
   background-color: #fff;
   border-radius: 4px;
   width: 665px;
@@ -186,6 +204,10 @@ export default {
   box-sizing: border-box;
   box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.24);
   font-family: 'Source Sans Pro', Arial;
+
+  &.detail {
+    overflow-y: auto;
+  }
 
   #heading-and-sort,
   #recipe-list {
@@ -352,6 +374,74 @@ export default {
         background: linear-gradient(-90deg, white, white, white, rgba(255, 255, 255, 0.3));
       }
 
+    }
+  }
+
+  #recipe-detail {
+    padding: 20px;
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: solid 1px #dadada;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+
+      .top-bar-icon {
+        .icon {
+          cursor: pointer;
+
+          svg {
+            height: 22px;
+            width: 22px;
+          }
+        }
+      }
+    }
+
+    .recipe-title {
+      line-height: 30px;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .recipe-url {
+      color: #14aaf5;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .recipe-tags {
+      margin-bottom: 20px;
+
+      li {
+        background-color: rgb(222, 198, 136);
+        border-radius: 14px;
+        font-size: 13px;
+        padding: 8px;
+        margin-right: 8px;
+        display: inline-block;
+        color: white;
+      }
+    }
+
+    .recipe-ingredients {
+      list-style-type: disc;
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    .recipe-description {
+      margin-bottom: 20px;
+    }
+
+    .recipe-image {
+      border-radius: 5px;
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
+      margin-bottom: 20px;
+      height: 285px;
+      width: 285px;
+      object-fit: cover;
     }
   }
 
