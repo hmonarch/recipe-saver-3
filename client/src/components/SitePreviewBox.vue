@@ -36,22 +36,20 @@
           <Icon v-if="isFavorite" name="starFilled"/>
           <Icon v-else name="star"/>
         </div>
-        <div class="top-bar-icon">
+        <div class="top-bar-icon" @click="listMode = true">
           <Icon name="close"/>
         </div>
       </div>
-      <div class="recipe-title">All-American Bacon Cheeseburgers Recipe</div>
-      <div class="recipe-url">https://www.tasteofhome.com/recipes/all-american-bacon-cheeseburgers/</div>
+      <div class="recipe-title">{{ recipe.title }}</div>
+      <a class="recipe-url" :href="recipe.url" target="_blank">{{ recipe.url }}</a>
       <ul class="recipe-tags">
-        <li>dinner</li>
-        <li>burgers</li>
+        <li v-for="tag in recipe.tags" :key="tag.name" :style="backgroundColor(tag.color)">{{ tag.name }}</li>
       </ul>
       <ul class="recipe-ingredients">
-        <li>one</li>
-        <li>two</li>
+        <li v-for="ingredient in recipe.ingredients" :key="ingredient">{{ ingredient }}</li>
       </ul>
-      <div class="recipe-description">description</div>
-      <img class="recipe-image" src="https://res.cloudinary.com/dormh2fvt/image/upload/v1563930457/p0tq00fdoeoa0lh12tyk.jpg">
+      <div class="recipe-description">{{ recipe.description }}</div>
+      <img class="recipe-image" :src="recipe.image">
     </div>
 
   </div>
@@ -69,17 +67,22 @@ export default {
   mixins: [utils],
   data() {
     return {
-      listMode: false,
+      listMode: true,
       isFavorite: false,
       imageView: false,
       sortVisible: false,
       sortBy: 'Newest',
       recipes: [
         {
-          'title': 'Gourmet Steak Burgers',
-          'date': 1565063396975,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893343/lwqztod0hlbrj3mv3kll.jpg',
-          'ingredients': [
+          title: 'Gourmet Steak Burgers',
+          url: 'https://www.onceuponachef.com/recipes/steakhouse-burgers.html',
+          tags: [
+            { name: 'Dinner', color: '#00c5ff' },
+            { name: 'Burgers', color: '#dec688' }
+          ],
+          date: 1565063396975,
+          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893343/lwqztod0hlbrj3mv3kll.jpg',
+          ingredients: [
             '2 pieces white sandwich bread, crusts removed and cut into 1/4-inch pieces',
             '1/3 cup low fat milk',
             '2-1/2 teaspoons kosher salt',
@@ -92,7 +95,7 @@ export default {
             'Non-flammable cooking spray to grease grill',
             '10 hamburger buns'
           ],
-          'description': 'In a large bowl, mash the bread and milk together with a fork until it forms a chunky paste. Add the salt, pepper, garlic, Worcestershire sauce and ketchup and mix well. Add the ground beef and scallions and break the meat up with your hands. Gently mix everything together until just combined. Do not overmix. Divide the mixture into ten equal portions and form loose balls. Flatten the balls into 3/4-inch patties about 4-1/2 inches around. Form a slight depression in the center of each patty to prevent the burgers from puffing up on the grill. Grease the grill with non-flammable cooking spray. Grill the burgers, covered, until nicely browned on the first side, 2-4 minutes. Flip burgers and continue cooking for a few minutes more until desired doneness is reached. Before serving, toast the buns on the cooler side of the grill if desired.'
+          description: 'In a large bowl, mash the bread and milk together with a fork until it forms a chunky paste. Add the salt, pepper, garlic, Worcestershire sauce and ketchup and mix well. Add the ground beef and scallions and break the meat up with your hands. Gently mix everything together until just combined. Do not overmix. Divide the mixture into ten equal portions and form loose balls. Flatten the balls into 3/4-inch patties about 4-1/2 inches around. Form a slight depression in the center of each patty to prevent the burgers from puffing up on the grill. Grease the grill with non-flammable cooking spray. Grill the burgers, covered, until nicely browned on the first side, 2-4 minutes. Flip burgers and continue cooking for a few minutes more until desired doneness is reached. Before serving, toast the buns on the cooler side of the grill if desired.'
         },
         {
           'title': 'Grilled Corn on the Cob with Garlic Butter',
@@ -149,7 +152,8 @@ export default {
           'date': 1501062610948,
           'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893354/u4w5fgckko9hirt5nzo3.jpg'
         }
-      ]
+      ],
+      recipe: {},
     }
   },
   methods: {
@@ -177,7 +181,8 @@ export default {
       this.isFavorite = !this.isFavorite;
     },
     showDetail(title) {
-      console.log('test', title);
+      this.recipe = this.recipes.find(recipe => recipe.title === title);
+      this.listMode = false;
     }
   },
   created() {
@@ -406,6 +411,7 @@ export default {
     }
 
     .recipe-url {
+      display: inline-block;
       color: #14aaf5;
       font-size: 14px;
       margin-bottom: 20px;
@@ -429,10 +435,15 @@ export default {
       list-style-type: disc;
       padding-left: 20px;
       margin-bottom: 20px;
+
+      li {
+        margin-bottom: 5px;
+      }
     }
 
     .recipe-description {
       margin-bottom: 20px;
+      line-height: 20px;
     }
 
     .recipe-image {
@@ -442,31 +453,6 @@ export default {
       height: 285px;
       width: 285px;
       object-fit: cover;
-    }
-  }
-
-  @media (min-width: 768px) {
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-    
-    /* Track */
-    ::-webkit-scrollbar-track {
-      box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
-      -webkit-box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
-    }
-    
-    /* Handle */
-    ::-webkit-scrollbar-thumb {
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
-      background: rgba(178, 195, 213, 0.6); 
-      // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-    }
-    ::-webkit-scrollbar-thumb:window-inactive {
-      background: rgba(246, 245, 245, 0.3); 
     }
   }
 }
