@@ -45,10 +45,14 @@
       <ul class="recipe-tags">
         <li v-for="tag in recipe.tags" :key="tag.name" :style="backgroundColor(tag.color)">{{ tag.name }}</li>
       </ul>
+      <label>Ingredients</label>
       <ul class="recipe-ingredients">
         <li v-for="ingredient in recipe.ingredients" :key="ingredient">{{ ingredient }}</li>
       </ul>
-      <div class="recipe-description">{{ recipe.description }}</div>
+      <label>Description</label>
+      <ul class="recipe-description">
+        <li v-for="line in recipe.description" :key="line">{{ line }}</li>
+      </ul>
       <img class="recipe-image" :src="recipe.image">
     </div>
 
@@ -58,6 +62,7 @@
 <script>
 import utils from '@/mixins/utils';
 import Icon from '@/components/Icons';
+import sitePreviewRecipes from '@/model/site-preview-recipes';
 
 export default {
   name: 'site-preview-box',
@@ -72,87 +77,7 @@ export default {
       imageView: false,
       sortVisible: false,
       sortBy: 'Newest',
-      recipes: [
-        {
-          title: 'Gourmet Steak Burgers',
-          url: 'https://www.onceuponachef.com/recipes/steakhouse-burgers.html',
-          tags: [
-            { name: 'Dinner', color: '#00c5ff' },
-            { name: 'Burgers', color: '#dec688' }
-          ],
-          date: 1565063396975,
-          image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893343/lwqztod0hlbrj3mv3kll.jpg',
-          ingredients: [
-            '2 pieces white sandwich bread, crusts removed and cut into 1/4-inch pieces',
-            '1/3 cup low fat milk',
-            '2-1/2 teaspoons kosher salt',
-            '1 teaspoon freshly ground black pepper',
-            '3 garlic cloves, minced',
-            '1-1/2 tablespoons Worcestershire sauce',
-            '2 tablespoons ketchup',
-            '3 pounds 85% lean ground beef',
-            '3 scallions, finely sliced (optional)',
-            'Non-flammable cooking spray to grease grill',
-            '10 hamburger buns'
-          ],
-          description: 'In a large bowl, mash the bread and milk together with a fork until it forms a chunky paste. Add the salt, pepper, garlic, Worcestershire sauce and ketchup and mix well. Add the ground beef and scallions and break the meat up with your hands. Gently mix everything together until just combined. Do not overmix. Divide the mixture into ten equal portions and form loose balls. Flatten the balls into 3/4-inch patties about 4-1/2 inches around. Form a slight depression in the center of each patty to prevent the burgers from puffing up on the grill. Grease the grill with non-flammable cooking spray. Grill the burgers, covered, until nicely browned on the first side, 2-4 minutes. Flip burgers and continue cooking for a few minutes more until desired doneness is reached. Before serving, toast the buns on the cooler side of the grill if desired.'
-        },
-        {
-          'title': 'Grilled Corn on the Cob with Garlic Butter',
-          'date': 1562052210948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893333/cs1yzzvmdu1syynjvtek.jpg'
-        },
-        {
-          'title': 'Panna Cotta',
-          'date': 1561062610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893478/ptpkfxujscwg2a7eaush.jpg'
-        },
-        {
-          'title': 'Fluffy Pancakes',
-          'date': 1560062610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/rqknuttkdlkpiyll8ik7.jpg'
-        },
-        {
-          'title': 'Avocado on Toast with Lemon Zest',
-          'date': 1555062610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/jursvzqdn2ajcdlnv6ec.jpg'
-        },
-        {
-          'title': 'Roasted Rack of Lamb',
-          'date': 1550062610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893355/ry6fcpzt4npsbp9nhc2i.jpg'
-        },
-        {
-          'title': 'Eggplant with Spicy Garlic Sauce',
-          'date': 1541002610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893504/qynou8arpuajdyrnbzek.jpg'
-        },
-        {
-          'title': '4-Flavor Pork Belly',
-          'date': 1535252610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893332/akepkkrhkbgwbbtk33zd.jpg'
-        },
-        {
-          'title': 'Oven-Roasted Sweet Potato Wedges',
-          'date': 1530062610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893341/yldit66vd9m4tzhcw6qv.jpg'
-        },
-        {
-          'title': 'Shack Shack Burger',
-          'date': 1515062610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893333/qrtnjlmgl9im9alvpwfm.jpg'
-        },
-        {
-          'title': 'Tartine with Grilled Peaches',
-          'date': 1505062610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893336/weogavskynzrifbruoxu.jpg'
-        },
-        {
-          'title': 'Vegan Jalapeno Poppers',
-          'date': 1501062610948,
-          'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893354/u4w5fgckko9hirt5nzo3.jpg'
-        }
-      ],
+      recipes: sitePreviewRecipes,
       recipe: {},
     }
   },
@@ -225,6 +150,7 @@ export default {
     justify-content: space-between;
     padding-bottom: 12px;
     position: relative;
+    z-index: 10;
 
     .heading {
       font-size: 22px;
@@ -415,6 +341,7 @@ export default {
       color: #14aaf5;
       font-size: 14px;
       margin-bottom: 20px;
+      line-height: 16px;
     }
 
     .recipe-tags {
@@ -431,6 +358,12 @@ export default {
       }
     }
 
+    label {
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
     .recipe-ingredients {
       list-style-type: disc;
       padding-left: 20px;
@@ -444,6 +377,10 @@ export default {
     .recipe-description {
       margin-bottom: 20px;
       line-height: 20px;
+
+      li {
+        padding-bottom: 8px;
+      }
     }
 
     .recipe-image {
