@@ -7,7 +7,7 @@ const sitePreviewRecipes = [
       { name: 'dinner', color: '#00c5ff' },
       { name: 'burgers', color: '#dec688' }
     ],
-    image: '',
+    image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698146/hjbjokpcofnxrhvzy0zq.jpg',
     ingredients: [
       '2 pieces white sandwich bread, crusts removed and cut into 1/4-inch pieces',
       '1/3 cup low fat milk',
@@ -34,7 +34,7 @@ const sitePreviewRecipes = [
     tags: [
       { name: 'side dish', color: '#00c5ff' }
     ],
-    image: '',
+    image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698147/g0paaumulmezk7sqtpyv.jpg',
     ingredients: [
       '8 ears corn',
       'Garlic butter, recipe follows',
@@ -60,7 +60,7 @@ const sitePreviewRecipes = [
     tags: [
       { name: 'dessert ', color: '' }
     ],
-    image: '',
+    image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698347/h6gordwugdiphbl7cgmi.jpg',
     ingredients: [
       '1 envelope unflavored gelatin',
       '2 tablespoons cold water',
@@ -82,7 +82,7 @@ const sitePreviewRecipes = [
     tags: [
       { name: 'breakfast', color: '' }
     ],
-    image: '',
+    image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698391/l7z3emsswucmkv6mcyy8.jpg',
     ingredients: [
       '1 cup whole-wheat flour',
       '1 cup all-purpose flour',
@@ -208,7 +208,7 @@ const sitePreviewRecipes = [
     tags: [
       { name: 'side dish', color: '' },
     ],
-    image: '',
+    image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698444/r1p0uyvzbmldmesixbms.jpg',
     ingredients: [
       '3 sweet potatoes (about 2 1/2 pounds), cut into 1/2-inch wedges',
       '2 tablespoons coconut oil',
@@ -234,7 +234,7 @@ const sitePreviewRecipes = [
       { name: 'dessert', color: '' },
       { name: 'cookies', color: '' },
     ],
-    image: '',
+    image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698149/ldkx63yfumttvroze4wh.jpg',
     ingredients: [
       '1 (16.5 ounce) package red velvet cake mix',
       '1 1/4 cups all-purpose flour',
@@ -255,14 +255,50 @@ const sitePreviewRecipes = [
     ]
   },
   {
-    'title': 'Tartine with Grilled Peaches',
-    'date': 1505062610948,
-    'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893336/weogavskynzrifbruoxu.jpg'
+    title: 'Tartine with Grilled Peaches',
+    date: 1505062610948,
+    url: 'https://www.youtube.com/watch?v=aX3f9u88FTo',
+    tags: [
+      { name: 'lunch', color: '' },
+      { name: 'sandwich', color: '' },
+    ],
+    image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698149/dgjiketcop7kexsyousp.jpg',
+    ingredients: [
+      'Sourdough Bread',
+      'Fresh Goat cheese',
+      'Peaches',
+      'Spring onions',
+      'Olive oil'
+    ],
+    description: [
+      'Cut the onions and gently sautee them for 3-5 minutes on each side. Cut the peach into thick slices. Cook each slice with oil and a bit of salt. Grill them for about 2 minutes on each side.',
+      'Slice the bread and place on a hot griddle pan for about 2 minutes, each side. Rub the toast with an onion. Smear the bread with a layer of goat cheese. Add peaches, onions, and sesame and black pepper. Enjoy',
+    ]
   },
   {
-    'title': 'Vegan Jalapeno Poppers',
-    'date': 1501062610948,
-    'image': 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893354/u4w5fgckko9hirt5nzo3.jpg'
+    title: 'Black Bean and Corn Jalapeño Poppers',
+    date: 1501062610948,
+    url: 'https://www.tablespoon.com/recipes/black-bean-and-corn-jalapeno-poppers/532038c6-24e1-4af0-9968-1b1c91350390',
+    tags: [
+      { name: 'lunch', color: '' },
+      { name: 'snack', color: '' },
+    ],
+    image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698150/uwp7ofyk4h2salbjolen.jpg',
+    ingredients: [
+      '1 package (8 oz) cream cheese, softened',
+      '1/2 cup Progresso black beans (from 15-oz can), drained, rinsed',
+      '1/2 cup canned (drained) or frozen (thawed) whole kernel sweet corn',
+      '1/2 cup Progresso plain panko crispy bread crumbs',
+      '1/4 cup finely shredded Mexican 4-cheese blend (1 oz)',
+      '2 tablespoons butter, melted',
+      '8 medium (about 3 inch) jalapeño chiles, halved lengthwise, seeded',
+      '1 tablespoon chopped fresh cilantro leaves'
+    ],
+    description: [
+      'Heat oven to 350°F. Spray cookie sheet with cooking spray. In small bowl, mix cream cheese, beans and corn. In another small bowl, mix bread crumbs, Mexican cheese blend and melted butter.',
+      'Divide cream cheese mixture evenly among jalapeño chile halves. Place on cookie sheet. Sprinkle chiles with bread crumb mixture; gently press into cream cheese mixture.',
+      'Bake 28 to 32 minutes or until tops are light golden brown and chiles are tender. Sprinkle with cilantro. Serve warm.'
+    ]
   }
 ];
 

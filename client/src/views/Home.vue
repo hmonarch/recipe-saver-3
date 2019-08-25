@@ -65,28 +65,18 @@
           Recipe Saver is designed to let you choose how you want to organize your recipes
         </div>
 
-        <SitePreviewBox></SitePreviewBox>
+        <div class="site-preview-box-and-controls">
+          <SitePreviewBox></SitePreviewBox>
+          <ul class="site-preview-controls">
+            <li>List View</li>
+            <li>Image View</li>
+            <li>Detail View</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="white-boxes">
-
-      <!-- <div class="white-box">
-        <div class="white-box-icon">
-          <Icon name="folder"/>
-        </div>
-        <div class="white-box-headline">Stay Organized</div>
-        <div class="white-box-text">Recipe Saver lets you customize your recipe collection any way you want! Add recipes to your Favorites or add your own custom-named tags. You can search by name, or sort by name or date so you can get on with creating your culinary masterpieces.</div>
-      </div>
-
-      <div class="white-box">
-        <div class="white-box-icon">
-          <Icon name="paper"/>
-        </div>
-        <div class="white-box-headline">Clip Recipes Online</div>
-        <div class="white-box-text">Several top recipes sites are integrated with our Chrome extension so you can easily save any recipe you find online directly to your account. For nonintegrated sites we'll save the basic page info to your collection whether it be a video, blog post, or text recipe.</div>
-      </div> -->
-
       <div class="plans">
 
         <div class="plans-headline">What's Included</div>
@@ -528,6 +518,8 @@ export default {
       max-width: 1040px;
       margin: 0 auto;
       padding: 60px 0;
+      position: relative;
+      z-index: 10;
       text-align: left;
 
       .site-preview-heading,
@@ -565,6 +557,37 @@ export default {
         color: #8feffb;
         font-size: 15px;
         margin-bottom: 50px;
+      }
+
+      .site-preview-box-and-controls {
+        display: flex;
+        justify-content: space-between;
+
+        .site-preview-controls {
+          width: 210px;
+          box-sizing: border-box;
+          box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.24);
+          background-color: #f6f9fc;
+          border-radius: 4px;
+          padding: 10px;
+          height: 140px;
+          
+
+          li {
+            padding: 8px 8px 8px 34px;
+            border-radius: 2px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            color: #6772e5;
+            font-weight: 600;
+
+            &:first-child {
+              background-color: #fff;
+              color: #24b47e;
+              box-shadow: 0 2px 4px rgba(50,50,93,.1);
+            }
+          }
+        }
       }
     }
   }

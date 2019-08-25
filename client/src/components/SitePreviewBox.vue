@@ -3,7 +3,7 @@
 
     <div id="list-mode" v-if="listMode">
       <div id="heading-and-sort">
-        <div class="heading">All Recipes</div>
+        <div class="heading">My Recipes</div>
         <div class="sort-section">
           <div id="sort" @click="sortVisible = true">
             <span>Sort by: </span>
