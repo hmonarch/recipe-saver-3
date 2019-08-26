@@ -64,15 +64,7 @@
         <div class="site-preview-subheading">
           Recipe Saver is designed to let you choose how you want to organize your recipes
         </div>
-
-        <div class="site-preview-box-and-controls">
-          <SitePreviewBox></SitePreviewBox>
-          <ul class="site-preview-controls">
-            <li>List View</li>
-            <li>Image View</li>
-            <li>Detail View</li>
-          </ul>
-        </div>
+        <SitePreviewBox></SitePreviewBox>
       </div>
     </div>
 
@@ -557,37 +549,6 @@ export default {
         color: #8feffb;
         font-size: 15px;
         margin-bottom: 50px;
-      }
-
-      .site-preview-box-and-controls {
-        display: flex;
-        justify-content: space-between;
-
-        .site-preview-controls {
-          width: 210px;
-          box-sizing: border-box;
-          box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.24);
-          background-color: #f6f9fc;
-          border-radius: 4px;
-          padding: 10px;
-          height: 140px;
-          
-
-          li {
-            padding: 8px 8px 8px 34px;
-            border-radius: 2px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            color: #6772e5;
-            font-weight: 600;
-
-            &:first-child {
-              background-color: #fff;
-              color: #24b47e;
-              box-shadow: 0 2px 4px rgba(50,50,93,.1);
-            }
-          }
-        }
       }
     }
   }
