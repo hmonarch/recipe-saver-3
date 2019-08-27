@@ -1,7 +1,8 @@
 <template>
   <div class="site-preview-box-and-controls">
-    <div class="site-preview-box" :class="{ 'detail': !listMode }">
-      <div id="list-mode" v-if="listMode">
+    <div class="site-preview-box" @click="hasEngaged = true" :class="{ 'detail': !listOrImageMode, 'full-size': hasEngaged }">
+
+      <div id="list-mode" v-if="listOrImageMode">
         <div id="heading-and-sort">
           <div class="heading">My Recipes</div>
           <div class="sort-section">
@@ -9,8 +10,8 @@
               <span>Sort by: </span>
               <span id="sort-selection">{{ sortBy }}</span>
             </div>
-            <img v-if="imageView" @click="toggleImageView(false)" class="layout-icon list-icon" src="../assets/layout-list-icon.svg">
-            <img v-else @click="toggleImageView(true)" class="layout-icon image-icon" src="../assets/layout-image-icon.svg">
+            <img v-if="imageView" @click="setListView()" class="layout-icon list-icon" src="../assets/layout-list-icon.svg">
+            <img v-else @click="setImageView()" class="layout-icon image-icon" src="../assets/layout-image-icon.svg">
           </div>
 
           <ul id="sort-options" v-show="sortVisible">
@@ -22,7 +23,7 @@
         </div>
 
         <ul id="recipe-list" :class="{ 'image-view': imageView }">
-          <li v-for="recipe in recipes" :key="recipe.title" class="recipe-entry" @click="showDetail(recipe.title)">
+          <li v-for="recipe in recipes" :key="recipe.title" class="recipe-entry" @click="setDetailView(recipe.title)">
             <img :src="recipe.image">
             <span class="recipe-entry-left">{{ recipe.title }}</span>
             <span class="recipe-entry-right">{{ formatDate(recipe.date) }}</span>
@@ -36,7 +37,7 @@
             <Icon v-if="isFavorite" name="starFilled"/>
             <Icon v-else name="star"/>
           </div>
-          <div class="top-bar-icon" @click="listMode = true">
+          <div class="top-bar-icon" @click="closeDetailView()">
             <Icon name="close"/>
           </div>
         </div>
@@ -58,14 +59,16 @@
     </div>
 
     <div class="site-preview-controls-container">
-      <ul class="site-preview-controls">
-        <li @click="setActiveItem('List')" :class="{ active: activeItem === 'List' }">List View</li>
-        <li @click="setActiveItem('Image')" :class="{ active: activeItem === 'Image' }">Image View</li>
-        <li @click="setActiveItem('Detail')" :class="{ active: activeItem === 'Detail' }">Detail View</li>
+      <ul class="site-preview-controls" @click="hasEngaged = true">
+        <li @click="setListView()" :class="{ active: activeItem === 'List' }">List View</li>
+        <li @click="setImageView()" :class="{ active: activeItem === 'Image' }">Image View</li>
+        <li @click="setDetailView()" :class="{ active: activeItem === 'Detail' }">Detail View</li>
         <li class="selection"></li>
       </ul>
 
-      <div class="site-preview-cta">Start Now</div>
+      <div class="site-preview-cta-container">
+        <a class="site-preview-cta" href="#">Start Now</a>
+      </div>
     </div>
 
   </div>
@@ -84,20 +87,18 @@ export default {
   mixins: [utils],
   data() {
     return {
-      listMode: true,
-      isFavorite: false,
+      listOrImageMode: true,
       imageView: false,
+      isFavorite: false,
       activeItem: 'List',
       sortVisible: false,
       sortBy: 'Newest',
       recipes: sitePreviewRecipes,
       recipe: {},
+      hasEngaged: false,
     }
   },
   methods: {
-    toggleImageView(imageView) {
-      this.imageView = imageView;
-    },
     sortRecipes(e, critea, order) {
       this.sortVisible = false;
       this.sortBy = e.target.innerText;
@@ -118,9 +119,28 @@ export default {
     toggleFavorite() {
       this.isFavorite = !this.isFavorite;
     },
-    showDetail(title) {
-      this.recipe = this.recipes.find(recipe => recipe.title === title);
-      this.listMode = false;
+    setListView() {
+      this.setActiveItem('List');
+      this.listOrImageMode = true;
+      this.imageView = false;
+    },
+    setImageView() {
+      this.setActiveItem('Image');
+      this.listOrImageMode = true;
+      this.imageView = true;
+    },
+    setDetailView(title) {
+      this.setActiveItem('Detail');
+      this.listOrImageMode = false;
+      if (title) {
+        this.recipe = this.recipes.find(recipe => recipe.title === title);
+      } else {
+        this.recipe = this.recipes[0];
+      }
+    },
+    closeDetailView() {
+      if (this.imageView) this.setImageView();
+      else this.setListView();
     },
     setActiveItem(item) {
       this.activeItem = item;
@@ -169,9 +189,22 @@ export default {
     box-sizing: border-box;
     box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.24);
     font-family: 'Source Sans Pro', Arial;
+    transition: all .25s ease;
 
     &.detail {
       overflow-y: auto;
+    }
+
+    &.full-size {
+      height: 440px;
+
+      #recipe-list {
+        max-height: 371px;
+
+        &.image-view {
+          max-height: 392px;
+        }
+      }
     }
 
     #heading-and-sort,
@@ -252,6 +285,7 @@ export default {
       position: relative;
       max-height: 291px;
       overflow-y: auto;
+      transition: all .25s ease;
 
       &.image-view {
         display: grid;
@@ -435,7 +469,7 @@ export default {
       width: 200px;
       box-sizing: border-box;
       box-shadow: 0 2px 4px 0 rgba(50, 50, 93, 0.24);
-      background-color: #f6f9fc;
+      background-color: #f4f4f4;
       border-radius: 4px;
       padding: 10px;
       height: 140px;
@@ -443,7 +477,7 @@ export default {
       
       li {
         font-size: 15px;
-        padding: 8px 8px 8px 34px;
+        padding: 8px 8px 8px 38px;
         border-radius: 2px;
         margin-bottom: 10px;
         cursor: pointer;
@@ -452,6 +486,18 @@ export default {
         position: relative;
         z-index: 10;;
         transition: all .25s ease;
+
+        &:not(.selection)::before {
+          content: '';
+          width: 22px;
+          height: 24px;
+          display: inline-block;
+          background-size: 22px 24px;
+          background-repeat: no-repeat;
+          position: absolute;
+          left: 5px;
+          top: 4px;
+        }
 
         &:hover {
           color: #000;
@@ -471,10 +517,62 @@ export default {
           transform: translateY(-124px);
         }
       }
+
+      li:nth-child(1) {
+        &::before {
+          background-image: url(../assets/layout-list-icon-purple.svg);
+        }
+
+        &.active::before {
+          background-image: url(../assets/layout-list-icon-green.svg);
+        }
+      }
+
+      li:nth-child(2) {
+        &::before {
+          background-image: url(../assets/layout-image-icon-purple.svg);
+        }
+
+        &.active::before {
+          background-image: url(../assets/layout-image-icon-green.svg);
+        }
+      }
+
+      li:nth-child(3) {
+        &::before {
+          background-image: url(../assets/icon-clipboard-purple.svg);
+        }
+
+        &.active::before {
+          background-image: url(../assets/icon-clipboard-green.svg);
+        }
+      }
     }
 
-    .site-preview-cta {
+    .site-preview-cta-container {
       margin-top: 20px;
+
+      .site-preview-cta {
+        box-sizing: border-box;
+        width: 100%;
+        display: inline-block;
+        background-color: #3ecf8e;
+        font-size: 16px;
+        color: #fff;
+        box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+        transition: all .15s ease;
+        letter-spacing: 0.9px;
+        padding: 15px 60px 15px 20px;
+        background-image: url(../assets/arrow-long.png);
+        background-repeat: no-repeat;
+        background-position: right 20px center;
+        text-decoration: none;
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08);
+        }
+      }
     }
   }
 }

@@ -4,8 +4,8 @@ const sitePreviewRecipes = [
     date: 1565063396975,
     url: 'https://www.onceuponachef.com/recipes/steakhouse-burgers.html',
     tags: [
-      { name: 'dinner', color: '#00c5ff' },
-      { name: 'burgers', color: '#dec688' }
+      { name: 'dinner', color: '#dec688' },
+      { name: 'burgers', color: '#2c77ff' }
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698146/hjbjokpcofnxrhvzy0zq.jpg',
     ingredients: [
@@ -32,7 +32,7 @@ const sitePreviewRecipes = [
     date: 1562052210948,
     url: 'https://www.foodnetwork.com/recipes/bobby-flay/grilled-corn-on-the-cob-with-garlic-butter-fresh-lime-and-cotija-cheese-recipe3-2014384',
     tags: [
-      { name: 'side dish', color: '#00c5ff' }
+      { name: 'side dish', color: '#22da00' }
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698147/g0paaumulmezk7sqtpyv.jpg',
     ingredients: [
@@ -58,7 +58,7 @@ const sitePreviewRecipes = [
     date: 1561062610948,
     url: 'https://www.epicurious.com/recipes/food/views/panna-cotta-14224',
     tags: [
-      { name: 'dessert ', color: '' }
+      { name: 'dessert ', color: '#6d0873' }
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698347/h6gordwugdiphbl7cgmi.jpg',
     ingredients: [
@@ -80,7 +80,7 @@ const sitePreviewRecipes = [
     date: 1560062610948,
     url: 'https://www.justataste.com/fluffy-greek-yogurt-pancakes-recipe/',
     tags: [
-      { name: 'breakfast', color: '' }
+      { name: 'breakfast', color: '#ffa500' }
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698391/l7z3emsswucmkv6mcyy8.jpg',
     ingredients: [
@@ -108,7 +108,7 @@ const sitePreviewRecipes = [
     date: 1555062610948,
     url: 'https://gimmedelicious.com/2016/07/10/how-to-make-the-best-avocado-toast-with-eggs/',
     tags: [
-      { name: 'breakfast', color: '' }
+      { name: 'breakfast', color: '#ffa500' }
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893337/jursvzqdn2ajcdlnv6ec.jpg',
     ingredients: [
@@ -130,7 +130,7 @@ const sitePreviewRecipes = [
     date: 1550062610948,
     url: 'http://www.thecrepesofwrath.com/2014/05/15/dijon-roasted-rack-lamb/',
     tags: [
-      { name: 'dinner', color: '' }
+      { name: 'dinner', color: '#dec688' }
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893355/ry6fcpzt4npsbp9nhc2i.jpg',
     ingredients: [
@@ -156,8 +156,8 @@ const sitePreviewRecipes = [
     date: 1541002610948,
     url: 'https://www.kawalingpinoy.com/eggplant-with-spicy-garlic-sauce/',
     tags: [
-      { name: 'dinner', color: '' },
-      { name: 'chinese', color: '' } 
+      { name: 'dinner', color: '#dec688' },
+      { name: 'chinese', color: '#f00f00' } 
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893504/qynou8arpuajdyrnbzek.jpg',
     ingredients: [
@@ -182,7 +182,7 @@ const sitePreviewRecipes = [
     date: 1535252610948,
     url: 'https://cookinginsens.wordpress.com/2012/02/17/roasted-pork-belly/',
     tags: [
-      { name: 'lunch', color: '' },
+      { name: 'lunch', color: '#9e5f01' },
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1564893332/akepkkrhkbgwbbtk33zd.jpg',
     ingredients: [
@@ -206,7 +206,7 @@ const sitePreviewRecipes = [
     date: 1530062610948,
     url: 'https://www.cookingchanneltv.com/recipes/tia-mowry/roasted-sweet-potato-wedges-3242778',
     tags: [
-      { name: 'side dish', color: '' },
+      { name: 'side dish', color: '#22da00' },
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698444/r1p0uyvzbmldmesixbms.jpg',
     ingredients: [
@@ -231,8 +231,8 @@ const sitePreviewRecipes = [
     date: 1515062610948,
     url: 'https://www.allrecipes.com/recipe/269403/red-velvet-coconut-biscotti',
     tags: [
-      { name: 'dessert', color: '' },
-      { name: 'cookies', color: '' },
+      { name: 'dessert', color: '#6d0873' },
+      { name: 'cookies', color: '#ff05d6' },
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698149/ldkx63yfumttvroze4wh.jpg',
     ingredients: [
@@ -259,8 +259,8 @@ const sitePreviewRecipes = [
     date: 1505062610948,
     url: 'https://www.youtube.com/watch?v=aX3f9u88FTo',
     tags: [
-      { name: 'lunch', color: '' },
-      { name: 'sandwich', color: '' },
+      { name: 'lunch', color: '#9e5f01' },
+      { name: 'sandwich', color: '#000000' },
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698149/dgjiketcop7kexsyousp.jpg',
     ingredients: [
@@ -280,8 +280,8 @@ const sitePreviewRecipes = [
     date: 1501062610948,
     url: 'https://www.tablespoon.com/recipes/black-bean-and-corn-jalapeno-poppers/532038c6-24e1-4af0-9968-1b1c91350390',
     tags: [
-      { name: 'lunch', color: '' },
-      { name: 'snack', color: '' },
+      { name: 'lunch', color: '#9e5f01' },
+      { name: 'snack', color: '#00c5ff' },
     ],
     image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1566698150/uwp7ofyk4h2salbjolen.jpg',
     ingredients: [
