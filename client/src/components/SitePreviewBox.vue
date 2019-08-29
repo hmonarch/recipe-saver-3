@@ -42,7 +42,9 @@
           </div>
         </div>
         <div class="recipe-title">{{ recipe.title }}</div>
-        <a class="recipe-url" :href="recipe.url" target="_blank">{{ recipe.url }}</a>
+        <div class="recipe-url-container">
+          <a class="recipe-url" :href="recipe.url" target="_blank">{{ recipe.url }}</a>
+        </div>
         <ul class="recipe-tags">
           <li v-for="tag in recipe.tags" :key="tag.name" :style="backgroundColor(tag.color)">{{ tag.name }}</li>
         </ul>
@@ -178,6 +180,7 @@ export default {
 .site-preview-box-and-controls {
   display: flex;
   justify-content: space-around;
+  padding-left: 50px;
 
   .site-preview-box {
     position: relative;
@@ -406,12 +409,18 @@ export default {
         margin-bottom: 12px;
       }
 
-      .recipe-url {
-        display: inline-block;
-        color: #14aaf5;
-        font-size: 14px;
-        margin-bottom: 20px;
-        line-height: 16px;
+      .recipe-url-container {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        .recipe-url {
+          display: inline-block;
+          color: #14aaf5;
+          font-size: 14px;
+          margin-bottom: 20px;
+          line-height: 16px;
+        }
       }
 
       .recipe-tags {

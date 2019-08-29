@@ -275,7 +275,7 @@ export default {
   header {
     position: relative;
     padding: 14px;
-    background: linear-gradient(45deg, #92fe9d 0%,#44e2d2 30%, #00b2e1 100%);
+    background: linear-gradient(45deg, #565cc3 0%, #00b2e1 100%);
     box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 3px 0px;
     overflow: auto;
     display: flex;
@@ -293,6 +293,8 @@ export default {
         font-size: 22px;
         font-weight: bold;
         margin-left: 8px;
+        color: #fff;
+        letter-spacing: 0.3px;
       }
     }
 
