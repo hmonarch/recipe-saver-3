@@ -1,6 +1,6 @@
 @media (max-width: 767px) {
   /* Set overflow: hidden; on mobile so that -100% bottom details panel is not shown */
-  body {
+  body.recipes {
     overflow: hidden;
     position: fixed;
     width: 100%;

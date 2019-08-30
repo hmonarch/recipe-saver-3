@@ -1,12 +1,12 @@
 <template>
   <div id="recipes">
 
-    <SideNav :class="{ 'full-screen-hide': !listOpen }"></SideNav>
+    <!-- <!-- <SideNav :class="{ 'full-screen-hide': !listOpen }"></SideNav> -->
     <Header></Header>
     <section id="panels">
       <ListPanel :class="{ 'list-open': listOpen, 'full-width': !detailsOpen }"></ListPanel>
       <DetailPanel :class="{ 'full-width': !listOpen, 'close': !detailsOpen, 'open': detailsOpen }" :screenModeText="screenModeText"></DetailPanel>
-    </section>
+    </section> -->
 
   </div>
 </template>
@@ -23,7 +23,7 @@ export default {
   name: 'recipes',
   components: {
     SideNav,
-    Header,    
+    Header,
     ListPanel,
     DetailPanel,
     Icon
@@ -69,21 +69,21 @@ export default {
 </script>
 
 <style lang="scss">
-#panels {
-  height: calc(100% - 50px);
-  display: flex;
-  flex-direction: row;
-  box-sizing: border-box;
-  padding: 10px 20px 0 20px;
+// #panels {
+//   height: calc(100% - 50px);
+//   display: flex;
+//   flex-direction: row;
+//   box-sizing: border-box;
+//   padding: 10px 20px 0 20px;
 
-  .panel {
-    box-sizing: border-box;
-    border-radius: 3px;
-    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
-    background-color: white;
-    position: relative;
-    text-align: left;
-  }
-}
+//   .panel {
+//     box-sizing: border-box;
+//     border-radius: 3px;
+//     box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
+//     background-color: white;
+//     position: relative;
+//     text-align: left;
+//   }
+// }
 </style>
 

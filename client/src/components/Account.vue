@@ -108,6 +108,9 @@ export default {
   },
   created() {
     this.getUserData();
+  },
+  beforeCreate() {
+    document.body.className = 'account';
   }
 }
 </script>

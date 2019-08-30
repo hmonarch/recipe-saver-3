@@ -143,12 +143,15 @@ export default {
       this.messageVerb = ` ${message}`;
       this.showMessage = true;
     });
+  },
+  beforeCreate() {
+    document.body.className = 'recipes';
   }
 }
 </script>
 
 <style lang="scss">
-body {
+body.recipes {
   background: url('../assets/bg-recipes.jpg') no-repeat center center fixed;
   background-size: cover;
 }
@@ -512,28 +515,28 @@ header {
 
 
 @media (min-width: 768px) {
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
+  // ::-webkit-scrollbar {
+  //   width: 10px;
+  // }
   
-  /* Track */
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
-    -webkit-box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-  }
+  // /* Track */
+  // ::-webkit-scrollbar-track {
+  //   box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
+  //   -webkit-box-shadow: inset 0 0 6px rgba(178, 195, 213, 0.9); 
+  //   -webkit-border-radius: 10px;
+  //   border-radius: 10px;
+  // }
   
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: rgba(178, 195, 213, 0.6); 
-    // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-  }
-  ::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(246, 245, 245, 0.3); 
-  }
+  // /* Handle */
+  // ::-webkit-scrollbar-thumb {
+  //   -webkit-border-radius: 10px;
+  //   border-radius: 10px;
+  //   background: rgba(178, 195, 213, 0.6); 
+  //   // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+  // }
+  // ::-webkit-scrollbar-thumb:window-inactive {
+  //   background: rgba(246, 245, 245, 0.3); 
+  // }
 }
 
 

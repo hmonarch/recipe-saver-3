@@ -2,10 +2,10 @@
   <div class="home">
 
     <header>
-      <div class="header-logo logo">
+      <router-link :to="{ path: '/' }" class="header-logo logo">
         <img class="logo-image" src="../assets/logo-255x255.png">
         <span class="logo-text">Recipe Saver</span>
-      </div>
+      </router-link>
 
       <div class="burger-menu" @click="openMenu()">
         <Icon name="burger"/>
@@ -16,16 +16,16 @@
           <Icon name="close"/>
         </div>
         <div class="nav-item">
-          <a href="#">My Recipes</a>
+          <router-link :to="{ path: '/recipes' }">My Recipes</router-link>
         </div>
         <div class="nav-item">
-          <a href="#">Chrome Extension</a>
+          <a href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a>
         </div>
         <div class="nav-item">
-          <a href="#">Account</a>
+          <router-link :to="{ path: '/account' }">Account</router-link>
         </div>
         <div class="nav-item">
-          <a href="https://localhost:8080/login">Login / Register</a>
+          <router-link :to="{ path: '/login' }">Login / Register</router-link>
         </div>
       </nav>
     </header>
@@ -47,7 +47,7 @@
         </div>
         <div class="ctas">
           <a @click.prevent="scrollToPlans()" class="secondary-cta" href="#">See Plans</a>
-          <a class="main-cta" href="/login">Set Up Now</a>
+          <router-link :to="{ path: '/login' }" class="main-cta">Login / Register</router-link>
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@
               <li>All the benefits of the Lite plan</li>
               <li>Save unlimited recipes</li>
               <li>Share recipes with friends and family</li>
-              <li>Create grocery lists (coming soon)</li>
+              <li>Create grocery lists (coming soon!)</li>
             </ul>
           </div>
           <div class="plan-right">
@@ -237,6 +237,7 @@ export default {
       this.menuOpen = false;
     },
     scrollToPlans() {
+      console.log('scrolling', document.querySelector('.plans'));
       document.querySelector('.plans').scrollIntoView({
         behavior: 'smooth'
       });
@@ -254,6 +255,9 @@ export default {
       }
     });
   },
+  beforeCreate() {
+    document.body.className = 'home';
+  }
 }
 </script>
 
@@ -284,6 +288,7 @@ export default {
 
     .header-logo {
       width: 202px;
+      text-decoration: none;
 
       .logo-image {
         width: 34px;
