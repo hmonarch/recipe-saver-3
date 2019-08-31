@@ -69,7 +69,7 @@
       </ul>
 
       <div class="site-preview-cta-container">
-        <a class="site-preview-cta" href="#">Start Now</a>
+        <router-link :to="{ path: '/login' }" class="site-preview-cta">Start Now</router-link>
       </div>
     </div>
 

@@ -150,13 +150,13 @@
     </div>
 
     <div class="horizontal-box-section">
-      <a class="horizontal-box" href="/login">
+      <router-link :to="{ path: '/login' }" class="horizontal-box">
         <span class="horizontal-box-title">Start Now</span>
         <Icon name="shortArrow"/>
         <div class="horizontal-box-text">
           Use Recipe Saver to create your own recipe collection, add custom tags, share your favorite recipes and more!
         </div>
-      </a>
+      </router-link>
     </div>
 
     <div class="footer-bar"></div>
@@ -187,16 +187,16 @@
         </div>
         <div id="footer-right">
           <div id="footer-right-cta-title">Finally organize your recipes once and and for all!</div>
-          <a id="footer-right-cta-button" href="/login">Sign Up Free</a>
+          <router-link id="footer-right-cta-button" :to="{ path: '/login' }">Sign Up Free</router-link>
 
           <div id="footer-links-section">
             <ul class="footer-links">
-              <li><a href="#">My Recipes</a></li>
+              <li><router-link :to="{ path: '/recipes' }">My Recipes</router-link></li>
               <li><a href="https://chrome.google.com/webstore/detail/recipe-saver/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a></li>
             </ul>
             <ul class="footer-links">
-              <li><a href="/#">Account</a></li>
-              <li><a href="/#">Login / Register</a></li>
+              <li><router-link :to="{ path: '/account' }">Account</router-link></li>
+              <li><router-link :to="{ path: '/login' }">Login / Register</router-link></li>
             </ul>
           </div>
         </div>

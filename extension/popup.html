@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        width: 305px;
+      }
+      #wrapper {
+        padding: 10px;
+      }
+      .field-title {
+        font-size: 16px;
+        margin-bottom: 2px;
+      }
+      .field {
+        width: 100%;
+        margin-bottom: 10px;
+        padding-left: 6px;
+        line-height: 20px;
+        height: 34px;
+        font-size: 14px;
+        border: solid 1px #dadada;
+      }
+      #more {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+	<body>
+    <div id="wrapper">
+      <div id="initial-view">
+        <form id="recipe-form">
+
+          <div class="field-title">Recipe Name</div>
+          <input type="text" id="name" class="field">
+
+          <div class="field-title">URL</div>
+          <input type="text" id="url" class="field">
+
+          <div id="more">More Details</div>
+
+          <div id="extra-data">
+            <div class="field-title">Description</div>
+            <div type="text" id="description" class="field" contenteditable="true"></div>
+
+            <div class="field-title">Categories <span class="field-title-small">(Comma Separated)</span></div>
+            <input type="text" id="tags" class="field">
+
+          </div>
+
+          <input type="submit" value="Save Recipe" id="save">
+        </form>
+      </div>
+
+      <div id="success">
+        <div id="posted">Recipe Posted!</div>
+        <div id="view-it"><a href="https://www.recipesaver.net/recipes" target="_blank">View it in your collection</a></div>
+      </div>
+
+      <div id="footer">
+        <a id="footer-left" href="https://www.recipesaver.net" target="_blank">
+          <img src="footer-icon.png">
+          <div id="logo-text">Recipe Saver</div>
+        </a>
+        <div id="footer-right">
+          <a href="https://www.recipesaver.net/recipes" target="_blank">My Recipes</a>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>
