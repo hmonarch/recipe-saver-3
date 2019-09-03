@@ -567,10 +567,7 @@ export default function scrape() {
   recipe = (integration) ? integration() : getDefaultData();
 
   // Set title
-  const titleEl = document.querySelector('title');
-  if (titleEl) {
-    recipe.title = titleEl.textContent.trim().replace(/\s([|\-—:>•·~\[,]+|(by|from|recipe)?)\s.*/, '');
-  }
+  recipe.title = $('title').text().trim().replace(/\s([|\-—:>•·~\[,]+|(by|from|recipe)?)\s.*/, '');
 
   // Set URL
   recipe.url = window.location.href;

@@ -1,5 +1,5 @@
 /* --- Set dev or prod --- */
-const site = 'https://localhost:3000/extension';
+const site = 'https://localhost:8081/api/extension';
 
 // Declare elements
 const moreEl = document.querySelector('#more');
@@ -82,5 +82,14 @@ function sendToRS() {
   const tagsTrimmed = tagsFiltered.map(tag => tag.trim());
   data.tags = tagsTrimmed;
 
-  console.log('Sending to RS', data);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', site, true);
+  xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8',);
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      console.log(xhr.responseText);
+    }
+  }
+  xhr.send(JSON.stringify(data));
 }

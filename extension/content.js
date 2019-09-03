@@ -10,9 +10,9 @@ if (window.location.hostname === 'rs3-staging.herokuapp.com' ||
 	//console.warn(rs_id);
 	//
   // Save user id to storage
-  chrome.storage.sync.set({'rs_id': rs_id}, function() {
-    //console.log('rs_id saved');
-  });
+  // chrome.storage.sync.set({'rs_id': rs_id}, function() {
+  //   //console.log('rs_id saved');
+  // });
 
 }
 

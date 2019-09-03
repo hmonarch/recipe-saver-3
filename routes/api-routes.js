@@ -5,7 +5,6 @@ const User = require('../models/user');
 const cloudinary = require('cloudinary');
 const fs = require('fs');
 
-
 // Config variables
 const user_id = process.env.PORT ? process.env.USER_ID : fs.readFileSync(`${__dirname}/../private/user_id.txt`).toString();
 const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync(`${__dirname}/../private/cloudinary_secret.txt`).toString();
@@ -28,6 +27,40 @@ module.exports = function(app) {
       res.sendStatus(401);
     }
   }
+
+  // Extension posts
+  app.post('/api/extension', (req, res) => {
+    console.log('extension', req.body);
+
+    const data = req.body;
+    const newRecipe = new Recipe(data);
+
+    // Temporarily set id
+    newRecipe.user_id = user_id;
+
+    if (data.image) {
+      cloudinary.uploader.upload(data.image, result => {
+        console.log('cloudinary upload:', result.secure_url);
+        newRecipe.image = result.secure_url;
+        saveRecipe(newRecipe);
+      },
+      cloudinaryOptionsRecipe);
+    } else { 
+      console.log('no image');
+      saveRecipe(newRecipe);
+    }
+
+    function saveRecipe(recipe) {
+      recipe.save((err, recipe) => {
+        if (err) console.error(err);
+        res.json(recipe);
+      });
+    }
+  });
+
+  // Deal with tags / tag colors
+  // Live update RS
+
 
   // Fetch all recipes
   app.get('/api/recipes/all', loggedIn, (req, res) => {

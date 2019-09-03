@@ -19,7 +19,8 @@
 
   "permissions": [
     "activeTab",
-    "storage"
+    "storage",
+    "https://ajax.googleapis.com/"
   ],
 
  "content_scripts": [
