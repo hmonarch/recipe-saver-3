@@ -28,8 +28,10 @@
         "http://*/*",
         "https://*/*"
       ],
-      "js": ["content.js"]
+      "js": ["jquery-1.11.2.min.js", "content.js"]
     }
-  ]
+  ],
+
+  "web_accessible_resources": ["scraper/integrations.js"]
 
 }

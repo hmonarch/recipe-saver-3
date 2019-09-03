@@ -541,23 +541,8 @@ var integrations = {
 };
 
 
-/*
-
-window.location.host.replace(/^www\./, '');
-
-*/
-
-var result = integrations[window.location.host.replace(/^www\./, '')]();
-
-console.log(result.img);
-result.ing.forEach(ing => console.log(ing));
-console.log('---------');
-result.desc.forEach(desc => console.log(desc));
-
-
 function lisToArr($lis, removeStepNum, rule, replaceStr = '') {
-
-  const ingArr = [...$lis].map(li => {
+  const ingArr = Array.from($lis).map(li => {
     let text = $(li).text().trim().replace(/\s\s+/g, ' ');
     if (removeStepNum) text = text.replace(/^(Step )?\d+\.?\s/i, '');
     if (rule) text = text.replace(rule, replaceStr);
@@ -565,4 +550,30 @@ function lisToArr($lis, removeStepNum, rule, replaceStr = '') {
   });
 
   return ingArr.filter(item => item);
+}
+
+function getDefaultData() {
+  return {
+    img: $('meta[property=og\\:image]').attr('content')
+  }
+}
+
+
+export default function scrape() {
+  var hostSite = window.location.host.replace(/^www\./, '');
+  var integration = integrations[hostSite];
+
+  let recipe;
+  recipe = (integration) ? integration() : getDefaultData();
+
+  // Set title
+  const titleEl = document.querySelector('title');
+  if (titleEl) {
+    recipe.title = titleEl.textContent.trim().replace(/\s([|\-—:>•·~\[,]+|(by|from|recipe)?)\s.*/, '');
+  }
+
+  // Set URL
+  recipe.url = window.location.href;
+
+  return recipe;
 }

@@ -78,9 +78,15 @@
         grid-gap: 15px;
         margin-bottom: 0;
       }
+      #title-and-image.no-image {
+        display: block;
+      }
       #image {
         border-radius: 4px;
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
+        height: 68px;
+        object-fit: cover;
+        width: 68px;
       }
       #more {
         text-align: center;
@@ -164,7 +170,7 @@
           <div id="title-and-image">
             <div id="title-container">
               <div class="field-title">Recipe Name</div>
-              <input type="text" id="name" class="field">
+              <input type="text" id="title" class="field">
             </div>
             <img id="image" src="http://res.cloudinary.com/dormh2fvt/image/upload/v1557809347/ciw4w17mzxsf34tywmuv.jpg">
           </div>

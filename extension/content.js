@@ -1,5 +1,10 @@
+console.log('content.js');
+
 // This script runs in the visited page that's open in Chrome
-if (window.location.hostname === 'recipesaver.herokuapp.com' || window.location.hostname === 'www.recipesaver.net' || window.location.hostname === '127.0.0.1') {
+if (window.location.hostname === 'rs3-staging.herokuapp.com' || 
+		window.location.hostname === 'www.recipesaver.net' ||
+		window.location.hostname === 'www.recipesaver.me' ||
+		window.location.hostname === 'localhost') {
 	
 	// var rs_id = $('#rs-id').attr('data-rs-id');
 	//console.warn(rs_id);
@@ -17,11 +22,25 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 	// Extract recipe
 	if (request.rsAction === 'extract') {
-		const recipe = {};
-
-		recipe.title = window.location.href;
-
-		sendResponse(recipe);
+		(async () => {
+			const src = chrome.extension.getURL('./scraper/integrations.js');
+			const scrape = await import(src);
+			// This returns a module - the default property is the actual function
+			const recipe = scrape.default();
+			sendResponse(recipe);
+		})();
 	}
 
+	// We need to return true to get around this error: "The message port closed before a response was received."
+	return true; 
 });
+
+
+
+
+
+
+
+
+
+
