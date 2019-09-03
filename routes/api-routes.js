@@ -30,10 +30,16 @@ module.exports = function(app) {
 
   // Extension posts
   app.post('/api/extension', (req, res) => {
-    console.log('extension', req.body);
-
     const data = req.body;
     const newRecipe = new Recipe(data);
+
+    // Give tags the default color
+    // Note: This will be overwritten client-side by the dynamicBackgroundColor utility
+    const coloredTags = data.tags.map(tag => {
+      return { name: tag, color: '#000000' };
+    });
+    newRecipe.tags = coloredTags;
+    newRecipe.favorite = false;
 
     // Temporarily set id
     newRecipe.user_id = user_id;
@@ -45,8 +51,7 @@ module.exports = function(app) {
         saveRecipe(newRecipe);
       },
       cloudinaryOptionsRecipe);
-    } else { 
-      console.log('no image');
+    } else {
       saveRecipe(newRecipe);
     }
 
@@ -57,10 +62,6 @@ module.exports = function(app) {
       });
     }
   });
-
-  // Deal with tags / tag colors
-  // Live update RS
-
 
   // Fetch all recipes
   app.get('/api/recipes/all', loggedIn, (req, res) => {
