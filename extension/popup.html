@@ -48,9 +48,11 @@
         padding: 5px 8px;
         box-shadow: 0 2px 3px rgba(50, 50, 93, 0.07), 0 1px 1px rgba(0, 0, 0, 0.08);
         border-radius: 2px;
+        transition: all .15s ease;
       }
-
-
+      #my-recipes:hover {
+        background-color: #6772e5;
+      }
       #wrapper {
         padding: 20px 10px;
       }
@@ -74,7 +76,7 @@
         display: grid;
         grid-template-columns: 1fr 20%;
         grid-gap: 15px;
-        margin-bottom: 18px;
+        margin-bottom: 0;
       }
       #image {
         border-radius: 4px;
@@ -88,11 +90,15 @@
         color: black;
         font-size: 15px;
         margin: 10px 0;
+        transition: all .15s ease;
       }
       #more::after {
         content: url(dropdown-arrow.png);
         padding-left: 5px;
         position: absolute;
+      }
+      #more:hover {
+        background-color: rgba(8, 157, 227, 0.07);
       }
       #image {
         width: 100%;
@@ -103,6 +109,12 @@
         min-height: 55px;
         width: 100%;
         height: auto;
+      }
+      #tags {
+        text-transform: lowercase;
+      }
+      #extra-data {
+        display: none;
       }
       #save {
         background-color: #089de3;
@@ -118,6 +130,21 @@
         background-color: #23d82f;
         border: solid 1px #23d82f;
       }
+      #success {
+        display: none;
+        border: solid 1px #089de3;
+        padding: 10px;
+      }
+      #posted {
+        font-size: 16px;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      #view-it a {
+        color: #089de3;
+        font-size: 16px;
+        font-weight: 600;
+      }
     </style>
   </head>
 	<body>
@@ -127,7 +154,7 @@
         <img src="logo-255x255.png">
         <div id="logo-text">Recipe Saver</div>
       </a>
-      <a id="my-recipes" href="https://www.recipesaver.net/recipes" target="_blank">Recipes</a>
+      <a id="my-recipes" href="https://www.recipesaver.net/recipes" target="_blank">My Recipes</a>
     </div>
 
     <div id="wrapper">
@@ -165,15 +192,6 @@
         <div id="view-it"><a href="https://www.recipesaver.net/recipes" target="_blank">View it in your collection</a></div>
       </div>
 
-      <div id="footer">
-        <a id="footer-left" href="https://www.recipesaver.net" target="_blank">
-          <img src="footer-icon.png">
-          <div id="logo-text">Recipe Saver</div>
-        </a>
-        <div id="footer-right">
-          <a href="https://www.recipesaver.net/recipes" target="_blank">My Recipes</a>
-        </div>
-      </div>
     </div>
     <script src="popup.js"></script>
   </body>
