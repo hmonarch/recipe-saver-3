@@ -513,7 +513,6 @@ export default {
       }
     }
 
-
     .recipe-entry {
       &:first-child {
         a {
@@ -564,6 +563,14 @@ export default {
           background: -moz-linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
           background: linear-gradient(-90deg, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgba(255, 255, 255, 0.3));
         }
+      }
+    }
+  }
+
+  .list-panel-body:not(.image-layout) {
+    .recipe-entry:hover {
+      + .recipe-entry a {
+        border-top: solid 1px #0093ff;
       }
     }
   }

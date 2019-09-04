@@ -45,13 +45,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	// We need to return true to get around this error: "The message port closed before a response was received."
 	return true; 
 });
-
-
-
-
-
-
-
-
-
-

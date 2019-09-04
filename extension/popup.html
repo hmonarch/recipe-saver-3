@@ -137,7 +137,8 @@
         border: solid 1px #23d82f;
       }
       #success,
-      #error {
+      #error,
+      #sign-up-start {
         display: none;
         border: solid 1px #089de3;
         padding: 10px;
@@ -146,27 +147,32 @@
         border: solid 1px #f00f00;
       }
       #posted,
-      #error-title {
+      #error-title,
+      #welcome {
         font-size: 16px;
         margin-bottom: 5px;
         font-weight: bold;
       }
       #view-it a,
-      #sign-in-error a {
+      #sign-in-error a,
+      #welcome-detail a {
         color: #089de3;
         font-size: 16px;
         font-weight: 600;
+      }
+      #welcome-detail {
+        line-height: 18px;
       }
     </style>
   </head>
 	<body>
 
     <div id="top-bar">
-      <a id="logo" href="https://www.recipesaver.net" target="_blank">
+      <a id="logo" href="#" target="_blank">
         <img src="logo-255x255.png">
         <div id="logo-text">Recipe Saver</div>
       </a>
-      <a id="my-recipes" href="https://www.recipesaver.net/recipes" target="_blank">My Recipes</a>
+      <a id="my-recipes" href="#" target="_blank">My Recipes</a>
     </div>
 
     <div id="wrapper">
@@ -199,14 +205,19 @@
         </form>
       </div>
 
+      <div id="sign-up-start">
+        <div id="welcome">Thanks for downloading!</div>
+        <div id="welcome-detail">To begin, first make sure you are <a id="welcome-sign-in" href="#" target="_blank">signed in</a>. After signing in your account information will be saved and you'll be good to go.</div>
+      </div>
+
       <div id="success">
         <div id="posted">Recipe Posted!</div>
-        <div id="view-it"><a href="https://www.recipesaver.net/recipes" target="_blank">View it in your collection</a></div>
+        <div id="view-it"><a id="view-link" href="#" target="_blank">View it in your collection</a></div>
       </div>
 
       <div id="error">
         <div id="error-title">Unlinked Account</div>
-        <div id="sign-in-error">Please sign into your account at <a href="https://www.recipesaver.net/recipes" target="_blank">RecipeSaver.me</a> first!</div>
+        <div id="sign-in-error">Please sign into your account at <a id="sign-in" href="https://www.recipesaver.me/recipes" target="_blank">RecipeSaver.me</a> first!</div>
       </div>
 
     </div>

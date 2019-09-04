@@ -210,7 +210,7 @@ export default {
 
       .logo {
         width: 75px;
-        margin-bottom: 12px;
+        margin: 0 auto 12px auto;
         border: solid 1px black;
         border-radius: 50%;
       }

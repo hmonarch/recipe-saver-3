@@ -30,7 +30,7 @@ module.exports = function(app) {
 
   // Extension posts
   app.post('/api/extension', (req, res) => {
-    User.findOne({ _id: user_id }, (err, user) => {
+    User.findOne({ _id: req.body.user_id }, (err, user) => {
       if (!user) return res.sendStatus(401);
 
       const data = req.body;
@@ -43,9 +43,6 @@ module.exports = function(app) {
       });
       newRecipe.tags = coloredTags;
       newRecipe.favorite = false;
-  
-      // Temporarily set id
-      newRecipe.user_id = user_id;
   
       if (data.image) {
         cloudinary.uploader.upload(data.image, result => {
