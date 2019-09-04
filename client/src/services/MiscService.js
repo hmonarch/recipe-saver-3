@@ -11,5 +11,8 @@ export default {
         'Content-Type': 'multipart/form-data;',
       }
     });
+  },
+  getUserId() {
+    return Api().get('user-id');
   }
 }

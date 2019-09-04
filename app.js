@@ -11,9 +11,8 @@ const LocalStrategy = require('passport-local').Strategy;
 const https = require('https');
 const bcrypt = require('bcrypt');
 
-
+// User model
 const User = require('./models/user');
-const Recipe = require('./models/recipe');
 
 // DB / Mongoose modules
 const mongoose = require('mongoose');

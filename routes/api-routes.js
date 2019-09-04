@@ -30,30 +30,34 @@ module.exports = function(app) {
 
   // Extension posts
   app.post('/api/extension', (req, res) => {
-    const data = req.body;
-    const newRecipe = new Recipe(data);
+    User.findOne({ _id: user_id }, (err, user) => {
+      if (!user) return res.sendStatus(401);
 
-    // Give tags the default color
-    // Note: This will be overwritten client-side by the dynamicBackgroundColor utility
-    const coloredTags = data.tags.map(tag => {
-      return { name: tag, color: '#000000' };
-    });
-    newRecipe.tags = coloredTags;
-    newRecipe.favorite = false;
-
-    // Temporarily set id
-    newRecipe.user_id = user_id;
-
-    if (data.image) {
-      cloudinary.uploader.upload(data.image, result => {
-        console.log('cloudinary upload:', result.secure_url);
-        newRecipe.image = result.secure_url;
+      const data = req.body;
+      const newRecipe = new Recipe(data);
+  
+      // Give tags the default color
+      // Note: This will be overwritten client-side by the dynamicBackgroundColor utility
+      const coloredTags = data.tags.map(tag => {
+        return { name: tag, color: '#000000' };
+      });
+      newRecipe.tags = coloredTags;
+      newRecipe.favorite = false;
+  
+      // Temporarily set id
+      newRecipe.user_id = user_id;
+  
+      if (data.image) {
+        cloudinary.uploader.upload(data.image, result => {
+          console.log('cloudinary upload:', result.secure_url);
+          newRecipe.image = result.secure_url;
+          saveRecipe(newRecipe);
+        },
+        cloudinaryOptionsRecipe);
+      } else {
         saveRecipe(newRecipe);
-      },
-      cloudinaryOptionsRecipe);
-    } else {
-      saveRecipe(newRecipe);
-    }
+      }
+    });
 
     function saveRecipe(recipe) {
       recipe.save((err, recipe) => {
@@ -63,10 +67,15 @@ module.exports = function(app) {
     }
   });
 
+  // Get user id (for extension)
+  app.get('/api/user-id', loggedIn, (req, res) => {
+    res.json({ id: req.session.passport.user._id });
+  });
+
   // Fetch all recipes
   app.get('/api/recipes/all', loggedIn, (req, res) => {
 
-    Recipe.find({user_id: req.session.passport.user._id}, 'title creationDate image', (err, recipes) => {
+    Recipe.find({ user_id: req.session.passport.user._id }, 'title creationDate image', (err, recipes) => {
       if (err) console.error(err);
       res.send(recipes);
     })

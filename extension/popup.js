@@ -9,6 +9,9 @@ const imageEl = document.querySelector('#image');
 const urlInput = document.querySelector('#url');
 const descEl = document.querySelector('#description');
 const tagsInput = document.querySelector('#tags');
+const initialViewEl = document.querySelector('#initial-view');
+const successEl = document.querySelector('#success');
+const errorEl = document.querySelector('#error');
 
 
 // Show "More Details" on click
@@ -89,6 +92,18 @@ function sendToRS() {
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log(xhr.responseText);
+      initialViewEl.style.display = 'none';
+      successEl.style.display = 'block';
+      successEl.querySelector('#view-it a').setAttribute('href', `${site}/recipes/all?id=${JSON.parse(xhr.responseType)._id}`);
+    } else if (xhr.readyState === 4 && xhr.status === 401) {
+      initialViewEl.style.display = 'none';
+      errorEl.style.display = 'block';
+      console.log('Error:', xhr.responseText, xhr.status);
+    } else if (xhr.readyState === 4) {
+      initialViewEl.style.display = 'none';
+      errorEl.style.display = 'block';
+      errorEl.querySelector('#error-title').textContent = 'Oops';
+      errorEl.querySelector('#sign-in-error').innerHTML = 'Something went wrong. Try signing into your account first.'
     }
   }
   xhr.send(JSON.stringify(data));

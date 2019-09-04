@@ -10,7 +10,7 @@
         box-sizing: border-box;
       }
       body {
-        width: 350px;
+        width: 370px;
         font-family: 'Source Sans Pro', sans-serif;
       }
 
@@ -81,6 +81,9 @@
       #title-and-image.no-image {
         display: block;
       }
+      #title-and-image.no-image #image {
+        display: none;
+      }
       #image {
         border-radius: 4px;
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.24);
@@ -105,9 +108,6 @@
       }
       #more:hover {
         background-color: rgba(8, 157, 227, 0.07);
-      }
-      #image {
-        width: 100%;
       }
       #description {
         box-sizing: border-box;
@@ -136,17 +136,23 @@
         background-color: #23d82f;
         border: solid 1px #23d82f;
       }
-      #success {
+      #success,
+      #error {
         display: none;
         border: solid 1px #089de3;
         padding: 10px;
       }
-      #posted {
+      #error {
+        border: solid 1px #f00f00;
+      }
+      #posted,
+      #error-title {
         font-size: 16px;
         margin-bottom: 5px;
         font-weight: bold;
       }
-      #view-it a {
+      #view-it a,
+      #sign-in-error a {
         color: #089de3;
         font-size: 16px;
         font-weight: 600;
@@ -172,7 +178,7 @@
               <div class="field-title">Recipe Name</div>
               <input type="text" id="title" class="field">
             </div>
-            <img id="image" src="http://res.cloudinary.com/dormh2fvt/image/upload/v1557809347/ciw4w17mzxsf34tywmuv.jpg">
+            <img id="image" src="https://res.cloudinary.com/dormh2fvt/image/upload/v1527317481/placeholder_rjy55k.jpg">
           </div>
 
           <div class="field-title">URL</div>
@@ -196,6 +202,11 @@
       <div id="success">
         <div id="posted">Recipe Posted!</div>
         <div id="view-it"><a href="https://www.recipesaver.net/recipes" target="_blank">View it in your collection</a></div>
+      </div>
+
+      <div id="error">
+        <div id="error-title">Unlinked Account</div>
+        <div id="sign-in-error">Please sign into your account at <a href="https://www.recipesaver.net/recipes" target="_blank">RecipeSaver.me</a> first!</div>
       </div>
 
     </div>
