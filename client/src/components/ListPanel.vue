@@ -494,6 +494,8 @@ export default {
             max-height: 178px;
             position: relative;
             top: -2px;
+            word-wrap: break-word;
+            word-break: break-all;
           }
 
           .recipe-entry-right {

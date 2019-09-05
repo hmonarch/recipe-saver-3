@@ -1,10 +1,10 @@
 <template>
   <div id="side-nav" :class="{ 'open': mobileMenuOpen === true }">
 
-    <div class="side-nav-logo">
+    <router-link :to="{ path: '/' }" class="side-nav-logo">
       <img src="../assets/logo-37x37.png">
       <div class="side-nav-logo-text">Recipe Saver</div>
-    </div>
+    </router-link>
 
     <div id="add-recipe" class="btn" @click="addNewRecipe()">New Recipe</div>
 
@@ -153,6 +153,8 @@ export default {
   .side-nav-logo {
     display: flex;
     align-items: center;
+    text-decoration: none;
+    color: #fff;
 
     .side-nav-logo-text {
       margin-left: 12px;

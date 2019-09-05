@@ -141,6 +141,7 @@ export default {
   }
 
   #account-container {
+    border-radius: 4px;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 3px 0px;
     margin: 50px auto 0 auto;
