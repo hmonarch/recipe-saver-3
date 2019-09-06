@@ -7,25 +7,50 @@
         <h2>Sign up for the full service or upgrade later.</h2>
       </div>
       <div class="plan-blocks">
-        <div class="plan">
-          <div class="plan-title-and-icon">
-            <img class="plan-title-icon" src="../assets/icon-emerald.png">
-            <div class="plan-title">Lite </div>
-          </div>
-          <div class="plan-info">
-            <div class="plan-subtitle">
-              The best way to save and organize online recipes
+
+        <div class="plan-container">
+          <div class="plan lite">
+            <div class="plan-title-and-icon">
+              <img class="plan-title-icon" src="../assets/icon-emerald.png">
+              <div class="plan-title">Lite</div>
             </div>
-            <div class="plan-price">$9</div>
-            <div class="plan-price-info">per month</div>
-            <ul class="plan-benefits">
-              <li>Save up to 50 recipes</li>
-              <li>Recipe Saver Chrome extension</li>
-              <li>Add custom notes and images</li>
-              <li>Create personalized tags</li>
-            </ul>
-          </div><a class="plan-cta" href="#">Select</a>
+            <div class="plan-info">
+              <div class="plan-subtitle">
+                The best way to save and organize online recipes
+              </div>
+              <div class="plan-price">Free</div>
+              <div class="plan-price-info">upgrade later</div>
+              <ul class="plan-benefits">
+                <li>Save up to 50 recipes</li>
+                <li>Recipe Saver Chrome extension</li>
+                <li>Add custom notes, images, and tags</li>
+              </ul>
+            </div><a class="plan-cta" href="#">Select</a>
+          </div>
         </div>
+
+        <div class="plan-container">
+          <div class="plan full">
+            <div class="plan-title-and-icon">
+              <img class="plan-title-icon" src="../assets/icon-ruby.png">
+              <div class="plan-title">Full</div>
+            </div>
+            <div class="plan-info">
+              <div class="plan-subtitle">
+                The ultimate recipe organization tool and more
+              </div>
+              <div class="plan-price">$9</div>
+              <div class="plan-price-info">per month</div>
+              <ul class="plan-benefits">
+                <li>All the benefits of the Lite plan</li>
+                <li>Save unlimited recipes</li>
+                <li>Share recipes with friends and family</li>
+                <li>Create grocery lists (coming soon!)</li>
+              </ul>
+            </div><a class="plan-cta" href="#">Select</a>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -109,33 +134,54 @@ export default {
     }
 
     .plan-blocks {
-      .plan {
-        width: 50%;
-        background-color: #fff;
-        border-radius: 4px;
-        box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
 
-        .plan-title-and-icon {
-          padding: 24px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-bottom: solid 1px #e6ebf1;
+      .plan-container {
+        margin: 0 30px;
 
-          .plan-title-icon {
-            width: 34px;
-            height: 40px;
-            margin-right: 14px;
+        .plan {
+          background-color: #fff;
+          border-radius: 4px;
+          box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
+
+          &.full {
+            .plan-title-and-icon {
+              .plan-title-icon {
+                width: 40px;
+                height: 40px;
+                transform: rotate(45deg);
+              }
+            }
+            .plan-info {
+              .plan-price {
+                font-size: 62px;
+              }
+            }
           }
 
-          .plan-title {
-            text-transform: uppercase;
-            font-weight: bold;
-            color: #24b47e;
-            font-size: 20px;
-            letter-spacing: 0.3px;
+          .plan-title-and-icon {
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: solid 1px #e6ebf1;
+
+            .plan-title-icon {
+              width: 34px;
+              height: 40px;
+              margin-right: 14px;
+            }
+
+            .plan-title {
+              text-transform: uppercase;
+              font-weight: bold;
+              color: #24b47e;
+              font-size: 20px;
+              letter-spacing: 0.3px;
+            }
           }
-        }
 
         .plan-info {
           padding: 40px;
@@ -148,9 +194,10 @@ export default {
           }
 
           .plan-price {
-            font-size: 62px;
+            font-size: 40px;
             color: #24b47e;
             margin-bottom: 10px;
+            text-transform: uppercase;
           }
 
           .plan-price-info {
@@ -185,31 +232,32 @@ export default {
           }
         }
 
-        .plan-cta {
-          padding: 25px;
-          text-align: center;
-          display: block;
-          background-color: #3ecf8e;
-          font-size: 23px;
-          color: #fff;
-          text-decoration: none;
-          border-radius: 0 0 4px 4px;
-          transition: all .25s ease;
+          .plan-cta {
+            padding: 25px;
+            text-align: center;
+            display: block;
+            background-color: #3ecf8e;
+            font-size: 23px;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 0 0 4px 4px;
+            transition: all .25s ease;
 
-          &::after {
-            content: '';
-            background-image: url(../assets/arrow-long.png);
-            display: inline-block;
-            height: 20px;
-            width: 28px;
-            background-repeat: no-repeat;
-            position: relative;
-            top: 9px;
-            margin-left: 10px;
-          }
+            &::after {
+              content: '';
+              background-image: url(../assets/arrow-long.png);
+              display: inline-block;
+              height: 20px;
+              width: 28px;
+              background-repeat: no-repeat;
+              position: relative;
+              top: 9px;
+              margin-left: 10px;
+            }
 
-          &:hover {
-            filter: hue-rotate(120deg);
+            &:hover {
+              filter: hue-rotate(120deg);
+            }
           }
         }
       }

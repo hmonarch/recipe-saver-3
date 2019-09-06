@@ -82,9 +82,8 @@
             </div>
             <ul class="plan-benefits">
               <li>Save up to 50 recipes</li>
-              <li>Add custom notes and images</li>
+              <li>Add custom notes, images, and tags</li>
               <li>Recipe Saver Chrome extension</li>
-              <li>Create personalized tags</li>
             </ul>
           </div>
           <div class="plan-right">
@@ -113,9 +112,9 @@
             </ul>
           </div>
           <div class="plan-right">
-            <div class="plan-cost">$5</div>
+            <div class="plan-cost">$9</div>
             <div class="plan-cost-details">
-              One time charge (not annual)
+              Per month (cancel anytime)
             </div>
             <a class="plan-cta" href="#">
               <span class="plan-cta-text">Get full plan</span>
