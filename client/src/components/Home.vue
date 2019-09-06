@@ -1,34 +1,7 @@
 <template>
   <div class="home">
 
-    <header>
-      <router-link :to="{ path: '/' }" class="header-logo logo">
-        <img class="logo-image" src="../assets/logo-255x255.png">
-        <span class="logo-text">Recipe Saver</span>
-      </router-link>
-
-      <div class="burger-menu" @click="openMenu()">
-        <Icon name="burger"/>
-      </div>
-
-      <nav :class=" { 'open': menuOpen }">
-        <div class="nav-close" @click="closeMenu()">
-          <Icon name="close"/>
-        </div>
-        <div class="nav-item">
-          <router-link :to="{ path: '/recipes' }">My Recipes</router-link>
-        </div>
-        <div class="nav-item">
-          <a href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a>
-        </div>
-        <div class="nav-item">
-          <router-link :to="{ path: '/account' }">Account</router-link>
-        </div>
-        <div class="nav-item">
-          <router-link :to="{ path: '/login' }">Login / Register</router-link>
-        </div>
-      </nav>
-    </header>
+    <HeaderNonApp></HeaderNonApp>
 
     <div class="wrapper title-wrapper">
       <div class="center-logo logo">
@@ -160,99 +133,32 @@
 
     <div class="footer-bar"></div>
 
-    <footer>
-      <div id="footer-inner">
-        <div id="footer-left">
-          <a id="footer-logo" href="/">
-            <img src="../assets/logo-255x255.png">
-            <span class="logo-text">Recipe Saver</span>
-            <div class="tagline">Any recipe, anywhere</div>
-          </a>
-
-          <div id="footer-social">
-            <div id="footer-social-heading">FOLLOW US</div>
-            <div id="footer-social-icons">
-              <a class="footer-social-icon" href="https://www.facebook.com/Recipe-Saver-1832559400339822" target="_blank">
-                <img src="../assets/icon-facebook.jpg">
-                <span class="footer-social-label">Facebook</span>
-              </a>
-              <a class="footer-social-icon" href="https://twitter.com/recipesaver" target="_blank">
-                <img src="../assets/icon-twitter.jpg">
-                <span class="footer-social-label">Twitter</span>
-              </a>
-            </div>
-          </div>
-
-        </div>
-        <div id="footer-right">
-          <div id="footer-right-cta-title">Finally organize your recipes once and and for all!</div>
-          <router-link id="footer-right-cta-button" :to="{ path: '/login' }">Sign Up Free</router-link>
-
-          <div id="footer-links-section">
-            <ul class="footer-links">
-              <li><router-link :to="{ path: '/recipes' }">My Recipes</router-link></li>
-              <li><a href="https://chrome.google.com/webstore/detail/recipe-saver/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a></li>
-            </ul>
-            <ul class="footer-links">
-              <li><router-link :to="{ path: '/account' }">Account</router-link></li>
-              <li><router-link :to="{ path: '/login' }">Login / Register</router-link></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div id="copyright">
-        <div id="copyright-inner">
-          <div id="all-rights-reserved">Let Recipe Saver be your saviour</div>
-          <div id="recipesaver">© 2019 Recipe Saver</div>
-        </div>
-      </div>
-    </footer>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import Icon from '@/components/Icons';
+import HeaderNonApp from '@/components/HeaderNonApp';
 import SitePreviewBox from '@/components/SitePreviewBox.vue';
+import Footer from '@/components/Footer.vue';
 
 export default {
   name: 'home',
   components: {
-    HelloWorld,
     Icon,
-    SitePreviewBox
-  },
-  data() {
-    return {
-      menuOpen: false
-    };
+    HeaderNonApp,
+    SitePreviewBox,
+    Footer
   },
   methods: {
-    openMenu() {
-      this.menuOpen = true;
-    },
-    closeMenu() {
-      this.menuOpen = false;
-    },
     scrollToPlans() {
       console.log('scrolling', document.querySelector('.plans'));
       document.querySelector('.plans').scrollIntoView({
         behavior: 'smooth'
       });
     }
-  },
-  created() {
-    document.addEventListener('click', e => {
-      // Main Menu
-      const isBurgerIcon = e.target.closest('.burger-menu') || e.target.matches('.burger-menu');
-      if (isBurgerIcon) return;
-
-      const isChildOfNav = e.target.closest('nav') || e.target.matches('nav');
-      if (!isChildOfNav) {
-        this.menuOpen = false;
-      }
-    });
   },
   beforeCreate() {
     document.body.className = 'home';
@@ -264,75 +170,6 @@ export default {
 .home {
   color: #000;
   font-family: 'Raleway', Arial;
-
-  .logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .logo-text {
-      font-family: 'Merriweather', serif;
-    }
-  }
-
-  header {
-    position: relative;
-    padding: 14px;
-    background: linear-gradient(45deg, #565cc3 0%, #00b2e1 100%);
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 1px 3px 0px;
-    overflow: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .header-logo {
-      width: 202px;
-      text-decoration: none;
-
-      .logo-image {
-        width: 34px;
-      }
-
-      .logo-text {
-        font-size: 22px;
-        font-weight: bold;
-        margin-left: 8px;
-        color: #fff;
-        letter-spacing: 0.3px;
-      }
-    }
-
-    .burger-menu {
-      display: none;
-    }
-
-    nav {
-      display: flex;
-      justify-content: space-around;
-
-      .nav-close {
-        display: none;
-      }
-
-      .nav-item {
-        padding: 0 11px;
-
-        a {
-          color: #ffeaea;
-          text-decoration: none;
-          font-size: 16px;
-          text-rendering: optimizelegibility;
-          -webkit-font-smoothing: antialiased;
-          transition: 280ms;
-          font-weight: 500;
-
-          &:hover {
-            color: #000;
-          }
-        }
-      }
-    }
-  }
 
   .hero,
   .white-boxes,
@@ -952,158 +789,6 @@ export default {
     margin-top: 80px;
     background-size: cover;
     background-image: url(../assets/ingredients-cover.png);  height: 166px;
-  }
-
-  footer {
-    background-color: #444444;
-    color: white;
-
-    #footer-inner,
-    #copyright-inner {
-      max-width: 1040px;
-    }
-
-    #footer-inner {
-      margin: 0 auto;
-      padding: 32px 20px;
-      overflow: auto;
-    }
-
-    #footer-left {
-      width: 362px;
-      float: left;
-      margin-top: 13px;
-      text-align: left;
-
-      #footer-logo {
-        width: 215px;
-        float: left;
-        margin-bottom: 77px;
-        color: white;
-
-        img {
-          float: left;
-          width: 37px;
-        }
-
-        .logo-text {
-          float: right;
-          margin-top: 6px;
-          margin-left: 8px;
-          font-size: 25px;
-          letter-spacing: 1px;
-          display: inline-block;
-          font-family: 'Merriweather', serif;
-          margin-bottom: 8px;
-        }
-
-        .tagline {
-          display: inline-block;
-          float: right;
-          clear: both;
-          font-weight: inherit;
-          position: relative;
-          left: -8px;
-        }
-      }
-
-      #footer-social {
-        clear: both;
-
-        #footer-social-heading {
-          font-size: 18px;
-          margin-bottom: 12px;
-        }
-
-        .footer-social-icon {
-          color: white;
-          text-decoration: none;
-
-          &:hover {
-            color: #23d82f;
-          }
-
-          img {
-            vertical-align: middle;
-          }
-
-          .footer-social-label {
-            margin-right: 20px;
-            display: inline-block;
-            margin-left: 8px;
-          }
-        }
-
-      }
-    }
-
-    #footer-right {
-      float: right;
-
-      #footer-right-cta-title {
-        font-size: 18px;
-        margin-top: 12px;
-      }
-
-      #footer-right-cta-button,
-      .footer-links a {
-        transition: 280ms;
-      }
-
-      #footer-right-cta-button {
-        text-decoration: none;
-        color: white;
-        border: solid 1px #23d82f;
-        display: inline-block;
-        margin-top: 12px;
-        padding: 10px;
-
-        &:hover {
-          background-color: #23d82f;
-          color: #444444;
-        }
-      }
-
-      #footer-links-section {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 62px;
-
-        .footer-links {
-          li {
-            margin-bottom: 16px;
-          }
-
-          a {
-            color: white;
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 15px;
-
-            &:hover {
-              color: #23d82f;
-            }
-          }
-        }
-      }
-    }
-
-
-    #copyright {
-      clear: both;
-      background-color: #26282e;
-      color: white;
-
-      #copyright-inner {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: 42px;
-        margin: 0 auto;
-        font-size: 15px;
-      }
-    }
-    
   }
 }
 

@@ -1,7 +1,8 @@
 <template>
   <div id="plans">
-    <div class="hero"></div>
     <div class="plans-container wrapper">
+      <HeaderNonApp></HeaderNonApp>
+
       <div class="plans-container-title">
         <h1>Plans built for home cooks of all types.</h1>
         <h2>Sign up for the full service or upgrade later.</h2>
@@ -16,7 +17,7 @@
             </div>
             <div class="plan-info">
               <div class="plan-subtitle">
-                The best way to save and organize online recipes
+                Save and organize online recipes
               </div>
               <div class="plan-price">Free</div>
               <div class="plan-price-info">upgrade later</div>
@@ -37,7 +38,7 @@
             </div>
             <div class="plan-info">
               <div class="plan-subtitle">
-                The ultimate recipe organization tool and more
+                The ultimate recipe <br>organization tool and more
               </div>
               <div class="plan-price">$9</div>
               <div class="plan-price-info">per month</div>
@@ -53,19 +54,23 @@
 
       </div>
     </div>
+
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Header from '@/components/Header.vue';
+import HeaderNonApp from '@/components/HeaderNonApp.vue';
 import Icon from '@/components/Icons';
 import utils from '@/mixins/utils';
+import Footer from '@/components/Footer.vue';
 
 
 export default {
   components: {
-    Header,
+    HeaderNonApp,
     Icon,
+    Footer
   },
   mixins: [utils],
   data() {
@@ -87,39 +92,31 @@ export default {
 
 <style lang="scss">
 #plans {
+  background-image: url(../assets/bg-guacamole.jpg);
+  background-size: cover;
+
+  header.non-app {
+    background: transparent;
+    box-shadow: none;
+
+    nav .nav-item a:hover {
+      color: #3ecf8e;
+    }
+  }
 
   .wrapper {
     max-width: 1040px;
     margin: 0 auto;
   }
 
-  .hero {
-    background-image: url(../assets/bg-guacamole.jpg);
-    height: 600px;
-    padding-top: 500px;
-    background-size: cover;
-
-    &::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      top: 600px;
-      height: 2000px;
-      background: #f6f9fc;
-      -webkit-transform: skew(0,-12deg);
-      transform: skew(0,-12deg);
-    }
-  }
-
   .plans-container {
     position: relative;
-    top: -1100px;
+    margin: 0 auto 200px auto;
 
     .plans-container-title {
       margin-top: 100px;
       margin-bottom: 66px;
-      text-shadow: 2px 2px 3px #393939;
+      text-shadow: 2px 2px 3px #515151;
       
       h1 {
         color: #fff;
@@ -144,19 +141,38 @@ export default {
         .plan {
           background-color: #fff;
           border-radius: 4px;
-          box-shadow: 0 15px 35px rgba(50,50,93,.1), 0 5px 15px rgba(0,0,0,.07);
+          box-shadow: 0 15px 35px rgba(50,50,93,.1), 5px 5px 15px rgba(0,0,0,.07);
+          transition: all .25s ease;
 
           &.full {
+            box-shadow: 0 0 12px 5px rgba(216, 27, 96, 0.6);
+
+            &:hover {
+              box-shadow: 0 0 12px 5px rgba(36, 180, 126, 0.7490196078431373)
+            }
+
             .plan-title-and-icon {
               .plan-title-icon {
-                width: 40px;
-                height: 40px;
+                width: 20px;
+                height: 20px;
                 transform: rotate(45deg);
+                position: relative;
+                top: -3px;
               }
             }
+
             .plan-info {
               .plan-price {
                 font-size: 62px;
+                color: #24b47e;
+              }
+            }
+
+            .plan-cta {
+              background-color: #fe4081;
+
+              &:hover {
+                background-color: #24b47e;
               }
             }
           }
@@ -169,15 +185,15 @@ export default {
             border-bottom: solid 1px #e6ebf1;
 
             .plan-title-icon {
-              width: 34px;
-              height: 40px;
+              width: 17px;
+              height: 20px;
               margin-right: 14px;
             }
 
             .plan-title {
               text-transform: uppercase;
               font-weight: bold;
-              color: #24b47e;
+              color: #4db6ac;
               font-size: 20px;
               letter-spacing: 0.3px;
             }
@@ -195,7 +211,7 @@ export default {
 
           .plan-price {
             font-size: 40px;
-            color: #24b47e;
+            color: #9eb0ae;
             margin-bottom: 10px;
             text-transform: uppercase;
           }
@@ -213,7 +229,7 @@ export default {
 
             li {
               margin-bottom: 16px;
-              font-size: 18px;
+              font-size: 17px;
               line-height: 22px;
               position: relative;
 
@@ -236,7 +252,7 @@ export default {
             padding: 25px;
             text-align: center;
             display: block;
-            background-color: #3ecf8e;
+            background-color: #9eb0ae;
             font-size: 23px;
             color: #fff;
             text-decoration: none;
@@ -256,8 +272,46 @@ export default {
             }
 
             &:hover {
-              filter: hue-rotate(120deg);
+              background-color: #000;
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 788px) {
+  #plans {
+    background-size: initial;
+
+    .plans-container {
+      margin-bottom: 100px;
+
+      .plans-container-title {
+        padding: 0 20px;
+        margin-top: 70px;
+
+        h1 {
+          font-size: 38px;
+        }
+
+        h2 {
+          font-size: 26px;
+        }
+      }
+
+      .plan-blocks {
+        grid-template-columns: 1fr;
+
+        .plan-container {
+          &:first-child {
+            order: 2;
+          }
+
+          &:last-child {
+            order: 1;
+            margin-bottom: 60px;
           }
         }
       }
