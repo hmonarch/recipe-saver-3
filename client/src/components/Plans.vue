@@ -81,7 +81,47 @@ export default {
   methods: {
 
   },
-  created() {
+  mounted() {
+    // Test CC #: 4242424242424242
+
+		const handler = StripeCheckout.configure({
+			key: 'pk_test_KmQZh5RXWtu0bnCzyOoFBn5A',
+			// key: 'pk_live_ladU88gOOTUS87vjvXepHlUY',
+			image: 'images/stripe-logo.png',
+			locale: 'auto',
+			token: function(token) {
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'https://localhost:8081/api/charge', true);
+        xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8',);
+        xhr.onreadystatechange = () => {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            console.log('YAY', xhr.responseText);
+          } else if (xhr.readyState === 4 && xhr.status === 401) {
+            console.log('ERROR - Not signed in');
+          } else if (xhr.readyState === 4) {
+            console.log('ERROR - Some other error');
+          }
+        }
+        xhr.send(JSON.stringify({
+          stripeToken: token.id,
+          stripeEmail: token.email
+        }));
+			}
+		});
+
+    document.querySelector('.plan.full .plan-cta').addEventListener('click', e => {
+      e.preventDefault();
+			var email = sessionStorage.rs_email ? sessionStorage.rs_email : '';
+			handler.open({
+				name: 'Recipe Saver',
+				email: email,
+				description: 'Full Plan',
+				amount: 499,
+				allowRememberMe: false,
+			});
+			delete sessionStorage.rs_email;
+    });
 
   },
   beforeCreate() {

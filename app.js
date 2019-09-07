@@ -301,6 +301,11 @@ app.get(['/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) 
   res.sendFile(`${__dirname}/client/dist/app.html`);
 });
 
+// Testing /charge
+app.post('/api/charge', (req, res) => {
+  console.log('/charge');
+  res.sendStatus(200);
+});
 
 
 // Listen on port 8081
