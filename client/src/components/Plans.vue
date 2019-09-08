@@ -83,13 +83,12 @@ export default {
   },
   mounted() {
     // Test CC #: 4242424242424242
-
 		const handler = StripeCheckout.configure({
 			key: 'pk_test_KmQZh5RXWtu0bnCzyOoFBn5A',
 			// key: 'pk_live_ladU88gOOTUS87vjvXepHlUY',
 			image: 'images/stripe-logo.png',
 			locale: 'auto',
-			token: function(token) {
+			token(token) {
         
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'https://localhost:8081/api/charge', true);

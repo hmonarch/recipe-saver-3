@@ -67,7 +67,7 @@ app.use(express.static(`${__dirname}/client/dist`));
 app.use(bodyParser.json({ limit: '5mb' }));
 app.use(session({
   secret: 'cj-the-cat',
-  cookie: {},
+  cookie: { maxAge: 31556952000, secure: false },
   resave: false,
   saveUninitialized: true,
   store: new MongoStore(mongoStoreOptions)
@@ -301,11 +301,6 @@ app.get(['/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) 
   res.sendFile(`${__dirname}/client/dist/app.html`);
 });
 
-// Testing /charge
-app.post('/api/charge', (req, res) => {
-  console.log('/charge');
-  res.sendStatus(200);
-});
 
 
 // Listen on port 8081

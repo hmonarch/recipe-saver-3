@@ -121,6 +121,8 @@ module.exports = function(app) {
   app.post('/api/tag-color', loggedIn, (req, res) => {
     const { tagToUpdate, newColor } = req.body;
 
+    console.log(req.session)
+
     Recipe.find({user_id: req.session.passport.user._id, 'tags.name': tagToUpdate}, (err, recipes) => {
 
       saveRecipes(recipes);
