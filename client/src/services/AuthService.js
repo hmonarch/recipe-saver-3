@@ -12,5 +12,8 @@ export default {
   },
   getUserData() {
     return Api().get('/user-data');
+  },
+  charge(data) {
+    return Api().post('/charge', data);
   }
 }

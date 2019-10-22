@@ -10,6 +10,7 @@ const UserSchema = new Schema({
 	googleId: String,
 	subscription: String,
 	profileImage: String,
+	stripeSubId: String,
   creationDate: {type: Date, default: Date.now},
   lastLogin: {type: Date, default: Date.now},
   resetPasswordToken: String,

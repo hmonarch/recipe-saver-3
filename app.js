@@ -19,6 +19,12 @@ const mongoose = require('mongoose');
 const uriUtil = require('mongodb-uri');
 const MongoStore = require('connect-mongo')(session);
 
+// Stripe
+const stripeSK = process.env.PORT ? process.env.STRIPE_LIVE_SK : fs.readFileSync(`${__dirname}/private/stripe_test_secret_key.txt`).toString();
+const stripe = require('stripe')(stripeSK);
+
+
+
 // Middleware
 const loggedIn = require('./middleware/loggedIn');
 
@@ -283,6 +289,9 @@ app.get('/test', (req, res) => {
 
 // Initialize API router
 require('./routes/api-routes')(app);
+
+// Payment charge router
+require('./routes/charge')(app, stripe);
 
 // Sharing route
 require('./routes/sharing')(app);
