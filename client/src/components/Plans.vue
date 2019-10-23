@@ -26,7 +26,7 @@
                 <li>Recipe Saver Chrome extension</li>
                 <li>Add custom notes, images, and tags</li>
               </ul>
-            </div><a class="plan-cta" href="#">Select</a>
+            </div><a class="plan-cta" href="#" @click.prevent="showLitePlan()">Select</a>
           </div>
         </div>
 
@@ -56,6 +56,25 @@
     </div>
 
     <Footer></Footer>
+
+    <div v-show="showModal" class="charge-modal">
+      <div class="charge-modal-inner" :class="{ 'error': error, 'processing': processing === true, 'charge-modal-inner': true }">
+        <div class="rs-logo">
+          <img class="rs-logo-image" src="../assets/logo-255x255.svg">
+        </div>
+        <div class="charge-processing">Processing...</div>
+        <div class="charge-modal-title">{{ title }}</div>
+        <div class="charge-message">{{ message }}</div>
+        <router-link v-show="btnToShow === 'login'" :to="{ path: '/login' }" class="charge-modal-btn">Login / Register</router-link>
+        <router-link v-show="btnToShow === 'recipes'" :to="{ path: '/recipes/all' }" class="charge-modal-btn">My Recipes</router-link>
+        <div class="charge-modal-cancel-container" v-show="title !== ''">
+          <div class="charge-modal-cancel" @click="showModal = false">Cancel</div>
+        </div>
+      </div>
+
+      <div class="charge-overlay"></div>
+    </div>
+
   </div>
 </template>
 
@@ -76,59 +95,97 @@ export default {
   mixins: [utils],
   data() {
     return {
-
+      processing: false,
+      title: '',
+      message: '',
+      error: false,
+      showModal: false,
+      btnToShow: '',
     };
   },
   methods: {
+    resetModal() {
+      this.title = '';
+      this.message = '';
+      this.error = false;
+      this.btnToShow = '';
+    },
+    showLitePlan() {
+      this.resetModal();
+      this.showModal = true;
+      this.processing = true;
 
+      // Simulate loading just for effect
+      setTimeout(() => {
+        this.processing = false;
+        this.title = 'Welcome to Recipe Saver!';
+        this.message = 'Your account is all set up! Click "My Recipes" below to access your personal recipe collection.'
+        this.btnToShow = 'recipes';
+      }, 2000);
+    },
+    handleResponse(response) {
+
+      this.processing = false;
+      const noChargeText = 'Your card has not been charged.';
+
+      this.title = 'Unsuccessful Purchase';
+      this.error = true;
+      this.btnToShow = 'login';
+      
+      switch(response.data.message) {
+        case 'not logged in':
+          this.message = `Please login or register first. ${noChargeText}`;
+          break;
+        case 'no user found':
+          this.message = `User not found. Please login first. ${noChargeText}`;
+          break;
+        case 'has full plan':
+          this.message = `This account already has a Full Plan. ${noChargeText}`;
+          this.btnToShow = 'recipes';
+          break;
+        case 'new subscription':
+          this.title = 'You\'re In!';
+          this.message = 'Congratulations! You have successfully signed up for the Full plan and now have unlimited access';
+          this.btnToShow = 'recipes';
+          this.error = false;
+          break;
+      }
+
+      this.showModal = true;
+    }
   },
   mounted() {
+
+    const component = this;
 
     // Test CC #: 4242424242424242
 		const handler = StripeCheckout.configure({
 			key: 'pk_test_KmQZh5RXWtu0bnCzyOoFBn5A',
 			// key: 'pk_live_ladU88gOOTUS87vjvXepHlUY',
-			// image: 'images/stripe-logo.png',
+			image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1571800233/Site%20Images/logo-255x255-white-square.png',
 			locale: 'auto',
 			async token(token) {
+
+        component.processing = true;
+        component.showModal = true;
         
         const response = await AuthService.charge({
           stripeToken: token.id,
           stripeEmail: token.email
         });
 
-        console.log('response', response);
-
-        // const xhr = new XMLHttpRequest();
-        // xhr.open('POST', 'https://localhost:8081/api/charge', true);
-        // xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8',);
-        // xhr.onreadystatechange = () => {
-        //   if (xhr.readyState === 4 && xhr.status === 200) {
-        //     console.log('YAY', xhr.responseText);
-        //   } else if (xhr.readyState === 4 && xhr.status === 401) {
-        //     console.log('ERROR - Not signed in');
-        //   } else if (xhr.readyState === 4) {
-        //     console.log('ERROR - Some other error');
-        //   }
-        // }
-        // xhr.send(JSON.stringify({
-        //   stripeToken: token.id,
-        //   stripeEmail: token.email
-        // }));
+        component.handleResponse(response);
 			}
 		});
 
     document.querySelector('.plan.full .plan-cta').addEventListener('click', e => {
       e.preventDefault();
-			var email = sessionStorage.rs_email ? sessionStorage.rs_email : '';
 			handler.open({
 				name: 'Recipe Saver',
-				email: email,
 				description: 'Full Plan',
-				amount: 499,
+				amount: 900,
 				allowRememberMe: false,
 			});
-			delete sessionStorage.rs_email;
     });
 
   },
@@ -327,6 +384,129 @@ export default {
       }
     }
   }
+
+  .charge-modal {
+    .charge-modal-inner {
+      position: fixed;
+      width: 350px;
+      top: 50%;
+      transform: translateY(-50%);
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 20px;
+      z-index: 2;
+      background-color: white;
+      border-radius: 3px 3px 3px 3px;
+      border: 1px solid #B9BCC0;
+      box-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+      max-height: calc(100vh - 203px);
+      overflow-y: auto;
+      font-family: 'Source Sans Pro', sans-serif;
+      text-align: left;
+
+      &.error {
+        .charge-modal-title {
+          color: #dd0000;
+        }
+      }
+
+      &.processing {
+        background: none;
+        border: none;
+        box-shadow: none;
+
+        .rs-logo .rs-logo-image {
+          width: 120px;
+          margin-bottom: 12px;
+          animation-name: wiggle;
+          animation-duration: 2.5s;
+          animation-iteration-count: infinite;
+          animation-timing-function: ease-in-out;
+        }
+
+        .charge-processing {
+          display: block;
+        }
+      }
+
+      .rs-logo {
+        text-align: center;
+
+        .rs-logo-image {
+          width: 60px;
+          margin-bottom: 25px;
+        }
+      }
+
+      .charge-processing {
+        display: none;
+        text-align: center;
+        color: white;
+        font-size: 24px;
+        letter-spacing: 0.5px;
+      }
+
+      .charge-modal-title {
+        font-weight: bold;
+        font-size: 22px;
+        margin-bottom: 8px;
+      }      
+
+      .charge-message {
+        font-size: 16px;
+        margin-bottom: 30px;
+        line-height: 22px;
+      }
+
+      .charge-modal-btn {
+        display: block;
+        width: 100%;
+        text-decoration: none;
+        padding: 15px 0;
+        text-align: center;
+        border-radius: 4px;
+        background-color: #000;
+        color: #fff;
+        font-size: 18px;
+        border: solid 1px transparent;
+        transition: all .15s ease;
+
+        &:hover {
+          background-color: #fff;
+          border: solid 1px #000;
+          color: #000;
+        }
+      }
+
+      .charge-modal-cancel-container {
+        color: #606060;
+        text-align: center;
+        margin-top: 20px;
+
+        .charge-modal-cancel {
+          display: inline-block;
+          cursor: pointer;
+
+          &:hover {
+            color: #000;
+          }
+        }
+      }
+    }
+
+    .charge-overlay {
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+  }
 }
 
 @media (max-width: 788px) {
@@ -365,6 +545,14 @@ export default {
       }
     }
   }
+}
+
+@keyframes wiggle {
+  0% {transform: rotate(0deg);}
+  25% {transform: rotate(-25deg);}
+  50% {transform: rotate(25deg);}
+  75% {transform: rotate(-25deg);}
+  100% {transform: rotate(0deg);}
 }
 </style>
 

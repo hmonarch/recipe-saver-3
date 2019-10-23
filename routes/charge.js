@@ -1,18 +1,29 @@
 const User = require('../models/user');
+const loggedIn = require('../middleware/logged-in');
 
 module.exports = function(app, stripe) {
 
   // Test CC #: 4242424242424242
-  app.post('/api/charge', /*loggedIn,*/ (req, res) => {
+  app.post('/api/charge', (req, res) => {
     console.log('/charge');
+
+    if (!req.session.passport) {
+      return res.json({
+        message: 'not logged in'
+      });
+    }
     
     User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
 
-      if (!user) return console.log('Handle no user found');
+      if (!user) return res.json({
+        message: 'no user found'
+      });
 
       console.log('Subscription', user.subscription);
-      if (user.subscription === 'Full' || user.subscription === 'Full (Legacy)') {
-        return console.log('User already has a full plan');
+      if (/Full/.test(user.subscription)) {
+        return res.json({
+          message: 'has full plan'
+        });
       }
 
       // Create subscription
@@ -43,7 +54,9 @@ module.exports = function(app, stripe) {
               user.save((err) => {
                 if (err) throw err;
                 console.log(`Subscription created for ${req.session.passport.user._id}`);
-                res.sendStatus(200);
+                res.json({
+                  message: 'new subscription'
+                });
               });
             });
         });

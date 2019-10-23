@@ -26,7 +26,7 @@ const stripe = require('stripe')(stripeSK);
 
 
 // Middleware
-const loggedIn = require('./middleware/loggedIn');
+const loggedIn = require('./middleware/logged-in');
 
 // Global constants
 const GOOGLE_CLIENT_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/google_client_secret.txt`).toString();

@@ -4,6 +4,7 @@ const Recipe = require('../models/recipe');
 const User = require('../models/user');
 const cloudinary = require('cloudinary');
 const fs = require('fs');
+const loggedIn = require('../middleware/logged-in');
 
 // Config variables
 const user_id = process.env.PORT ? process.env.USER_ID : fs.readFileSync(`${__dirname}/../private/user_id.txt`).toString();
@@ -19,14 +20,6 @@ const cloudinaryOptionsProfile = Object.assign(cloudinaryOptionsRecipe, { tags: 
 
 
 module.exports = function(app) {
-
-  function loggedIn(req, res, next) {
-    if (req.session && req.session.passport && req.session.passport.user && req.session.passport.user._id) {
-      next();
-    } else {
-      res.sendStatus(401);
-    }
-  }
 
   // Extension posts
   app.post('/api/extension', (req, res) => {
@@ -314,7 +307,7 @@ module.exports = function(app) {
   });
 
 
-  app.get('/api/user-data', /*loggedIn,*/ (req, res) => {
+  app.get('/api/user-data', loggedIn, (req, res) => {
     User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
       if (err) console.error(err);
       res.json(user);
