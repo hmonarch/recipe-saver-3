@@ -3,6 +3,48 @@ const loggedIn = require('../middleware/logged-in');
 
 module.exports = function(app, stripe) {
 
+
+  app.get('/api/cancel-subscription', (req, res) => {
+    console.log('/cancel-subscription');
+
+    if (!req.session.passport) {
+      return res.json({
+        message: 'not logged in'
+      });
+    }
+
+    User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
+      if (!user) return res.json({
+        message: 'no user found'
+      });
+
+      const stripeSubId = user.stripeSubId;
+      if (!stripeSubId) return res.json({
+        message: 'no sub id'
+      });
+
+      // Cancel subscription
+      stripe.subscriptions.del(
+        user.stripeSubId,
+        (err, confirmation) => {
+
+          console.log('confirmation', confirmation);
+
+          user.stripeSubId = null;
+          user.subscription = 'Basic';
+          user.save(err => {
+            if (err) throw err;
+            console.log(`Subscription cancelled for ${user._id}`);
+            return res.json({
+              message: 'successful cancellation'
+            });
+          });
+        }
+      );
+    });
+
+  });
+
   // Test CC #: 4242424242424242
   app.post('/api/charge', (req, res) => {
     console.log('/charge');

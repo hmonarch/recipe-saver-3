@@ -290,8 +290,8 @@ app.get('/test', (req, res) => {
 // Initialize API router
 require('./routes/api-routes')(app);
 
-// Payment charge router
-require('./routes/charge')(app, stripe);
+// Stripe API routes
+require('./routes/stripe-api')(app, stripe);
 
 // Sharing route
 require('./routes/sharing')(app);

@@ -31,8 +31,10 @@
         </ul>
       </div>
 
-      <div class="upgrade-account">
-        <a href="#">Upgrade</a>
+      <div class="upgrade-downgrade-account">
+        <!-- Show the cancel option for Full monthly customers only -->
+        <a href="#" v-if="user.subscription === 'Full (9/monthly)'" @click.prevent="cancelSubscription()">Cancel Subscription</a>
+        <router-link href="#" v-if="user.subscription === 'Basic'" :to="{ path: '/plans' }">Upgrade To Full Plan</router-link>
       </div>
       <div class="delete-account">
         <a href="#">Delete Account</a>
@@ -46,6 +48,7 @@ import Header from '@/components/Header.vue';
 import EventBus from '@/EventBus';
 import AuthService from '@/services/AuthService';
 import MiscService from '@/services/MiscService';
+import StripeService from '@/services/StripeService';
 import Icon from '@/components/Icons';
 import utils from '@/mixins/utils';
 import SideNav from '@/components/SideNav.vue';
@@ -83,7 +86,7 @@ export default {
     },
     async getUserData() {
       const response = await AuthService.getUserData();
-      console.log('response', response);
+      console.log('response', response.data);
       this.user = response.data;
     },
     async handleImage(e) {
@@ -104,6 +107,11 @@ export default {
       console.log(response);
       document.querySelector('#profile-image').setAttribute('src', response.data.profileImage);
       this.imageIsSaving = false;
+    },
+    async cancelSubscription() {
+      console.log('cancelSubscription');
+      const response = await StripeService.cancelSubscription();
+      console.log('cancel sub res', response);
     }
   },
   created() {
@@ -236,7 +244,7 @@ export default {
       }
     }
 
-    .upgrade-account,
+    .upgrade-downgrade-account,
     .delete-account {
       align-self: end;
       text-decoration: underline;
@@ -248,7 +256,7 @@ export default {
     }
 
 
-    .upgrade-account {
+    .upgrade-downgrade-account {
       text-align: left;
 
       a {

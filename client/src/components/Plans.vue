@@ -83,7 +83,7 @@ import HeaderNonApp from '@/components/HeaderNonApp.vue';
 import Icon from '@/components/Icons';
 import utils from '@/mixins/utils';
 import Footer from '@/components/Footer.vue';
-import AuthService from '@/services/AuthService';
+import StripeService from '@/services/StripeService';
 
 
 export default {
@@ -169,7 +169,7 @@ export default {
         component.processing = true;
         component.showModal = true;
         
-        const response = await AuthService.charge({
+        const response = await StripeService.charge({
           stripeToken: token.id,
           stripeEmail: token.email
         });
