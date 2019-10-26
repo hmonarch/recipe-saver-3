@@ -544,6 +544,11 @@ export default {
         }
       }
     }
+
+    .charge-modal .charge-modal-inner {
+      width: 90%;
+      box-sizing: border-box;
+    }
   }
 }
 
