@@ -2,7 +2,7 @@
   <div id="share">
     <div id="share-container">
 
-      <div class="actions">
+      <div v-if="recipe._id" class="actions">
         <div v-if="!importedRecipeID" @click="addToMyRecipes()" class="add">Add To My Recipes</div>
         <div v-else class="added-block">
           <icon name="checkCircle"/>
@@ -56,6 +56,15 @@ export default {
       const recipeID = encodeURIComponent(this.$route.params.recipe);
       const response = await RecipeService.retrieveSharedRecipe(recipeID);
       this.recipe = response.data;
+
+      console.log(response);
+      if (!response.data) {
+        console.log('No recipe');
+        this.recipe = {
+          title: 'Recipe Not Found',
+          description: 'The recipe you requested may have been deleted by it\'s owner.'
+        }
+      }
     },
     getRecipeImage() {
       return this.recipe.image;

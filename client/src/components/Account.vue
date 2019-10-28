@@ -51,7 +51,8 @@
         <div class="account-modal-title">{{ title }}</div>
         <div class="account-message">{{ message }}</div>
         <div v-show="!processing" class="account-modal-ctas">
-          <div class="account-modal-close" @click="showModal = false">Close</div>
+          <div class="account-delete-confirm-btn account-modal-cta" v-show="isConfirmDelete" @click="deleteAccountFinal()">Delete Account</div>
+          <div class="account-modal-cta account-modal-close" @click="showModal = false">Close</div>
         </div>
       </div>
 
@@ -171,7 +172,29 @@ export default {
       this.isConfirmDelete = true;
       this.showModal = true;
       this.title = 'WARNING! Are You Sure?';
-      this.message = ' Your entire account and all your recipes will be permanently deleted. If you\'re a Full plan member your subscription will be canceled as well. Do you still wish to proceed?'
+      this.message = ' Your entire account along with all your recipes will be permanently deleted. If you\'re a Full plan member your subscription will be canceled as well. Do you still wish to proceed?'
+    },
+    async deleteAccountFinal() {
+      this.resetModal();
+
+      this.processing = true;
+      const response = await StripeService.deleteAccount();
+      const message = response.data.message;
+      this.processing = false;
+
+      if (message === 'not logged in') {
+        this.error = true;
+        this.title = 'Something Went Wrong';
+        this.message = 'Please try logging in again first.';
+      }
+
+      if (message === 'account deleted') {
+        this.error = true;
+        this.title = 'Account Deleted';
+        this.message = 'Your account (and subscription if you had one) has been deleted.';
+      }
+
+      this.showModal = true;
     },
     resetModal() {
       this.error = false;
@@ -390,7 +413,7 @@ export default {
           color: #f00;
         }
 
-        .account-modal-close {
+        .account-delete-confirm-btn {
           background-color: #f00;
 
           &:hover {
@@ -399,6 +422,14 @@ export default {
             color: #f00;;
           }
         }
+
+        .account-modal-close {
+          color: #000;
+          margin-top: 10px;
+          background-color: #fff;
+          padding: 5px;
+        }
+      
       }
 
       .rs-logo {
@@ -430,7 +461,7 @@ export default {
         line-height: 22px;
       }
 
-      .account-modal-close {
+      .account-modal-cta {
         cursor: pointer;
         display: block;
         width: 100%;

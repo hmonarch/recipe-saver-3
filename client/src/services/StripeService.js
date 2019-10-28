@@ -6,5 +6,8 @@ export default {
   },
   cancelSubscription() {
     return Api().get('/cancel-subscription');
+  },
+  deleteAccount() {
+    return Api().get('/delete-account');
   }
 }

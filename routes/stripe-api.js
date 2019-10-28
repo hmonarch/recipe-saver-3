@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const Recipe = require('../models/recipe');
 const loggedIn = require('../middleware/logged-in');
 
 module.exports = function(app, stripe) {
@@ -116,6 +117,42 @@ module.exports = function(app, stripe) {
   app.get('/api/delete-account', (req, res) => {
     console.log('delete-account');
     
+    if (!req.session.passport) {
+      return res.json({
+        message: 'not logged in'
+      });
+    }
+
+  
+    Recipe.deleteMany({ user_id: req.session.passport.user._id }, (err, recipe) => {
+      if (err) throw err;
+      console.log(`All recipes deleted for ${req.session.passport.user._id}`);
+
+      User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
+
+        // If user has a paid subscription then cancel it first
+        if (user.subscription === 'Full (9/monthly)') {
+          stripe.subscriptions.del(user.stripeSubId, (err, confirmation) => {
+            console.log(`Subscription cancelled for ${req.session.passport.user._id}`, confirmation);
+            deleteUser();
+
+          });
+        } else deleteUser();
+
+        function deleteUser() {
+          User.deleteOne({ _id: req.session.passport.user._id }, (err, user) => {
+            if (err) throw err;
+            console.log(`${req.session.passport.user._id} deleted`);
+            req.session.destroy(() => {
+              return res.json({
+                message: 'account deleted'
+              });
+            });
+          });
+        }
+      });
+
+    });
   });
 
 }
