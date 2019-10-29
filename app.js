@@ -10,6 +10,7 @@ const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const LocalStrategy = require('passport-local').Strategy;
 const https = require('https');
 const bcrypt = require('bcrypt');
+const sendWelcomeEmail = require('./mailer/send-welcome-email.js');
 
 // User model
 const User = require('./models/user');
@@ -24,9 +25,6 @@ const stripeSK = process.env.PORT ? process.env.STRIPE_LIVE_SK : fs.readFileSync
 const stripe = require('stripe')(stripeSK);
 
 
-
-// Middleware
-const loggedIn = require('./middleware/logged-in');
 
 // Global constants
 const GOOGLE_CLIENT_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/google_client_secret.txt`).toString();
@@ -138,6 +136,7 @@ passport.use(new FacebookStrategy({
         newUser.save(function(err) {
           if (err) console.error(err);
           console.log('Facebook user saved');
+          sendWelcomeEmail(profile._json.email);
           return done(null, newUser);
         });
       });
@@ -203,6 +202,7 @@ passport.use(new GoogleStrategy({
         newUser.save(function(err) {
           if (err) console.error(err);
           console.log('Google user saved');
+          sendWelcomeEmail(profile._json.email);
           return done(null, newUser);
         });
       });
@@ -242,9 +242,15 @@ passport.use(new LocalStrategy(
 
     if (actionToTake === 'login') {
       User.findOne({ email }, (err, user) => {
-        if (err) return done(null, { errMessage: 'Something went wrong. Please try again.' });
-        if (!user) return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
-        if (!bcrypt.compareSync(password, user.password)) return done(null, { errMessage: 'Incorrect password. Please try again.' });
+        if (err) {
+          return done(null, { errMessage: 'Something went wrong. Please try again.' });
+        }
+        if (!user) {
+          return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
+        }
+        if (!bcrypt.compareSync(password, user.password)) {
+          return done(null, { errMessage: 'Incorrect password. Please try again.' });
+        }
         return done(null, user);
       });
     } else if (actionToTake === 'register') {
@@ -259,6 +265,7 @@ passport.use(new LocalStrategy(
         });
         newUser.save(function(err) {
           if (err) console.error(err);
+          sendWelcomeEmail(email);
           return done(null, newUser);
         });
       });
