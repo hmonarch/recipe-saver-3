@@ -46,6 +46,11 @@ export default new Router({
       path: '/plans',
       name: 'Plans',
       component: () => import('./components/Plans.vue')
+    },
+    {
+      path: '/password-recovery',
+      name: 'PasswordRecovery',
+      component: () => import('./components/PasswordRecovery.vue')
     }
   ]
 })

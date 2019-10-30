@@ -1,10 +1,14 @@
 <template>
-  <div id="login-register">
+  <div id="login-register" class="login-register-box">
 
     <div class="main-box">
       <div class="main-header">
-        <img class="logo" src="../assets/logo-255x255.png">
-        <div class="logo-text">Recipe Saver</div>
+        <router-link :to="{ path: '/' }" class="logo-link">
+          <img class="logo" src="../assets/logo-255x255.png">
+        </router-link>
+        <router-link :to="{ path: '/' }" class="logo-link">
+          <div class="logo-text">Recipe Saver</div>
+        </router-link>
       </div>
       <div class="main-body">
         
@@ -50,7 +54,12 @@
             <div v-if="!isLoginView" class="login-strategy password-confirm">
               <div class="icon-block"><icon name="password"/></div>
               <input id="password-confirm" class="login-input" type="password" placeholder="Confirm password" v-model="passwordConfirm" @focus="addHighlight($event)" @blur="removeHighlight($event)">
-            </div>
+            </div>  
+
+            <router-link v-if="isLoginView" :to="{ path: '/password-recovery' }" class="password-recovery" @click="passwordRecovery = true">
+              Password Recovery
+            </router-link>
+      
 
             <input type="submit" hidden>
           </form>
@@ -91,7 +100,7 @@ export default {
         'login-again': 'Please login again.',
         'already-registered': 'This account is already registered. Please login.',
         'fb-already-registered': 'This account is already registered. To register a new Facebook account please log into your account at Facebook and try again.'
-      }
+      },
     };
   },
   methods: {
@@ -186,42 +195,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import '@/styles/_login-register-box.scss';
 #login-register {
-  background: linear-gradient(45deg, #23d82f 0%,#00adff 100%);
-  height: 100%;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   .main-box {
-    box-sizing: border-box;
-    width: 350px;
-    border-radius: 6px;
-    box-shadow: 0 0 40px 4px rgba(17, 17, 24, 0.47);
-    text-align: center;
-    z-index: 1;
-    background-color: #fff;
-
-    .main-header {
-      background-color: rgba(223, 222, 222, 0.8);
-      border-radius: 6px 6px 0 0;
-      padding: 20px;
-
-      .logo {
-        width: 75px;
-        margin: 0 auto 12px auto;
-        border: solid 1px black;
-        border-radius: 50%;
-      }
-
-      .logo-text {
-        font-size: 21px;
-        font-weight: 600;
-        font-family: 'Merriweather', serif;
-      }
-    }
-
     .main-body {
       .mode-controller {
         display: flex;
@@ -237,6 +213,7 @@ export default {
           &.active {
             border-bottom: solid 1px #000;
             font-weight: bold;
+            background-color: #e5e5e5
           }
         }
       }
@@ -249,6 +226,7 @@ export default {
       .email-form {
         .login-register-label {
           margin-bottom: 10px;
+          font-weight: 600;
         }
 
         .login-strategy {
@@ -376,6 +354,13 @@ export default {
             padding-left: 10px;
             font-size: 15px;
           }
+        }
+
+        .password-recovery {
+          width: 129px;
+          display: block;
+          text-decoration: underline;
+          cursor: pointer;
         }
       }
 

@@ -136,7 +136,7 @@ passport.use(new FacebookStrategy({
         newUser.save(function(err) {
           if (err) console.error(err);
           console.log('Facebook user saved');
-          sendWelcomeEmail(profile._json.email);
+          if (profile._json.email) sendWelcomeEmail(profile._json.email);
           return done(null, newUser);
         });
       });
@@ -202,7 +202,7 @@ passport.use(new GoogleStrategy({
         newUser.save(function(err) {
           if (err) console.error(err);
           console.log('Google user saved');
-          sendWelcomeEmail(profile._json.email);
+          if (profile._json.email) sendWelcomeEmail(profile._json.email);
           return done(null, newUser);
         });
       });
@@ -302,6 +302,9 @@ require('./routes/stripe-api')(app, stripe);
 
 // Sharing route
 require('./routes/sharing')(app);
+
+// Password recovery route
+require('./routes/recovery')(app);
 
 
 // Get base page
