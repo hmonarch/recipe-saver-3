@@ -51,6 +51,11 @@ export default new Router({
       path: '/password-recovery',
       name: 'PasswordRecovery',
       component: () => import('./components/PasswordRecovery.vue')
+    },
+    {
+      path: '/reset/:token',
+      name: 'ResetForm',
+      component: () => import('./components/ResetForm.vue')
     }
   ]
 })

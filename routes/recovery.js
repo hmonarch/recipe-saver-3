@@ -28,7 +28,7 @@ module.exports = function(app) {
             <br><br>
             Please click the following link to reset your Recipe Saver password:
             <br>
-            https://${req.headers.host}/reset/${token}
+            https://${req.headers.host.replace('localhost:8081', 'localhost:8080')}/reset/${token}
             <br><br>
             -Recipe Saver
           `,
@@ -59,6 +59,29 @@ module.exports = function(app) {
         }
       );
     
+    });
+  });
+
+
+  // Validate password reset token
+  app.get('/api/reset/:token', (req, res) => {
+    console.log('/reset/:token');
+
+    User.findOne({ resetPasswordToken: req.params.token }, (err, user) => {
+      if (!user) return res.json({
+        message: 'Error: The password reset token is invalid. Please double check the link sent to your email.'
+      });
+
+      if (Date.now() > user.resetPasswordExpires) {
+        return res.json({
+          message: 'Error: The password reset token has expired.'
+        });
+      }
+
+      return res.json({
+        message: 'ok',
+        userEmail: user.email
+      });
     });
   });
 
