@@ -95,11 +95,12 @@ export default {
       fullName: '',
       isLoginView: true,
       errors: [],
-      errorMessages: {
+      queryMessages: {
         'not-recognized': 'Sorry, we have no record for this account. If you wish to sign up please click the Sign Up tab above.',
         'login-again': 'Please login again.',
         'already-registered': 'This account is already registered. Please login.',
-        'fb-already-registered': 'This account is already registered. To register a new Facebook account please log into your account at Facebook and try again.'
+        'fb-already-registered': 'This account is already registered. To register a new Facebook account please log into your account at Facebook and try again.',
+        'password-reset': 'Your password has been successfully reset. Please login to continue.'
       },
     };
   },
@@ -182,14 +183,14 @@ export default {
         this.$router.push('/recipes/all');
       }
     },
-    checkLoginRegError(errorStr) {
-      if (this.$route.query[errorStr]) {
-        this.message = this.errorMessages[this.$route.query[errorStr]];
+    checkQueryMessages(queryValue) {
+      if (this.$route.query[queryValue]) {
+        this.message = this.queryMessages[this.$route.query[queryValue]];
       }
     }
   },
   mounted() {
-    this.checkLoginRegError('login-reg-error');
+    this.checkQueryMessages('login-reg-msg');
   }
 }
 </script>

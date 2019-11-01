@@ -19,6 +19,9 @@ export default {
     return Api().post('send-password-recovery', data);
   },
   verifyToken(token) {
-    return Api().get(`/reset/${token}`);
+    return Api().get(`reset/${token}`);
+  },
+  resetPassword(data) {
+    return Api().post(`reset`, data);
   }
 }

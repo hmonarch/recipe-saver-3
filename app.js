@@ -155,9 +155,9 @@ app.get('/auth/facebook/:actionToTake', (req, res, next) => {
 
 app.get('/auth/facebook/login/callback', passport.authenticate('facebook', { failureRedirect: '/login-f' }), (req, res) => {
   if (req.user.notRecognized) {
-    res.redirect('/login?login-reg-error=not-recognized');
+    res.redirect('/login?login-reg-msg=not-recognized');
   } else if (req.user.errMessage === 'Account already registered') {
-    res.redirect('/login?login-reg-error=fb-already-registered');
+    res.redirect('/login?login-reg-msg=fb-already-registered');
   } else {
     res.redirect('/recipes');
   }
@@ -224,9 +224,9 @@ app.get('/auth/google/:actionToTake', (req, res, next) => {
 
 app.get(['/auth/google/login/callback', '/auth/google/register/callback'], passport.authenticate('google', { failureRedirect: '/login-f' }), (req, res) => {
   if (req.user.notRecognized) {
-    res.redirect('/login?login-reg-error=not-recognized');
+    res.redirect('/login?login-reg-msg=not-recognized');
   } else if (req.user.errMessage === 'Email already registered') {
-    res.redirect('/login?login-reg-error=already-registered');
+    res.redirect('/login?login-reg-msg=already-registered');
   } else {
     res.redirect('/recipes');
   }
@@ -263,7 +263,7 @@ passport.use(new LocalStrategy(
           name: req.body.name,
           subscription: 'Basic'
         });
-        newUser.save(function(err) {
+        newUser.save(err => {
           if (err) console.error(err);
           sendWelcomeEmail(email);
           return done(null, newUser);

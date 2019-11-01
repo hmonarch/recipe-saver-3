@@ -1,7 +1,8 @@
 const transporter = require('../mailer/transporter.js');
 const crypto = require('crypto');
 const User = require('../models/user.js');
-const validator = require("email-validator");
+const validator = require('email-validator');
+const bcrypt = require('bcrypt');
 
 module.exports = function(app) {
 
@@ -11,12 +12,11 @@ module.exports = function(app) {
     const { email } = req.body;
 
     if (!validator.validate(email)) return res.json({
-      message: 'invalid email'
+      message: 'Invalid email'
     });
 
     crypto.randomBytes(20, (err, buf) => {
       const token = buf.toString('hex');
-      console.log('Final link', `https://${req.headers.host}/reset/${token}`);
 
       transporter.sendMail(
         {
@@ -34,17 +34,22 @@ module.exports = function(app) {
           `,
         }, 
         (error, response) => {
-          console.log('passwordRecoveryEmail error', error);
-          console.log('passwordRecoveryEmail response', response);
-
           if (error) return res.json({
-            message: 'Email error'
+            message: 'Error: The password recovery email could not be sent. Please try again.'
           });
 
           User.findOne({ email }, (err, user) => {
-            if (!user) return res.json({
-              message: 'Email not found'
-            });
+            if (!user) {
+              if (email.indexOf('@gmail') > -1) {
+                return res.json({
+                  message: `Error: Could not find Recipe Saver account associated with ${email}. If you registered with "Log In with Google" then try logging in via that method with your Google account.`
+                });
+              } else {
+                return res.json({
+                  message: `Error: Could not find Recipe Saver account associated with ${email}.`
+                });
+              }
+            }
             
             console.log('Saving password reset token');
             user.resetPasswordToken = token;
@@ -83,6 +88,31 @@ module.exports = function(app) {
         userEmail: user.email
       });
     });
+  });
+
+
+  // Validate password reset token
+  app.post('/api/reset', (req, res) => {
+    console.log('/reset');
+    User.findOne({ resetPasswordToken: req.body.token }, (err, user) => {
+      if (!user) return res.json({
+        message: 'User not found or password reset token is invalid. Please try again.'
+      });
+
+      const hash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10));
+	    user.password = hash;
+	    user.resetPasswordToken = null;
+	    user.resetPasswordExpires = null;
+
+	    user.save(err => {
+        if (err) return console.log(err);
+	    	console.log(`Password successfully changed for ${user._id}`);
+	    	res.json({
+          message: 'Password changed'
+        });
+	    });
+    });
+
   });
 
 }

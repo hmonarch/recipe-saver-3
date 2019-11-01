@@ -10,12 +10,12 @@
         </router-link>
       </div>
       <div class="main-body">
-        <div v-show="tokenValid" class="reset-form-body">
+        <div v-if="tokenValid" class="reset-form-body">
           <div class="your-email"><b>Email:</b><span id="user-email"> {{ userEmail }}</span></div>
           <label class="create-new">Create New Password</label>
           <form v-show="tokenValid" class="reset-form" @submit.prevent="resetPassword()">
-            <input id="password" type="password" placeholder="Password">
-            <input id="password-confirm" type="password" placeholder="Confirm password">
+            <input v-model="password" id="password" type="password" placeholder="Password">
+            <input v-model="passwordConfirm" id="password-confirm" type="password" placeholder="Confirm password">
             <input type="submit" hidden>
           </form>
         </div>
@@ -38,6 +38,9 @@ export default {
       tokenValid: false,
       errorMessage: '',
       userEmail: '',
+      password: '',
+      passwordConfirm: '',
+      errors: [],
     };
   },
   methods: {
@@ -53,9 +56,35 @@ export default {
         console.log('all good');
       }
     },
+    passwordIsValid() {
+      this.errors = [];
+
+      if (!this.password.length) this.errors.push('Password required');
+      else if (this.password !== this.passwordConfirm) this.errors.push('Passwords must match');
+      else if (this.password.length < 8) this.errors.push('Password must be 8 or more characters');
+      else if (this.password.length > 30) this.errors.push('Password must be 30 characters or less'); 
+
+      if (!this.errors.length) return true;
+    },
     async resetPassword() {
-      console.log('resetPassword');
-    }
+      this.passwordIsValid();
+      if (!this.passwordIsValid()) {
+        this.errorMessage = this.errors.join('<br>');
+        return;
+      }
+
+      this.errorMessage = '';
+      const response = await MiscService.resetPassword({ token: this.$route.params.token, password: this.password });
+
+      console.log('response', response.data);
+
+      if (response.data.message !== 'Password changed') {
+        this.errorMessage = response.data.message;
+      } else {
+        this.$router.push('/login?login-reg-msg=password-reset');
+      }
+    },
+
   },
   created() {
     this.verifyToken(this.$route.params.token);
@@ -91,7 +120,8 @@ export default {
     }
 
     .error-message {
-      color: #f00;;
+      color: #f00;
+      margin-top: 10px;
     }
   }
 
