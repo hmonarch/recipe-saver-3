@@ -7,7 +7,6 @@ const fs = require('fs');
 const loggedIn = require('../middleware/logged-in');
 
 // Config variables
-const user_id = process.env.PORT ? process.env.USER_ID : fs.readFileSync(`${__dirname}/../private/user_id.txt`).toString();
 const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync(`${__dirname}/../private/cloudinary_secret.txt`).toString();
 cloudinary.config({ 
   cloud_name: 'dormh2fvt', 
@@ -16,6 +15,7 @@ cloudinary.config({
 });
 const cloudinaryOptionsRecipe = { quality: 60, gravity: 'center', height: 570, width: 570, crop: 'fill', tags: ['recipe_saver'] };
 const cloudinaryOptionsProfile = Object.assign(cloudinaryOptionsRecipe, { tags: 'rs_profile_img' });
+const recipeLimit = 50;
 
 
 
@@ -25,28 +25,35 @@ module.exports = function(app) {
   app.post('/api/extension', (req, res) => {
     User.findOne({ _id: req.body.user_id }, (err, user) => {
       if (!user) return res.sendStatus(401);
+      Recipe.find({ user_id: req.body.user_id }, (err, recipes) => {
 
-      const data = req.body;
-      const newRecipe = new Recipe(data);
-  
-      // Give tags the default color
-      // Note: This will be overwritten client-side by the dynamicBackgroundColor utility
-      const coloredTags = data.tags.map(tag => {
-        return { name: tag, color: '#000000' };
-      });
-      newRecipe.tags = coloredTags;
-      newRecipe.favorite = false;
-  
-      if (data.image) {
-        cloudinary.uploader.upload(data.image, result => {
-          console.log('cloudinary upload:', result.secure_url);
-          newRecipe.image = result.secure_url;
+        // Check recipe limit
+        if (recipes.length >= recipeLimit && !hasPaidPlan(user)) {
+          return res.json({ message: 'Limit reached' });
+        }
+
+        const data = req.body;
+        const newRecipe = new Recipe(data);
+    
+        // Give tags the default color
+        // Note: This will be overwritten client-side by the dynamicBackgroundColor utility
+        const coloredTags = data.tags.map(tag => {
+          return { name: tag, color: '#000000' };
+        });
+        newRecipe.tags = coloredTags;
+        newRecipe.favorite = false;
+    
+        if (data.image) {
+          cloudinary.uploader.upload(data.image, result => {
+            console.log('cloudinary upload:', result.secure_url);
+            newRecipe.image = result.secure_url;
+            saveRecipe(newRecipe);
+          },
+          cloudinaryOptionsRecipe);
+        } else {
           saveRecipe(newRecipe);
-        },
-        cloudinaryOptionsRecipe);
-      } else {
-        saveRecipe(newRecipe);
-      }
+        }
+      });
     });
 
     function saveRecipe(recipe) {
@@ -57,9 +64,14 @@ module.exports = function(app) {
     }
   });
 
-  // Get user id (for extension)
-  app.get('/api/user-id', loggedIn, (req, res) => {
-    res.json({ id: req.session.passport.user._id });
+  // Get user data (id for extension, plan type for sharing feature)
+  app.get('/api/user-info', loggedIn, (req, res) => {
+    User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
+      const rs_id = user._id;
+      const isPaidPlan = hasPaidPlan(user);
+
+      res.json({ rs_id, isPaidPlan });
+    });
   });
 
   // Fetch all recipes
@@ -249,9 +261,19 @@ module.exports = function(app) {
     const imageAsset = req.files['image-asset'] && req.files['image-asset'][0].path;
 
     if (recipeID === 'new') {
-      const newRecipe = new Recipe();
-      newRecipe.user_id = req.session.passport.user._id;
-      addRecipe(newRecipe);
+      User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
+        Recipe.find({ user_id: req.session.passport.user._id }, (err, recipes) => {
+          // Check for recipe limit
+          if (recipes.length >= recipeLimit && !hasPaidPlan(user)) {
+            return res.json({ message: 'Limit reached' });
+          } else {
+            const newRecipe = new Recipe();
+            newRecipe.user_id = req.session.passport.user._id;
+            addRecipe(newRecipe);
+          }
+        });
+      });
+
     } else {
       Recipe.findOne({ user_id: req.session.passport.user._id, _id: recipeID}, (err, recipe) => {
         if (err) console.error(err);
@@ -307,12 +329,14 @@ module.exports = function(app) {
   });
 
 
-  app.get('/api/user-data', loggedIn, (req, res) => {
-    User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
+  // Account page data
+  app.get('/api/account', loggedIn, (req, res) => {
+    User.findOne({ _id: req.session.passport.user._id }, 'creationDate email lastLogin name subscription _id', (err, user) => {
       if (err) console.error(err);
       res.json(user);
     });
   });
+
 
   // Upload profile image
   app.post('/api/account-image-upload', loggedIn, upload.fields([{ name: 'image-file' }]), (req, res) => {
@@ -367,5 +391,20 @@ module.exports = function(app) {
         return { creationDate: -1 };
     }
   }
+
+  function hasPaidPlan(user) {
+    let isPaidPlan = false;
+
+    if (/^Full/.test(user.subscription)) {
+      isPaidPlan = true;
+    } else if (/^Basic \(Subscription ended/.test(user.subscription)) {
+      if (Date.now() < user.subEnds) {
+        isPaidPlan = true;
+      }
+    }
+  
+    return isPaidPlan;
+  }
+
 
 }

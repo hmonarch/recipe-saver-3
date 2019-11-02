@@ -58,22 +58,18 @@
         Don't forget, you can also use the <a href="https://chrome.google.com/webstore/detail/recipe-saver/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a> to automatically save recipes directly to this page.
       </div>
     </div>
-
-    <input id="rs-id" type="hidden" :value="rs_id">
   </div>
 </template>
 
 <script>
 import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
-import MiscService from '@/services/MiscService';
 import utils from '@/mixins/utils';
 
 
 export default {
   data() {
     return {
-      rs_id: null,
       sortBy: localStorage.sortBy ? localStorage.sortBy : null,
       sortVisible: false,
       imageLayout: (localStorage.imageLayout === 'true') ? true : false,
@@ -193,14 +189,6 @@ export default {
       this.recipes = response.data;
       if (!this.recipes.length && this.$route.path === '/recipes/all')    this.showWelcome = true;
       else this.showWelcome = false;
-    },
-    async retrieveUserId() {
-      const response = await MiscService.getUserId();
-      this.rs_id = response.data.id;
-      const event = new CustomEvent('signin',
-        { detail: response.data.id }
-      );
-      document.dispatchEvent(event);
     }
   },
   mounted() {
@@ -226,7 +214,6 @@ export default {
     '$route.params': {
       handler() {
         this.retrieveRecipes();
-        this.retrieveUserId();
 
         if (this.$route.name === 'Tag') {
           this.selectedTag = {

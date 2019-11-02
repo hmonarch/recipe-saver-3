@@ -5,9 +5,10 @@
     <Header></Header>
     <section id="panels">
       <ListPanel :class="{ 'list-open': listOpen, 'full-width': !detailsOpen }"></ListPanel>
-      <DetailPanel :class="{ 'full-width': !listOpen, 'close': !detailsOpen, 'open': detailsOpen }" :screenModeText="screenModeText"></DetailPanel>
+      <DetailPanel :class="{ 'full-width': !listOpen, 'close': !detailsOpen, 'open': detailsOpen }" :screenModeText="screenModeText" :isPaidPlan="isPaidPlan"></DetailPanel>
     </section>
 
+    <input id="rs-id" type="hidden" :value="rs_id">
   </div>
 </template>
 
@@ -18,6 +19,9 @@ import ListPanel from '@/components/ListPanel.vue';
 import DetailPanel from '@/components/DetailPanel.vue';
 import EventBus from '@/EventBus';
 import Icon from '@/components/Icons';
+import MiscService from '@/services/MiscService';
+
+
 
 export default {
   name: 'recipes',
@@ -30,6 +34,8 @@ export default {
   },
   data() {
     return {
+      rs_id: null,
+      isPaidPlan: null,
       detailsOpen: true,
       listOpen: true,
     }
@@ -37,6 +43,18 @@ export default {
   computed: {
     screenModeText() {
       return this.listOpen ? 'Full Screen' : 'Half Screen';
+    }
+  },
+  methods: {
+    async retrieveUserData() {
+      const response = await MiscService.getUserInfo();
+      this.rs_id = response.data.rs_id;
+      this.isPaidPlan = response.data.isPaidPlan;
+
+      const event = new CustomEvent('signin',
+        { detail: this.rs_id }
+      );
+      document.dispatchEvent(event);
     }
   },
   mounted() {
@@ -64,6 +82,9 @@ export default {
     EventBus.$on('RECIPE_SELECTED', () => {
       this.detailsOpen = true;
     });
+
+    
+    this.retrieveUserData();
   },
 }
 </script>

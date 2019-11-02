@@ -12,8 +12,8 @@ export default {
       }
     });
   },
-  getUserId() {
-    return Api().get('user-id');
+  getUserInfo() {
+    return Api().get('user-info');
   },
   sendPasswordRecovery(data) {
     return Api().post('send-password-recovery', data);

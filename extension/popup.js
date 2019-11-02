@@ -119,9 +119,17 @@ function sendToRS() {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log(xhr.responseText);
       initialViewEl.style.display = 'none';
-      successEl.style.display = 'block';
-      viewLink.setAttribute('href', `${site}/recipes/all?id=${JSON.parse(xhr.responseText)._id}`);
-      console.log('test', `${site}/recipes/all?id=${JSON.parse(xhr.responseText)._id}`);
+
+      if (JSON.parse(xhr.responseText) && JSON.parse(xhr.responseText).message === 'Limit reached') {
+        errorEl.style.display = 'block';
+        errorEl.querySelector('#error-title').textContent = 'Paid Feature';
+        errorEl.querySelector('#sign-in-error').innerHTML = 'To save more than 50 recipes you\'ll need to upgrade your account on your Account page.'
+      } else {
+        successEl.style.display = 'block';
+        viewLink.setAttribute('href', `${site}/recipes/all?id=${JSON.parse(xhr.responseText)._id}`);
+        console.log('test', `${site}/recipes/all?id=${JSON.parse(xhr.responseText)._id}`);
+      }
+
     } else if (xhr.readyState === 4 && xhr.status === 401) {
       initialViewEl.style.display = 'none';
       errorEl.style.display = 'block';

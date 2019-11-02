@@ -14,7 +14,9 @@
             <li v-show="!editMode" @click="editRecipe()" class="action-edit">Edit Recipe</li>
             <li v-show="editMode" @click="cancel()" class="action-cancel">Cancel</li>
             <li @click="toggleScreen()" class="action-toggle-screen">{{ screenModeText }}</li>
-            <li v-show="!editMode" @click="shareRecipe()" class="action-share">Share Recipe</li>
+            <li v-show="!editMode" @click="shareRecipe()" class="action-share"><span>Share Recipe</span>
+              <span v-if="!isPaidPlan"><icon name="lock"/></span>
+            </li>
             <li @click="print()" class="action-print">Print</li>
             <li v-if="!confirmActive" @click="confirmActive = true" class="action-delete">Delete Recipe</li>
             <li v-else @click="deleteRecipe()" class="confirm-delete">Confirm Delete</li>
@@ -186,7 +188,7 @@ export default {
     EditorContent,
     Icon
   },
-  props: ['screenModeText'],
+  props: ['screenModeText', 'isPaidPlan'],
   data() {
     return {
       recipe: {},
@@ -252,8 +254,18 @@ export default {
       this.editor.setOptions({editable: true});
     },
     async shareRecipe() {
+      if (!this.isPaidPlan) {
+        return EventBus.$emit('MESSAGE', {
+          title: 'Paid Feature',
+          message: 'To share recipes you\'ll need to upgrade your account on your Account page.',
+          isError: true,
+          timeout: 40000
+        });
+      }
+
       const response = await RecipeService.shareRecipe(this.recipe._id);
-      const shareLink = `https://localhost:8080/share/${encodeURIComponent(response.data.result)}`;
+      const origin = window.location.origin;
+      const shareLink = `${origin}/share/${encodeURIComponent(response.data.result)}`;
       EventBus.$emit('MESSAGE', {
         title: 'Share Link:',
         message: shareLink,
@@ -345,9 +357,19 @@ export default {
       this.removeTagStatus();
       delete this.recipe.newEntry;
       const response = await RecipeService.updateRecipe(this.recipe._id, this.recipe, updateImage, this.imageAsset === 'remove');
+
       this.recipe.image = response.data.image;
       this.removeEditMode();
       this.savingOverlayActive = false;
+
+      if (response.data.message && response.data.message === 'Limit reached') {
+        return EventBus.$emit('MESSAGE', {
+          title: 'Paid Feature',
+          message: 'To save more than 50 recipes you\'ll need to upgrade your account on your Account page.',
+          isError: true,
+          timeout: 40000
+        });
+      }
 
       EventBus.$emit('RECIPE_SAVED');
       EventBus.$emit('RECALUCATE_TAGS');
@@ -454,7 +476,7 @@ export default {
     },
     recipeImage() {
       return this.recipe.image || this.blankImage;
-    },
+    }
   },
   computed: {
     favoriteToggleText() {
@@ -531,7 +553,6 @@ export default {
 
       this.handleImage(e, draggedImage);
     });
-
 
   },
   created() {

@@ -109,8 +109,8 @@ export default {
     getUserImg() {
       return this.user.profileImage || 'https://res.cloudinary.com/dormh2fvt/image/upload/v1559367596/logo-255x255_r72o7i.png';
     },
-    async getUserData() {
-      const response = await AuthService.getUserData();
+    async getAccountData() {
+      const response = await AuthService.getAccountData();
       console.log('response', response.data);
       this.user = response.data;
     },
@@ -160,7 +160,7 @@ export default {
         this.message = 'You may continue using Recipe Saver Lite version and may upgrade again the future.';
 
         // Reset user data for template
-        this.getUserData();
+        this.getAccountData();
       }
 
 
@@ -204,7 +204,7 @@ export default {
     }
   },
   created() {
-    this.getUserData();
+    this.getAccountData();
   },
   beforeCreate() {
     document.body.className = 'account';

@@ -125,6 +125,20 @@
         background-color: #008dff;
         color: white;
       }
+
+      &.action-share {
+        .icon--lock {
+          display: inline-block;
+          position: relative;
+          right: -4px;
+
+          svg {
+            height: 20px;
+            width: 20px;
+            fill: rgba(131, 128, 128, 0.63);
+          }
+        }
+      }
     }
   }
 
