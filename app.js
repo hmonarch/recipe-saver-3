@@ -11,6 +11,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const https = require('https');
 const bcrypt = require('bcrypt');
 const sendWelcomeEmail = require('./mailer/send-welcome-email.js');
+const history = require('connect-history-api-fallback');
 
 // User model
 const User = require('./models/user');
@@ -75,6 +76,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: new MongoStore(mongoStoreOptions)
+}));
+app.use(history({
+  disableDotRule: true,
+  verbose: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
