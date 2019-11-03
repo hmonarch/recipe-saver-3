@@ -31,10 +31,12 @@
           <ul class="footer-links">
             <li><router-link :to="{ path: '/recipes' }">My Recipes</router-link></li>
             <li><a href="https://chrome.google.com/webstore/detail/recipe-saver/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a></li>
+            <li><router-link :to="{ path: '/terms' }">Terms &amp; Conditions</router-link></li>
           </ul>
           <ul class="footer-links">
             <li><router-link :to="{ path: '/account' }">Account</router-link></li>
             <li><router-link :to="{ path: '/login' }">Login / Register</router-link></li>
+            <li><router-link :to="{ path: '/privacy' }">Privacy Policy</router-link></li>
           </ul>
         </div>
       </div>
@@ -239,8 +241,8 @@
                 font-size: 14px;
               }
               
-              li:nth-child(2),
-              li:nth-child(2) {
+              li:nth-child(3),
+              li:nth-child(3) {
                 margin-bottom: 0;
               }
             }

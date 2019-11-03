@@ -66,6 +66,19 @@ export default new Router({
       name: 'ResetForm',
       component: () => import('./components/ResetForm.vue'),
       meta: { title: 'Recipe Saver - Password Reset' }
-    }
+    },
+    {
+      path: '/terms',
+      name: 'Terms',
+      component: () => import('./components/Terms.vue'),
+      meta: { title: 'Recipe Saver - Terms & Conditions' }
+    },
+    {
+      path: '/privacy',
+      name: 'Privacy',
+      component: () => import('./components/Privacy.vue'),
+      meta: { title: 'Recipe Saver - Privacy Policy' }
+    },
+
   ]
 })

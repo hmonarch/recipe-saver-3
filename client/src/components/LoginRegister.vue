@@ -18,6 +18,14 @@
         </div>
 
         <div class="main-body-padding">
+
+          <div v-show="!isLoginView" class="terms-msg">
+            <span>By signing up you agree to the </span>
+            <router-link :to="{ path: '/terms' }" class="terms-link">
+              terms and conditions.
+            </router-link>
+          </div>
+
           <div class="login-strategies">
             <a class="login-strategy facebook" :href="getLoginOrRegisterURL('facebook')">
               <div class="icon-block"><icon name="facebook"/></div>
@@ -221,6 +229,17 @@ export default {
 
       .main-body-padding {
         padding: 20px;
+
+        .terms-msg {
+          color: #878787;
+          font-size: 12px;
+          font-style: italic;
+          margin-bottom: 10px;
+
+          .terms-link {
+            color: #000;
+          }
+        }
       }
 
       .login-strategies,
@@ -410,6 +429,8 @@ export default {
   @media (max-width: 767px) {
     .main-box {
       .main-header {
+        padding: 12px;
+
         .logo {
           width: 45px;
         }
