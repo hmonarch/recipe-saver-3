@@ -7,6 +7,7 @@ module.exports = {
     https: true,
     port: 8080,
     host: 'localhost', 
+    historyApiFallback: true,
     proxy: {
       // Remember to restart Vue server after making changes
       '/user': {
