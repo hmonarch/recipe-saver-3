@@ -331,7 +331,7 @@ module.exports = function(app) {
 
   // Account page data
   app.get('/api/account', loggedIn, (req, res) => {
-    User.findOne({ _id: req.session.passport.user._id }, 'creationDate email lastLogin name subscription _id', (err, user) => {
+    User.findOne({ _id: req.session.passport.user._id }, 'creationDate email lastLogin name subscription profileImage _id', (err, user) => {
       if (err) console.error(err);
       res.json(user);
     });

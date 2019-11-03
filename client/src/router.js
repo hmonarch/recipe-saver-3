@@ -11,51 +11,61 @@ export default new Router({
     {
       path: '/',
       name: 'Home',
-      component: () => import('./components/Home.vue')
+      component: () => import('./components/Home.vue'),
+      meta: { title: 'Recipe Saver - Home' }
     },
     {
       path: '/account',
       name: 'Account',
-      component: () => import('./components/Account.vue')
+      component: () => import('./components/Account.vue'),
+      meta: { title: 'Recipe Saver - Account' }
     },
     { 
       path: '/recipes',
-      redirect: '/recipes/all'
+      redirect: '/recipes/all',
+      meta: { title: 'Recipe Saver - My Recipes' }
     },
     {
       path: '/recipes/:view',
       name: 'Recipes',
-      component: () => import('./components/Recipes.vue')
+      component: () => import('./components/Recipes.vue'),
+      meta: { title: 'Recipe Saver - My Recipes' }
     },
     {
       path: '/recipes/tag/:tagName',
       name: 'Tag',
-      component: () => import('./components/Recipes.vue')
+      component: () => import('./components/Recipes.vue'),
+      meta: { title: 'Recipe Saver - My Recipes' }
     },
     {
       path: '/login',
       name: 'LoginRegister',
-      component: () => import('./components/LoginRegister.vue')
+      component: () => import('./components/LoginRegister.vue'),
+      meta: { title: 'Recipe Saver - Login/Register' }
     },
     {
       path: '/share/:recipe',
       name: 'Share',
-      component: () => import('./components/Share.vue')
+      component: () => import('./components/Share.vue'),
+      meta: { title: 'Recipe Saver - Shared Recipe' }
     },
     {
       path: '/plans',
       name: 'Plans',
-      component: () => import('./components/Plans.vue')
+      component: () => import('./components/Plans.vue'),
+      meta: { title: 'Recipe Saver - Plans' }
     },
     {
       path: '/password-recovery',
       name: 'PasswordRecovery',
-      component: () => import('./components/PasswordRecovery.vue')
+      component: () => import('./components/PasswordRecovery.vue'),
+      meta: { title: 'Recipe Saver - Password Recovery' }
     },
     {
       path: '/reset/:token',
       name: 'ResetForm',
-      component: () => import('./components/ResetForm.vue')
+      component: () => import('./components/ResetForm.vue'),
+      meta: { title: 'Recipe Saver - Password Reset' }
     }
   ]
 })

@@ -115,13 +115,18 @@ export default {
       this.showModal = true;
       this.processing = true;
 
-      // Simulate loading just for effect
+      // Simulate loading just for effect (Full plans won't be affected)
       setTimeout(() => {
         this.processing = false;
         this.title = 'Welcome to Recipe Saver!';
         this.message = 'Your account is all set up! Click "My Recipes" below to access your personal recipe collection.'
         this.btnToShow = 'recipes';
       }, 2000);
+
+      this.$ga.event({
+        eventCategory: 'Plans',
+        eventAction: 'free plan clicked'
+      });
     },
     handleResponse(response) {
 
@@ -135,19 +140,38 @@ export default {
       switch(response.data.message) {
         case 'not logged in':
           this.message = `Please login or register first. ${noChargeText}`;
+          this.$ga.event({
+            eventCategory: 'Plans',
+            eventAction: 'full plan error',
+            eventLabel: this.message
+          });
           break;
         case 'no user found':
           this.message = `User not found. Please login first. ${noChargeText}`;
+          this.$ga.event({
+            eventCategory: 'Plans',
+            eventAction: 'full plan error',
+            eventLabel: this.message
+          });
           break;
         case 'has full plan':
           this.message = `This account already has a Full Plan. ${noChargeText}`;
           this.btnToShow = 'recipes';
+          this.$ga.event({
+            eventCategory: 'Plans',
+            eventAction: 'full plan error',
+            eventLabel: this.message
+          });
           break;
         case 'new subscription':
           this.title = 'You\'re In!';
           this.message = 'Congratulations! You have successfully signed up for the Full plan and now have unlimited access';
           this.btnToShow = 'recipes';
           this.error = false;
+          this.$ga.event({
+            eventCategory: 'Plans',
+            eventAction: 'full plan signup',
+          });
           break;
       }
 
@@ -180,12 +204,18 @@ export default {
 
     document.querySelector('.plan.full .plan-cta').addEventListener('click', e => {
       e.preventDefault();
+      
 			handler.open({
 				name: 'Recipe Saver',
 				description: 'Full Plan',
 				amount: 900,
 				allowRememberMe: false,
-			});
+      });
+      
+      this.$ga.event({
+        eventCategory: 'Plans',
+        eventAction: 'full plan clicked'
+      });
     });
 
   },

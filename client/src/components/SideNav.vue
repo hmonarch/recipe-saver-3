@@ -12,6 +12,10 @@
       <li class="mobile account">
         <router-link :to="{ path: '/account' }">Account</router-link>
       </li>
+      <li class="mobile logout">
+        <a @click.prevent="logout">Logout</a>
+      </li>
+
 			<li>
         <router-link :class="{ active : view === 'all' }" :to="{ path: '/recipes/all' }">
           <img class="side-nav-menu-icon" src="../assets/icon-card.png">
@@ -61,6 +65,7 @@ import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
 import Icon from '@/components/Icons';
+import AuthService from '@/services/AuthService';
 
 export default {
   components: {
@@ -105,6 +110,10 @@ export default {
       this.tags.forEach(tag => {
         window.tagColorMap[tag.name] = tag.color;
       });
+    },
+    async logout() {
+      const response = await AuthService.logout();
+      this.$router.push('/');
     },
   },
   mounted() {

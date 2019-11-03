@@ -41,13 +41,18 @@
 
     #side-nav-menu {
 
-      li.mobile.account {
+      li.mobile.account,
+      li.mobile.logout {
         display: block;
         border-top: solid 1px #fff;
         position: absolute;
         bottom: 0;
         width: 100%;
         box-sizing: border-box;
+      }
+
+      li.mobile.logout {
+        bottom: 55px;
       }
 
       > li {

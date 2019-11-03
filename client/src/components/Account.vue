@@ -132,6 +132,11 @@ export default {
       console.log(response);
       document.querySelector('#profile-image').setAttribute('src', response.data.profileImage);
       this.imageIsSaving = false;
+      this.$ga.event({
+        eventCategory: 'User Actions',
+        eventAction: 'profile picture uploaded',
+        eventLabel: response.data.profileImage.replace('https://res.cloudinary.com/dormh2fvt/image/upload/', '')
+      });
     },
     async cancelSubscription() {
       console.log('cancelSubscription');

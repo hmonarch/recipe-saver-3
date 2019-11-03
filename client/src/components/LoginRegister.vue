@@ -406,6 +406,64 @@ export default {
       }
     }
   }
+
+  @media (max-width: 767px) {
+    .main-box {
+      .main-header {
+        .logo {
+          width: 45px;
+        }
+
+        .logo-text {
+          font-size: 20px;
+        }
+      }
+
+      .main-body {
+        .or {
+          display: none;
+        }
+
+        .mode-controller {
+          .mode-controller-btn {
+            padding: 14px 0;
+          }
+        }
+
+        .login-strategies {
+          .login-strategy {
+            .icon-block {
+              height: 40px;
+
+              .icon {
+                height: 40px;
+                width: 40px;
+              }
+            }
+          }
+        }
+
+        .email-form {
+          margin-top: 18px;
+
+          .login-strategy .icon-block {
+            height: 40px;
+            
+            .icon {
+              height: 40px;
+              width: 40px;
+            }
+          }
+        }
+      }
+
+      .main-footer {
+        padding: 18px;
+      }
+    }
+  }
 }
+
+
 </style>
 
