@@ -11,7 +11,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const https = require('https');
 const bcrypt = require('bcrypt');
 const sendWelcomeEmail = require('./mailer/send-welcome-email.js');
-const history = require('connect-history-api-fallback');
 
 // User model
 const User = require('./models/user');
@@ -77,10 +76,6 @@ app.use(session({
   saveUninitialized: true,
   store: new MongoStore(mongoStoreOptions)
 }));
-// app.use(history({
-//   disableDotRule: true,
-//   verbose: true
-// }));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.serializeUser((user, done) => {
@@ -100,6 +95,11 @@ app.use(cors({
   methods: ['GET', 'POST', 'DELETE'],
   credentials: true 
 }));
+
+app.route('/*')
+    .get(function(req, res) {
+      res.sendFile(`${__dirname}/client/dist/app.html`);
+});
 
 
 
