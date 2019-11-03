@@ -77,10 +77,10 @@ app.use(session({
   saveUninitialized: true,
   store: new MongoStore(mongoStoreOptions)
 }));
-app.use(history({
-  disableDotRule: true,
-  verbose: true
-}));
+// app.use(history({
+//   disableDotRule: true,
+//   verbose: true
+// }));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.serializeUser((user, done) => {
