@@ -1,5 +1,5 @@
 // This script runs in the visited page that's open in Chrome
-if (window.location.hostname === 'rs3-staging.herokuapp.com' || 
+if (window.location.hostname === 'recipe-saver-3.herokuapp.com' || 
 		window.location.hostname === 'www.recipesaver.net' ||
 		window.location.hostname === 'www.recipesaver.me' ||
 		window.location.hostname === 'localhost') {
