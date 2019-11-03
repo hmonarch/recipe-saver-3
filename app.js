@@ -324,12 +324,20 @@ app.get(['/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) 
 
 // Listen on port 8081
 // Use a self-signed certificate to serve localhost on https since Facebook login requires it
-https.createServer({
-  // Windows certificate
-  // key: fs.readFileSync('server.key'),
-  // cert: fs.readFileSync('server.cert')
 
-  // Mac certificate
-  key: fs.readFileSync('localhost.key'),
-  cert: fs.readFileSync('localhost.crt'),
-}, app).listen(process.env.PORT || 8081);
+if (process.env.PORT) {
+  app.listen(process.env.PORT, () => {
+    console.log('App running on Heroku');
+  });
+} else {
+  https.createServer({
+    // Windows certificate
+    // key: fs.readFileSync('server.key'),
+    // cert: fs.readFileSync('server.cert')
+  
+    // Mac certificate
+    key: fs.readFileSync('localhost.key'),
+    cert: fs.readFileSync('localhost.crt'),
+  }, app).listen(process.env.PORT || 8081);
+}
+
