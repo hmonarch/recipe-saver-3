@@ -380,6 +380,7 @@ export default {
           width: 129px;
           display: block;
           text-decoration: underline;
+          color: #000;
           cursor: pointer;
         }
       }
