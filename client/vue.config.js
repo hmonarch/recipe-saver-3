@@ -33,6 +33,10 @@ module.exports = {
         target: 'https://localhost:8081',
         changeOrigin: true
       },
+      '/testing': {
+        target: 'https://localhost:8081',
+        changeOrigin: true
+      },
     }
   }
 };

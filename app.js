@@ -96,9 +96,14 @@ app.use(cors({
   credentials: true 
 }));
 
-app.route('/*')
-    .get(function(req, res) {
-      res.sendFile(`${__dirname}/client/dist/app.html`);
+// Keep paths using the app.html file on direct route hits
+app.route('/*').get((req, res) => {
+  console.log('test');
+  console.log(req.path);
+  if (!/^\/api\//.test(req.path)) {
+    console.log('does not contain api')
+    res.sendFile(`${__dirname}/client/dist/app.html`);
+  }
 });
 
 
