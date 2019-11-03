@@ -66,6 +66,7 @@ module.exports = function(app) {
 
   // Get user data (id for extension, plan type for sharing feature)
   app.get('/api/user-info', loggedIn, (req, res) => {
+    console.log('/api/user-info');
     User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
       const rs_id = user._id;
       const isPaidPlan = hasPaidPlan(user);

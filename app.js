@@ -103,7 +103,10 @@ app.use('/*', (req, res, next) => {
   if (!/^\/api\//.test(req.path)) {
     console.log('does not contain api')
     res.sendFile(`${__dirname}/client/dist/app.html`);
-  } else next();
+  } else {
+    console.log('next');
+    next();
+  }
 });
 
 
