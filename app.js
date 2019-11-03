@@ -98,14 +98,13 @@ app.use(cors({
 
 // Keep paths using the app.html file on direct route hits
 app.use('/*', (req, res, next) => {
-  console.log('test');
-  console.log(req.path);
-  if (!/^\/api\//.test(req.path)) {
-    console.log('does not contain api')
-    res.sendFile(`${__dirname}/client/dist/app.html`);
-  } else {
-    console.log('next');
+  console.log('PATH', req.path);
+  if (/^\/api\//.test(req.path)) {
+    console.log('is api path');
     next();
+  } else {
+    console.log('is not api')
+    res.sendFile(`${__dirname}/client/dist/app.html`);
   }
 });
 
