@@ -33,12 +33,13 @@ const FACEBOOK_APP_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET 
 
 
 // DB setup
+mongoose.set('useUnifiedTopology', true)
 if (!process.env.PORT) {
   mongoose.connect('mongodb://localhost:27017/recipe-saver-3',  { useNewUrlParser: true });
 } else {
   console.log('App running in heroku');
 	const mongodbUri = process.env.MONGODB_URI;
-	const mongooseUri = uriUtil.formatMongoose(mongodbUri);
+  const mongooseUri = uriUtil.formatMongoose(mongodbUri);
   mongoose.connect(mongooseUri, { 
     useNewUrlParser: true, 
     server: { 
@@ -60,6 +61,7 @@ if (!process.env.PORT) {
 		ttl: 365 * 24 * 60 * 60,
 	};
 }
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Mongo connection succeeded'));
