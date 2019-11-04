@@ -101,9 +101,11 @@ if (!process.env.PORT) {
 // Force HTTPS redirect
 if (process.env.PORT) {
   app.use((req, res, next) => {
-    if (!req.secure) {
-      res.redirect(`https://${req.header('host')}${req.url}`);
-    } else next();
+    console.log(`https://${req.header('host')}${req.url}`)
+    console.log(req.header('x-forwarded-proto'))
+    // if (!req.secure) {
+    //   res.redirect(`https://${req.header('host')}${req.url}`);
+    // } else next();
   });
 }
 
