@@ -11,6 +11,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const https = require('https');
 const bcrypt = require('bcrypt');
 const sendWelcomeEmail = require('./mailer/send-welcome-email.js');
+const favicon = require('serve-favicon');
 
 // User model
 const User = require('./models/user');
@@ -76,6 +77,7 @@ app.use(session({
   saveUninitialized: true,
   store: new MongoStore(mongoStoreOptions)
 }));
+app.use(favicon(`${__dirname}/client/dist/favicon.ico`));
 app.use(passport.initialize());
 app.use(passport.session());
 passport.serializeUser((user, done) => {
