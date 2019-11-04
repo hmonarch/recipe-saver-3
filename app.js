@@ -98,6 +98,15 @@ if (!process.env.PORT) {
   }));
 }
 
+// Force HTTPS redirect
+if (process.env.PORT) {
+  app.use((req, res, next) => {
+    if (!req.secure) {
+      res.redirect(`https://${req.header('host')}${req.url}`);
+    } else next();
+  });
+}
+
 // Keep paths using the app.html file on direct route hits
 app.use('/*', (req, res, next) => {
   if (/^\/(api|auth)\//.test(req.originalUrl)) {
@@ -106,9 +115,6 @@ app.use('/*', (req, res, next) => {
     res.sendFile(`${__dirname}/client/dist/app.html`);
   }
 });
-
-const sslRedirect = require('heroku-ssl-redirect');
-app.use(sslRedirect());
 
 
 // Passport Facebook middleware
