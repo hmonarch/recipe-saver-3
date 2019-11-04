@@ -101,7 +101,7 @@ app.use('/*', (req, res, next) => {
   if (/^\/(api|auth)\//.test(req.originalUrl)) {
     next();
   } else {
-    console.log('WHAT IS THIS', ${__dirname}/client/dist/app.html);
+    console.log(`WHAT IS THIS: ${__dirname}/client/dist/app.html`);
     res.sendFile(`${__dirname}/client/dist/app.html`);
   }
 });
