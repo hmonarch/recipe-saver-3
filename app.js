@@ -89,23 +89,26 @@ app.use((req, res, next) => {
   next();
 });
 
-// TODO: Investigate if this is needed in production
-app.use(cors({
-  origin: ['https://localhost:8080', 'https://localhost:8081'],
-  methods: ['GET', 'POST', 'DELETE'],
-  credentials: true 
-}));
+// Allow CORS requests locally
+if (!process.env.PORT) {
+  app.use(cors({
+    origin: ['https://localhost:8080', 'https://localhost:8081'],
+    methods: ['GET', 'POST', 'DELETE'],
+    credentials: true 
+  }));
+}
 
 // Keep paths using the app.html file on direct route hits
 app.use('/*', (req, res, next) => {
   if (/^\/(api|auth)\//.test(req.originalUrl)) {
     next();
   } else {
-    console.log(`WHAT IS THIS: ${__dirname}/client/dist/app.html`);
     res.sendFile(`${__dirname}/client/dist/app.html`);
   }
 });
 
+const sslRedirect = require('heroku-ssl-redirect');
+app.use(sslRedirect());
 
 
 // Passport Facebook middleware
