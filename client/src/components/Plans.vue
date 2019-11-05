@@ -186,7 +186,7 @@ export default {
     // Test CC #: 4242424242424242
 		const handler = StripeCheckout.configure({
 			key: publicKey,
-			image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1571800233/Site%20Images/logo-255x255-white-square.png',
+			image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1572928163/rs-site-images/stripe-logo.png',
 			locale: 'auto',
 			async token(token) {
 
