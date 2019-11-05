@@ -254,7 +254,7 @@
         padding: 10px 20px;
 
         #copyright-inner {
-          font-size: 14px;
+          font-size: 12.5px;
           text-align: left;
           height: auto;
           line-height: 20px;
