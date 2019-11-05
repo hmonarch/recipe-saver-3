@@ -12,7 +12,7 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: () => import('./components/Home.vue'),
-      meta: { title: 'Recipe Saver - Home' }
+      meta: { title: 'Recipe Saver — Online Recipe Organizer' }
     },
     {
       path: '/account',
