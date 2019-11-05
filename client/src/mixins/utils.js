@@ -25,8 +25,9 @@ export default {
       return `background-color: ${color}`;
     },
 
-    formatDate(data) {
-      return new Date(data).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
+    formatDate(date) {
+      if (!date) return '';
+      return new Date(date).toLocaleDateString().replace(/\/20(\d\d)$/, '/$1');
     },
   }
 }

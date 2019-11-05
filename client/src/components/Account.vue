@@ -14,11 +14,11 @@
         </div>
       </div>
       <div class="account-right">
-        <div class="account-name">{{ user && user.name }}</div>
+        <div class="account-name">{{ user.name }}</div>
         <ul class="account-info">
           <li>
             <label>Account Type</label>
-            <div class="account-info-value">{{ user && user.subscription }}</div>
+            <div class="account-info-value">{{ user.subscription }}</div>
           </li>
           <li>
             <label>You Login Via</label>
@@ -94,6 +94,7 @@ export default {
   computed: {
     loginMethod() {
       let method;
+      if (Object.entries(this.user).length === 0 ) return '';
       if (this.user.googleId) method = 'Google';
       else if (this.user.facebookId) method = 'Facebook';
       else method = 'Email';
