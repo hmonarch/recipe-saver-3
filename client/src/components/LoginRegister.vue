@@ -1,5 +1,5 @@
 <template>
-  <div id="login-register" class="login-register-box">
+  <div id="login-register" class="login-register-box" :class="{ 'login-view': isLoginView, 'login-register-box': true }">
 
     <div class="main-box">
       <div class="main-header">
@@ -492,8 +492,30 @@ export default {
       }
     }
   }
+
+  @media (max-height: 810px) {
+    &:not(.login-view) {
+      display: block;
+      padding: 60px 0;
+      height: 107ch;
+
+      .main-box {
+        margin: 0 auto;
+      }
+    }
+  }
+
+  @media (max-height: 674px) {
+    &.login-view {
+      display: block;
+      padding: 60px 0;
+      height: 90ch;
+
+      .main-box {
+        margin: 0 auto;
+      }
+    }
+  }
 }
-
-
 </style>
 
