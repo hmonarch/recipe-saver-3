@@ -181,11 +181,11 @@ export default {
   mounted() {
 
     const component = this;
+    const publicKey = window.location.origin.includes('recipesaver.me') ? 'pk_live_ladU88gOOTUS87vjvXepHlUY' : 'pk_test_KmQZh5RXWtu0bnCzyOoFBn5A';
 
     // Test CC #: 4242424242424242
 		const handler = StripeCheckout.configure({
-			key: 'pk_test_KmQZh5RXWtu0bnCzyOoFBn5A',
-			// key: 'pk_live_ladU88gOOTUS87vjvXepHlUY',
+			key: publicKey,
 			image: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1571800233/Site%20Images/logo-255x255-white-square.png',
 			locale: 'auto',
 			async token(token) {
