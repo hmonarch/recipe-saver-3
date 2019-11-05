@@ -26,10 +26,10 @@ const stripeSK = process.env.PORT ? process.env.STRIPE_LIVE_SK : fs.readFileSync
 const stripe = require('stripe')(stripeSK);
 
 
-
 // Global constants
 const GOOGLE_CLIENT_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/google_client_secret.txt`).toString();
 const FACEBOOK_APP_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/facebook_app_secret.txt`).toString();
+const baseCallbackURL = (process.env.PORT) ? 'https://www.recipesaver.me' : 'https://localhost:8080';
 
 
 // DB setup
@@ -61,7 +61,6 @@ if (!process.env.PORT) {
 		ttl: 365 * 24 * 60 * 60,
 	};
 }
-
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Mongo connection succeeded'));
@@ -127,7 +126,7 @@ app.use('/*', (req, res, next) => {
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: 'https://localhost:8080/auth/facebook/login/callback',
+    callbackURL: `${baseCallbackURL}/auth/facebook/login/callback`,
     profileFields: ['id', 'emails', 'name'],
     passReqToCallback : true,
   },
@@ -194,7 +193,7 @@ app.get('/auth/facebook/login/callback', passport.authenticate('facebook', { fai
 passport.use(new GoogleStrategy({
     clientID: '906915295802-pq35f3ve2mubddbul0hab46s8tok9nom.apps.googleusercontent.com',
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: 'https://localhost:8080/auth/google/login/callback',
+    callbackURL: `${baseCallbackURL}/auth/google/login/callback`,
     passReqToCallback : true,
   },
   (req, accessToken, refreshToken, profile, done) => {
