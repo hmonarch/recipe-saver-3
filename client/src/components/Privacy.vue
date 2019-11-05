@@ -55,7 +55,7 @@ export default {
   methods: {
 
   },
-  created() {
+  mounted() {
     window.scrollTo(0,0);
   },
   beforeCreate() {
