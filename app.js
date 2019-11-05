@@ -31,6 +31,8 @@ const GOOGLE_CLIENT_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET
 const FACEBOOK_APP_SECRET = process.env.PORT ? process.env.FACEBOOK_APP_SECRET : fs.readFileSync(`${__dirname}/private/facebook_app_secret.txt`).toString();
 const baseCallbackURL = (process.env.PORT) ? 'https://www.recipesaver.me' : 'https://localhost:8080';
 
+console.log('FACEBOOK_APP_SECRET', FACEBOOK_APP_SECRET);
+
 
 // DB setup
 mongoose.set('useUnifiedTopology', true)

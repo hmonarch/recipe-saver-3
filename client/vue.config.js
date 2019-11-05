@@ -9,14 +9,6 @@ module.exports = {
     host: 'localhost', 
     proxy: {
       // Remember to restart Vue server after making changes
-      '/user': {
-        target: 'https://localhost:8081',
-        secure: false,
-      },
-      '/test': {
-        target: 'https://localhost:8081',
-        changeOrigin: true
-      },
       '/auth/google/callback/*': {
         target: 'https://localhost:8081',
         changeOrigin: true
@@ -28,15 +20,7 @@ module.exports = {
       '/auth/facebook': {
         target: 'https://localhost:8081',
         changeOrigin: true
-      },
-      '/testyo': {
-        target: 'https://localhost:8081',
-        changeOrigin: true
-      },
-      '/testing': {
-        target: 'https://localhost:8081',
-        changeOrigin: true
-      },
+      }
     }
   }
 };
