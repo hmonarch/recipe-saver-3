@@ -309,21 +309,6 @@ export default {
     overflow: hidden;
     position: relative;
 
-    // &::after {
-    //   content: '';
-    //   background: url(https://i.ibb.co/gwBSL8t/fish.jpg);
-    //   background-size: cover;
-    //   background-position: center center;
-    //   opacity: 0.1;
-    //   top: 0;
-    //   left: 0;
-    //   bottom: 0;
-    //   right: 0;
-    //   position: absolute;
-    //   z-index: 0;
-    //   background-repeat: no-repeat;
-    // }
-
     .stripes {
       width: 100%;
       display: grid;

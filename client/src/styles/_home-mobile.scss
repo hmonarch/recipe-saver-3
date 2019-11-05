@@ -25,7 +25,7 @@
             margin-bottom: 5px;
 
             #hero-image {
-              height: 450px;
+              height: 290px;
               width: 100%;
               background-image: url(../assets/mobile-hero.png);
               background-size: 75%;
@@ -41,7 +41,7 @@
           justify-content: space-around;
 
           .main-cta {
-            padding: 15px 20px;
+            padding: 15px;
             background-image: none;
           }
         }
@@ -57,7 +57,7 @@
         .site-preview-heading {
           line-height: 26px;
           padding-left: 55px;
-          font-size: 19px;
+          font-size: 18px;
           margin-bottom: 26px;
 
           &::before {
@@ -169,8 +169,8 @@
               grid-template-columns: 1fr;
 
               li {
-                padding-left: 30px;
-                font-size: 15px;
+                padding-left: 24px;
+                font-size: 14.5px;
                 line-height: 18px;
                 margin-bottom: 24px;
                 text-align: left;
@@ -178,6 +178,12 @@
                 &:nth-child(3),
                 &:nth-child(4) {
                   margin-bottom: 24px;
+                }
+
+                &::before {
+                  height: 24px;
+                  width: 24px;
+                  background-size: 24px 24px;
                 }
               }
             }
