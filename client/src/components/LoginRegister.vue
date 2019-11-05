@@ -433,6 +433,11 @@ export default {
   }
 
   @media (max-width: 767px) {
+    .login-register-box {
+      padding: 40px 0;
+      height: auto;
+    }
+
     .main-box {
       .main-header {
         padding: 12px;
@@ -460,11 +465,11 @@ export default {
         .login-strategies {
           .login-strategy {
             .icon-block {
-              height: 36px;
+              height: 40px;
 
               .icon {
-                height: 36px;
-                width: 36px;
+                height: 40px;
+                width: 40px;
               }
             }
           }
@@ -474,11 +479,11 @@ export default {
           margin-top: 18px;
 
           .login-strategy .icon-block {
-            height: 36px;
+            height: 40px;
             
             .icon {
-              height: 36px;
-              width: 36px;
+              height: 40px;
+              width: 40px;
             }
           }
         }
