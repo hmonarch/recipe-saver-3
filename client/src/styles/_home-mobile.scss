@@ -233,6 +233,14 @@
         display: block;
         padding: 20px 0 0 0;
 
+        &:hover ul {
+          filter: none;
+          opacity: 1;
+
+          .integrations-label {
+            opacity: 0;
+          }
+        }
 
         h2 {
           line-height: 30px;
