@@ -28,7 +28,7 @@ const stripe = require('stripe')(stripeSK);
 
 // Global constants
 const GOOGLE_CLIENT_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/google_client_secret.txt`).toString();
-const FACEBOOK_APP_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/facebook_app_secret.txt`).toString();
+const FACEBOOK_APP_SECRET = process.env.PORT ? process.env.FACEBOOK_APP_SECRET : fs.readFileSync(`${__dirname}/private/facebook_app_secret.txt`).toString();
 const baseCallbackURL = (process.env.PORT) ? 'https://www.recipesaver.me' : 'https://localhost:8080';
 
 
@@ -104,8 +104,6 @@ if (!process.env.PORT) {
 // Force HTTPS redirect
 if (process.env.PORT) {
   app.use((req, res, next) => {
-    console.log(`https://${req.header('host')}${req.url}`)
-    console.log(req.header('x-forwarded-proto'))
     if (req.header('x-forwarded-proto') !== 'https') {
       res.redirect(`https://${req.header('host')}${req.url}`);
     } else next();
