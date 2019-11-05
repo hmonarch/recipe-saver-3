@@ -433,10 +433,8 @@ export default {
   }
 
   @media (max-width: 767px) {
-    .login-register-box {
-      padding: 40px 0;
-      height: auto;
-    }
+    padding: 40px 0;
+    height: auto;
 
     .main-box {
       .main-header {
