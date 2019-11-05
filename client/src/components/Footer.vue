@@ -251,7 +251,7 @@
       }
 
       #copyright {
-        padding: 10px 20px;
+        padding: 10px;
 
         #copyright-inner {
           font-size: 12.5px;
