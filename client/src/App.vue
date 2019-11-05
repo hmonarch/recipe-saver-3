@@ -26,6 +26,14 @@ export default {
     EventBus.$on('NEW_RECIPE', () => {
       this.showOverlay = false;
     });
+
+    // Show functionality warning for IE
+    if (/MSIE|Trident\//.test(window.navigator.userAgent) &&
+        !document.querySelector('.ie-warning')) {
+      document.body.insertAdjacentHTML('afterbegin', `
+        <div class="ie-warning"><b>Warning:</b> Recipe Saver is not supported for Internet Explorer. Please download a different browser to use this application.</div>
+      `);
+    }
   },
   watch: {
     '$route': {
@@ -54,5 +62,12 @@ body,
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.ie-warning {
+  background-color: #f00;
+  color: #fff;
+  padding: 30px;
+  text-align: center;
 }
 </style>

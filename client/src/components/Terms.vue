@@ -75,6 +75,7 @@ export default {
 
   },
   created() {
+    window.scrollTo(0,0);
   },
   beforeCreate() {
     document.body.className = 'terms';
