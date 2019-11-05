@@ -69,7 +69,7 @@
       </ul>
 
       <div class="site-preview-cta-container">
-        <router-link :to="{ path: '/login' }" class="site-preview-cta">Start Now</router-link>
+        <router-link :to="{ path: '/login', query: { 'show-reg': 'true' } }"  class="site-preview-cta">Start Now</router-link>
       </div>
     </div>
 
