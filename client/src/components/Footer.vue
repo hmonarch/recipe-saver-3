@@ -2,11 +2,11 @@
   <footer>
     <div id="footer-inner">
       <div id="footer-left">
-        <a id="footer-logo" href="/">
+        <router-link id="footer-logo" :to="{ path: '/' }" >
           <img src="../assets/logo-255x255.png">
           <span class="logo-text">Recipe Saver</span>
           <div class="tagline">Any recipe, anywhere</div>
-        </a>
+        </router-link>
 
         <div id="footer-social">
           <div id="footer-social-heading">FOLLOW US</div>
@@ -57,6 +57,7 @@
     background-color: #444444;
     color: white;
     border-top: solid 1px #26282e;
+    font-family: 'Raleway', Arial, Helvetica, sans-serif;
 
     #footer-inner,
     #copyright-inner {
