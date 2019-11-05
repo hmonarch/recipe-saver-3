@@ -460,11 +460,11 @@ export default {
         .login-strategies {
           .login-strategy {
             .icon-block {
-              height: 40px;
+              height: 36px;
 
               .icon {
-                height: 40px;
-                width: 40px;
+                height: 36px;
+                width: 36px;
               }
             }
           }
@@ -474,11 +474,11 @@ export default {
           margin-top: 18px;
 
           .login-strategy .icon-block {
-            height: 40px;
+            height: 36px;
             
             .icon {
-              height: 40px;
-              width: 40px;
+              height: 36px;
+              width: 36px;
             }
           }
         }
