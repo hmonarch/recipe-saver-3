@@ -222,6 +222,8 @@ export default {
       padding-bottom: 12px;
       position: relative;
       z-index: 10;
+      height: 48px;
+      box-sizing: border-box;
 
       .heading {
         font-size: 22px;
