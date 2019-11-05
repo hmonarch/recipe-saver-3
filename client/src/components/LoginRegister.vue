@@ -188,7 +188,7 @@ export default {
       });
       if (response.data.errMessage) this.message = response.data.errMessage;
       if (response.data.userID) {
-        this.$router.push('/recipes/all');
+        this.$router.push('/plans');
       }
     },
     checkQueryMessages(queryValue) {
@@ -199,6 +199,11 @@ export default {
   },
   mounted() {
     this.checkQueryMessages('login-reg-msg');
+    
+    // Show Register view if parameter exits (coming from homepage links)
+    if (this.$route.query['show-reg']) {
+      this.isLoginView = false;
+    }
   }
 }
 </script>

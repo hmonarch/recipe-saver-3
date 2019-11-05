@@ -20,7 +20,7 @@
         </div>
         <div class="ctas">
           <a @click.prevent="scrollToPlans()" class="secondary-cta" href="#">See Plans</a>
-          <router-link :to="{ path: '/login' }" class="main-cta">Login / Register</router-link>
+          <router-link :to="{ path: '/login', query: { 'show-reg': 'true' } }" class="main-cta">Login / Register</router-link>
         </div>
       </div>
     </div>
@@ -64,10 +64,10 @@
             <div class="plan-cost-details">
               Upgrade later to save 50+ recipes
             </div>
-            <a class="plan-cta" href="#">
+            <router-link class="plan-cta" :to="{ path: '/login', query: { 'show-reg': 'true' } }">
               <span class="plan-cta-text">10 second sign up</span>
               <Icon name="shortArrow"/>
-            </a>
+            </router-link>
           </div>
         </div>
 
@@ -89,10 +89,10 @@
             <div class="plan-cost-details">
               Per month (cancel anytime)
             </div>
-            <a class="plan-cta" href="#">
+            <router-link class="plan-cta" :to="{ path: '/login', query: { 'show-reg': 'true' } }">
               <span class="plan-cta-text">Get full plan</span>
               <Icon name="shortArrow"/>
-            </a>
+            </router-link>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@
     </div>
 
     <div class="horizontal-box-section">
-      <router-link :to="{ path: '/login' }" class="horizontal-box">
+      <router-link :to="{ path: '/login', query: { 'show-reg': 'true' } }" class="horizontal-box">
         <span class="horizontal-box-title">Start Now</span>
         <Icon name="shortArrow"/>
         <div class="horizontal-box-text">
