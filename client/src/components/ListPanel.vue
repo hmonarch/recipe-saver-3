@@ -187,7 +187,7 @@ export default {
     async retrieveRecipes() {
       const response = await RecipeService.getRecipes(this.sortBy);
       this.recipes = response.data;
-      if (!this.recipes.length && this.$route.path === '/recipes/all')    this.showWelcome = true;
+      if (!this.recipes.length && this.$route.path === '/recipes/all') this.showWelcome = true;
       else this.showWelcome = false;
     }
   },
