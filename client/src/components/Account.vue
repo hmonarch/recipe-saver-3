@@ -7,7 +7,7 @@
       <div class="account-left">
         <div :class=" { 'saving': imageIsSaving, 'profile-image-container': true }">
           <img id="profile-image" :src="getUserImg()">
-          <input type="file" id="profile-image-input" accept="image/*" onchange="this.value = null; return false;" hidden @input="handleImage" ref="profileImageInput">
+          <input type="file" id="profile-image-input" accept="image/*" onchange="this.value = null; return false;" hidden ref="profileImageInput">
           <div @click="triggerUpload" id="profile-image-overlay">
             <button class="new-profile-image-btn">Update Image</button>
           </div>
@@ -208,6 +208,9 @@ export default {
       this.title = '';
       this.message = '';
     }
+  },
+  mounted() {
+    document.querySelector('#profile-image-input').addEventListener('input', this.handleImage);
   },
   created() {
     this.getAccountData();

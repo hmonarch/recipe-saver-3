@@ -11,7 +11,7 @@
           </router-link>
         </li>
         <li class="extension">
-          <a href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a>
+          <a href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank"><span class="chrome-ext-prefix">Chrome </span>Extension</a>
         </li>
         <li class="search-container">
           <icon name="magnifyingGlass"/>
@@ -537,6 +537,15 @@ header {
   // ::-webkit-scrollbar-thumb:window-inactive {
   //   background: rgba(246, 245, 245, 0.3); 
   // }
+}
+
+@media (max-width: 894px) {
+  .chrome-ext-prefix {
+    display: none;
+  }
+  .header .header-inner #nav li.search-container {
+    margin-left: 5px;
+  }
 }
 
 
