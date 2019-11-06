@@ -52,7 +52,7 @@
             <div v-if="isLoginView" class="login-register-label">Log In with Email</div>
             <div class="login-strategy email">
               <div class="icon-block"><icon name="email"/></div>
-              <input id="email" class="login-input" type="email" placeholder="email@example.com" v-model="email" @focus="addHighlight($event)" @blur="removeHighlight($event)">
+              <input id="email" class="login-input" type="email" placeholder="email@example.com" autocomplete="username" v-model="email" @focus="addHighlight($event)" @blur="removeHighlight($event)">
             </div>
             <div class="login-strategy password">
               <div v-if="isLoginView" class="icon-block"><icon name="password"/></div>
