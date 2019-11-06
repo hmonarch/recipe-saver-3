@@ -173,7 +173,8 @@ app.get('/auth/facebook/:actionToTake', (req, res, next) => {
 
   passport.authenticate('facebook', 
   { scope: ['email'],
-    state: actionToTake  
+    state: actionToTake,
+    prompt: 'select_account'
   })(req, res, next);
 });
 
