@@ -119,6 +119,8 @@ export default {
     },
     changeView(isLoginView) {
       this.message = '';
+      this.email = '',
+      this.password = '',
       this.isLoginView = isLoginView;
     },
     addHighlight(e) {
