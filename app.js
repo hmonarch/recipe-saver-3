@@ -243,7 +243,8 @@ app.get('/auth/google/:actionToTake', (req, res, next) => {
     'https://www.googleapis.com/auth/plus.login',
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email' ],
-    state: actionToTake
+    state: actionToTake,
+    prompt: 'select_account'
   })(req, res, next);
 });
 
