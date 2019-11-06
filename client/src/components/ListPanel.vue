@@ -175,8 +175,9 @@ export default {
         tagToUpdate: this.selectedTag.name,
         newColor: tagColor
       };  
-      const response = await RecipeService.updateTagColor(data);
+
       window.tagColorMap[this.selectedTag.name] = tagColor;
+      const response = await RecipeService.updateTagColor(data);
       const tagEls = document.querySelectorAll('.selected-tag, #tag-list .tag a, #tags .tag a, #tags .tag .tag-editable');
       [...tagEls].forEach(tag => {
         if (tag.querySelector('.tag-name').textContent.trim() === this.selectedTag.name) {
