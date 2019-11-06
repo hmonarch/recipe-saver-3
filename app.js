@@ -30,6 +30,7 @@ const stripe = require('stripe')(stripeSK);
 const GOOGLE_CLIENT_SECRET = process.env.PORT ? process.env.GOOGLE_CLIENT_SECRET : fs.readFileSync(`${__dirname}/private/google_client_secret.txt`).toString();
 const FACEBOOK_APP_SECRET = process.env.PORT ? process.env.FACEBOOK_APP_SECRET : fs.readFileSync(`${__dirname}/private/facebook_app_secret.txt`).toString();
 const baseCallbackURL = (process.env.PORT) ? 'https://www.recipesaver.me' : 'https://localhost:8080';
+const profileImageDefault = 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png';
 
 
 // DB setup
@@ -154,7 +155,7 @@ passport.use(new FacebookStrategy({
           email: profile._json.email,
           name: `${profile._json.first_name} ${profile._json.last_name}`,
           subscription: 'Basic',
-          profileImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png'
+          profileImage: profileImageDefault
         });
         newUser.save(function(err) {
           if (err) console.error(err);
@@ -221,7 +222,7 @@ passport.use(new GoogleStrategy({
           email: profile._json.email,
           name: profile.displayName,
           subscription: 'Basic',
-          profileImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png'
+          profileImage: profileImageDefault
         });
         newUser.save(function(err) {
           if (err) console.error(err);
@@ -286,7 +287,7 @@ passport.use(new LocalStrategy(
           password: hash,
           name: req.body.name,
           subscription: 'Basic',
-          profileImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png'
+          profileImage: profileImageDefault
         });
         newUser.save(err => {
           if (err) console.error(err);
