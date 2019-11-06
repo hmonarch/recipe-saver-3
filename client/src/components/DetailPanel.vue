@@ -141,7 +141,7 @@
               <div v-else @click="removeImage()" id="remove-image">Remove Image</div>
             </div>
             <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
-            <input type="file" id="image-input" accept="image/*" onchange="this.value = null; return false;" @input="handleImage" ref="imageInput">
+            <input type="file" id="image-input" accept="image/*" @input="handleImage" ref="imageInput">
           </form>
         </div>
       </div>
