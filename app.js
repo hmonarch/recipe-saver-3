@@ -153,7 +153,8 @@ passport.use(new FacebookStrategy({
           facebookId: profile.id,
           email: profile._json.email,
           name: `${profile._json.first_name} ${profile._json.last_name}`,
-          subscription: 'Basic'
+          subscription: 'Basic',
+          profileImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png'
         });
         newUser.save(function(err) {
           if (err) console.error(err);
@@ -219,7 +220,8 @@ passport.use(new GoogleStrategy({
           googleId: profile.id,
           email: profile._json.email,
           name: profile.displayName,
-          subscription: 'Basic'
+          subscription: 'Basic',
+          profileImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png'
         });
         newUser.save(function(err) {
           if (err) console.error(err);
@@ -283,7 +285,8 @@ passport.use(new LocalStrategy(
           email,
           password: hash,
           name: req.body.name,
-          subscription: 'Basic'
+          subscription: 'Basic',
+          profileImage: 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png'
         });
         newUser.save(err => {
           if (err) console.error(err);
