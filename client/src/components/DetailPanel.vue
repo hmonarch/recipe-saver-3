@@ -141,7 +141,7 @@
               <div v-else @click="removeImage()" id="remove-image">Remove Image</div>
             </div>
             <button @click="triggerUpload()" id="image-input-btn">Choose File</button>
-            <input type="file" id="image-input" accept="image/*" @input="handleImage" ref="imageInput">
+            <input type="file" id="image-input" accept="image/*" ref="imageInput">
           </form>
         </div>
       </div>
@@ -454,6 +454,10 @@ export default {
       this.imageAsset = 'remove';
     },
     handleImage(e, imageObj) {
+      console.log(e);
+      console.log(e.target);
+      console.log(e.target.files);
+
       // imageObj is the result of a drag and drop
       if (imageObj) {
         if (imageObj.url) {
@@ -517,6 +521,8 @@ export default {
       this.editor.setOptions({editable: true});
       this.editMode = true;
     });
+
+    document.querySelector('#image-input').addEventListener('change', this.handleImage);
 
     const dropArea = document.querySelector('.recipe-image-overlay');
     dropArea.addEventListener('dragstart', e => {
