@@ -116,6 +116,8 @@ export default {
       this.user = response.data;
     },
     async handleImage(e) {
+      console.log(e.target);
+      console.log(e.target.files);
       this.imageIsSaving = true;
       const image = e.target.files[0];
 
