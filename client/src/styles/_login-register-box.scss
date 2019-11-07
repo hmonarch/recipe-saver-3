@@ -61,6 +61,7 @@ body.reset-form {
   body.reset-form {
     height: 100%;
     display: block;
+    min-height: -webkit-fill-available;
 
     .login-register-box,
     .reset-main-body,
