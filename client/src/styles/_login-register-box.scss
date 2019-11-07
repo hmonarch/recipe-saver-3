@@ -1,11 +1,9 @@
 body.login-register,
 body.password-recovery,
 body.reset-form {
-  #app {
-    background: linear-gradient(45deg, #23d82f 0%,#00adff 100%);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  }
+  background: linear-gradient(45deg, #23d82f 0%,#00adff 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 
@@ -61,12 +59,9 @@ body.reset-form {
   body.login-register, 
   body.password-recovery,
   body.reset-form {
-
-    #app {
-      height: 100%;
-      display: block;
-      min-height: -webkit-fill-available;
-    }
+    height: 100%;
+    display: block;
+    min-height: -webkit-fill-available;
 
     .login-register-box,
     .reset-main-body,
