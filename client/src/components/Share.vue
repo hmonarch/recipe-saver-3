@@ -83,7 +83,9 @@ export default {
   },
   created() {
     this.retrieveRecipe();
-
+  },
+  beforeCreate() {
+    document.body.className = 'share';
   }
 }
 </script>

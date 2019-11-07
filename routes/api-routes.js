@@ -288,6 +288,7 @@ module.exports = function(app) {
       recipe.url = url;
       recipe.description = description;
       recipe.tags = JSON.parse(tags);
+
       if (removeImage) recipe.image = '';
     
       if (imageAsset || image) {

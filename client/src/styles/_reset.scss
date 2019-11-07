@@ -351,20 +351,43 @@ table {
 
 /* Print styles */
 @media print {
-	body {
-		background: transparent !important;
-	}
-  #list-panel,
-  #utility-bar,
-  #side-nav,
-  header,
-  .menubar {
-    display: none !important;
-  }
-  #detail-panel {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 100% !important;
+  .recipes,
+  .share {
+
+    body,
+    #share {
+      background: transparent !important;
+    }
+
+    #share {
+      display: block;
+
+      #share-container {
+        max-height: none;
+
+        .panel .image {
+          height: 285px;
+          width: 285px;
+          object-fit: none;;
+        }
+      }
+    }
+
+
+    #list-panel,
+    #utility-bar,
+    #side-nav,
+    header,
+    .menubar,
+    .actions {
+      display: none !important;
+    }
+
+    #detail-panel {
+      width: 100% !important;
+      max-width: 100% !important;
+      min-width: 100% !important;
+    }
   }
 }
 
