@@ -206,6 +206,8 @@ export default {
     if (this.$route.query['show-reg']) {
       this.isLoginView = false;
     }
+
+    window.scrollTo(0,0);
   }
 }
 </script>
