@@ -1,5 +1,13 @@
-.login-register-box {
+body.login-register,
+body.password-recovery,
+body.reset-form {
   background: linear-gradient(45deg, #23d82f 0%,#00adff 100%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+
+.login-register-box {
   height: 100%;
   position: relative;
   display: flex;
@@ -45,4 +53,25 @@
   .main-box {
     width: 90%;
   } 
+}
+
+@media (max-height: 1000px) {
+  body.login-register, 
+  body.password-recovery,
+  body.reset-form {
+    height: 100%;
+    display: block;
+
+    .login-register-box,
+    .reset-main-body,
+    .recovery-main-body {
+      height: auto;
+      display: block;
+      padding: 60px 0;
+    }
+
+    .main-box {
+      margin: 0 auto;
+    }
+  }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div id="login-register" class="login-register-box" :class="{ 'login-view': isLoginView, 'login-register-box': true }">
+  <div id="login-register" :class="{ 'login-view': isLoginView, 'login-register-box': true }">
 
     <div class="main-box">
       <div class="main-header">
@@ -208,6 +208,9 @@ export default {
     }
 
     window.scrollTo(0,0);
+  },
+  beforeCreate() {
+    document.body.className = 'login-register';
   }
 }
 </script>
@@ -493,30 +496,6 @@ export default {
 
       .main-footer {
         padding: 18px;
-      }
-    }
-  }
-
-  @media (max-height: 810px) {
-    &:not(.login-view) {
-      display: block;
-      padding: 60px 0;
-      height: 107ch;
-
-      .main-box {
-        margin: 0 auto;
-      }
-    }
-  }
-
-  @media (max-height: 674px) {
-    &.login-view {
-      display: block;
-      padding: 60px 0;
-      height: 90ch;
-
-      .main-box {
-        margin: 0 auto;
       }
     }
   }

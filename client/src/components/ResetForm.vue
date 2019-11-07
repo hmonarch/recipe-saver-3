@@ -9,7 +9,7 @@
           <div class="logo-text">Recipe Saver</div>
         </router-link>
       </div>
-      <div class="main-body">
+      <div class="main-body reset-main-body">
         <div v-if="tokenValid" class="reset-form-body">
           <div class="your-email"><b>Email:</b><span id="user-email"> {{ userEmail }}</span></div>
           <label class="create-new">Create New Password</label>
@@ -88,6 +88,9 @@ export default {
   },
   created() {
     this.verifyToken(this.$route.params.token);
+  },
+  beforeCreate() {
+    document.body.className = 'reset-form';
   }
 }
 </script>

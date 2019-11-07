@@ -9,7 +9,7 @@
           <div class="logo-text">Recipe Saver</div>
         </router-link>
       </div>
-      <div class="main-body">
+      <div class="main-body recovery-main-body">
 
         <div class="success-message">{{ successMessage }}</div>
 
@@ -52,6 +52,9 @@ export default {
         this.successMessage = 'An email with a password reset link has been sent. Please check your spam folder and allow up to 15 minutes for the email to be delivered.';
       }
     }
+  },
+  beforeCreate() {
+    document.body.className = 'password-recovery';
   }
 }
 </script>
