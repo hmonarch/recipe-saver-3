@@ -5,6 +5,7 @@
 
     #utility-bar {
       margin: 0 -20px 20px -20px;
+      padding-bottom: 0;
 
       li#more-actions-container {
         margin-right: 0;
@@ -13,12 +14,20 @@
 
         .utility-btn {
           width: 45px;
-          padding: 20px 0 0 20px;
+          padding: 20px 0 6px 20px;
+
+          .icon--dots {
+            left: -13px;
+          }
+
+          .icon--close {
+            right: -15px;
+          }
         }
 
         #more-actions-menu {
-          top: 33px;
-          left: 0;
+          top: 46px;
+          left: 25px;
 
           .action-cancel,
           .action-toggle-screen,
