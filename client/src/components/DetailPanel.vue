@@ -530,6 +530,8 @@ export default {
       this.editMode = true;
     });
 
+    // If a file was added then the value of the input will stay that way until it's changed again
+    // This means we need to clear it out after a click to ensure the same file can be uploaded to trigger the change event
     document.querySelector('#image-input').addEventListener('click', e => {
       console.log('click');
       e.target.value = '';
