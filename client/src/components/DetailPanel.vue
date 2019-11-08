@@ -354,7 +354,7 @@ export default {
       const initialUrl = this.recipe.url.trim();
       const protocolRegExp = new RegExp(/^https?:\/\//i);
       const protocol = (initialUrl.match(protocolRegExp) || [])[0];
-      const formattedUrl = `${!protocol ? 'http://' : ''}${initialUrl}`;
+      let formattedUrl = `${!protocol ? 'http://' : ''}${initialUrl}`;
       if (initialUrl === '') formattedUrl = '';
       this.recipe.url = formattedUrl;
 
