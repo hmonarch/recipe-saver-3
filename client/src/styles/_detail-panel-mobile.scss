@@ -25,10 +25,10 @@
 
     #title-input,
     #url-input,
-    #tags li#new-tag #new-tag-input {
+    #tags li#new-tag #new-tag-input,
+    #description #editor {
       font-size: 16px;
     }
-     
 
     .recipe-image-container {
       .recipe-image-overlay {
@@ -47,12 +47,6 @@
           box-shadow: 2px 3px 5px 1px rgba(128, 128, 128, 0.35);
         }
       }
-    }
-  }
-
-  #description {
-    #editor {
-      font-size: 16px;
     }
   }
 }
