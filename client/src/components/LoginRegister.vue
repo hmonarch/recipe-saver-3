@@ -447,7 +447,7 @@ export default {
     #email,
     #password,
     #password-confirm {
-      font-size: 16px;
+      font-size: 16px !important;
     }
 
     .main-box {
