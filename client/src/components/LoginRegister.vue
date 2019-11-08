@@ -443,6 +443,13 @@ export default {
     padding: 40px 0;
     height: auto;
 
+    #full-name,
+    #email,
+    #password,
+    #password-confirm {
+      font-size: 16px;
+    }
+
     .main-box {
       .main-header {
         padding: 12px;
