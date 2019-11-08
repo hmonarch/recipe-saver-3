@@ -67,6 +67,7 @@
     .account-modal .account-modal-inner {
       width: 90%;
       box-sizing: border-box;
+      max-height: calc(100vh - 146px);
     }
   }
 }
