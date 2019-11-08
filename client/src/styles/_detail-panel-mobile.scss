@@ -23,6 +23,13 @@
       }
     }
 
+    #title-input,
+    #url-input,
+    #tags li#new-tag #new-tag-input {
+      font-size: 16px;
+    }
+     
+
     .recipe-image-container {
       .recipe-image-overlay {
         .recipe-image-overlay-text {
@@ -45,7 +52,7 @@
 
   #description {
     #editor {
-      font-size: 15.5px;
+      font-size: 16px;
     }
   }
 }
