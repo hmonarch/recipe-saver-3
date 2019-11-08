@@ -351,10 +351,11 @@ export default {
       }
 
       // Add "http://" to URLs without protocol
-      let formattedUrl = this.recipe.url.trim();
+      const initialUrl = this.recipe.url.trim();
       const protocolRegExp = new RegExp(/^https?:\/\//i);
-      const protocol = (formattedUrl.match(protocolRegExp) || [])[0];
-      formattedUrl = `${!protocol ? 'http://' : ''}${formattedUrl}`;
+      const protocol = (initialUrl.match(protocolRegExp) || [])[0];
+      const formattedUrl = `${!protocol ? 'http://' : ''}${initialUrl}`;
+      if (initialUrl === '') formattedUrl = '';
       this.recipe.url = formattedUrl;
 
       this.saveDescription();

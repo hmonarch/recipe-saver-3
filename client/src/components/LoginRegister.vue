@@ -389,7 +389,8 @@ export default {
         }
 
         .password-recovery {
-          width: 129px;
+          width: 140px;
+          text-align: left;
           display: block;
           text-decoration: underline;
           color: #000;
