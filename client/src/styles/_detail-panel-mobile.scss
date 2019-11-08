@@ -1,10 +1,15 @@
 @media (max-width: 767px) {
   #detail-panel {
     display: block !important;
+    padding-top: 0;
 
     #utility-bar {
+      margin: 0 -20px 20px -20px;
+
       li#more-actions-container {
         margin-right: 16px;
+        padding-top: 20px;
+        padding-left: 20px;
 
         #more-actions-menu {
           top: 33px;
@@ -20,6 +25,11 @@
             margin: 10px 0 20px 0;
           }
         }
+      }
+
+      > li:last-child {
+        padding-top: 20px;
+        padding-right: 20px;
       }
     }
 
