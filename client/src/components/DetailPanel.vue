@@ -530,7 +530,12 @@ export default {
       this.editMode = true;
     });
 
+    document.querySelector('#image-input').addEventListener('click', e => {
+      console.log('click');
+      e.target.value = '';
+    });
     document.querySelector('#image-input').addEventListener('change', this.handleImage);
+
 
     const dropArea = document.querySelector('.recipe-image-overlay');
     dropArea.addEventListener('dragstart', e => {
