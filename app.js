@@ -122,6 +122,14 @@ app.use('/*', (req, res, next) => {
 
 
 // Passport Facebook middleware
+FacebookStrategy.prototype.authorizationParams = function (options) {
+  var params = {},
+      display = options.display,
+      auth_type = options.auth_type;
+  if (display) params['display'] = display;
+  if (auth_type) params['auth_type'] = auth_type;
+  return params;
+};
 passport.use(new FacebookStrategy({
     clientID: '264292990672562',
     clientSecret: FACEBOOK_APP_SECRET,
