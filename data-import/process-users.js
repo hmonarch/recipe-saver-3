@@ -1,7 +1,7 @@
 // NOTE: Delete raw data after use for privacy reasons
 
 const fs = require('fs');
-const users = require('./users_backup.js');
+const users = require('../users_backup.js');
 
 console.log(users.length);
 

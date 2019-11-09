@@ -1,7 +1,7 @@
 // NOTE: Delete raw data after use for privacy reasons
 
 const fs = require('fs');
-const recipes = require('./recipes_backup.js');
+const recipes = require('../recipes_backup.js');
 
 console.log(recipes.length);
 
