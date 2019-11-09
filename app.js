@@ -128,6 +128,7 @@ passport.use(new FacebookStrategy({
     callbackURL: `${baseCallbackURL}/auth/facebook/login/callback`,
     profileFields: ['id', 'emails', 'name'],
     passReqToCallback : true,
+    auth_type: "reauthenticate"
   },
   (req, accessToken, refreshToken, profile, done) => {
     const actionToTake = req.query.state;

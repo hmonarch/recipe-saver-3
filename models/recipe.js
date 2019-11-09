@@ -5,7 +5,6 @@ const RecipeSchema = new Schema({
   id: Schema.ObjectId,
 	user_id: String,
 	title: String,
-	ingredients: [String],
 	description: String,
 	url: String,
 	image: String,
