@@ -335,24 +335,8 @@ require('./routes/sharing')(app);
 require('./routes/recovery')(app);
 
 
-// // Get base page
-// // The webpack output html file should not be the same as the index route otherwise the Express static directory will immediately return the same-named file in the director and this custom Express route will never run so that's why '/' will return 'app.html' and not 'index.html'
-// app.get('/', (req, res) => {
-//   console.log('I can do things on the server now');
-//   res.sendFile(`${__dirname}/client/dist/app.html`);
-// });
-
-
-// app.get(['/recipes', '/recipes/:category', '/recipes/tag/:tagname'], (req, res) => {
-//   console.log('array of routes');
-//   res.sendFile(`${__dirname}/client/dist/app.html`);
-// });
-
-
-
 // Listen on port 8081
 // Use a self-signed certificate to serve localhost on https since Facebook login requires it
-
 if (process.env.PORT) {
   app.listen(process.env.PORT, () => {
     console.log('App running on Heroku');

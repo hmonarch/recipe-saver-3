@@ -233,7 +233,7 @@ export default {
     },
     async retrieveRecipe() {
       const recipeID = this.$route.query.id;
-      if (!recipeID || recipeID === 'new') return console.log('no recipe id');
+      if (!recipeID || recipeID === 'new') return;
       const response = await RecipeService.getRecipe(recipeID);
       this.recipe = response.data;
       this.editor.setContent(this.recipe.description);
@@ -286,7 +286,7 @@ export default {
       this.confirmActive = false;
       const recipeTitle = this.recipe.title;
       const response = await RecipeService.deleteRecipe(this.recipe._id);
-      if (response.status !== 200) return console.log('Error deleting recipe');
+      if (response.status !== 200) return;
 
       this.closeDetails();
       EventBus.$emit('MESSAGE', {
@@ -462,10 +462,6 @@ export default {
       this.imageAsset = 'remove';
     },
     handleImage(e, imageObj) {
-      console.log(e);
-      console.log(e.target);
-      console.log(e.target.files);
-
       // imageObj is the result of a drag and drop
       if (imageObj) {
         if (imageObj.url) {
@@ -533,7 +529,6 @@ export default {
     // If a file was added then the value of the input will stay that way until it's changed again
     // This means we need to clear it out after a click to ensure the same file can be uploaded to trigger the change event
     document.querySelector('#image-input').addEventListener('click', e => {
-      console.log('click');
       e.target.value = '';
     });
     document.querySelector('#image-input').addEventListener('change', this.handleImage);

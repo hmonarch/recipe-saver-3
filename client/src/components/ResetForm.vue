@@ -46,14 +46,12 @@ export default {
   methods: {
     async verifyToken(token) {
       const response = await MiscService.verifyToken(token);
-      console.log('response', response.data);
 
       if (response.data && response.data.message !== 'ok') {
         this.errorMessage = response.data.message;
       } else if (response.data.message === 'ok') {
         this.tokenValid = true;
-        this.userEmail = response.data.userEmail
-        console.log('all good');
+        this.userEmail = response.data.userEmail;
       }
     },
     passwordIsValid() {
@@ -75,8 +73,6 @@ export default {
 
       this.errorMessage = '';
       const response = await MiscService.resetPassword({ token: this.$route.params.token, password: this.password });
-
-      console.log('response', response.data);
 
       if (response.data.message !== 'Password changed') {
         this.errorMessage = response.data.message;

@@ -57,9 +57,7 @@ export default {
       const response = await RecipeService.retrieveSharedRecipe(recipeID);
       this.recipe = response.data;
 
-      console.log(response);
       if (!response.data) {
-        console.log('No recipe');
         this.recipe = {
           title: 'Recipe Not Found',
           description: 'The recipe you requested may have been deleted by it\'s owner.'

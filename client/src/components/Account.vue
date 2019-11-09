@@ -112,12 +112,9 @@ export default {
     },
     async getAccountData() {
       const response = await AuthService.getAccountData();
-      console.log('response', response.data);
       this.user = response.data;
     },
     async handleImage(e) {
-      console.log(e.target);
-      console.log(e.target.files);
       this.imageIsSaving = true;
       const image = e.target.files[0];
 
@@ -132,7 +129,6 @@ export default {
       }
 
       const response = await MiscService.uploadImage(image);
-      console.log(response);
       document.querySelector('#profile-image').setAttribute('src', response.data.profileImage);
       this.imageIsSaving = false;
       this.$ga.event({
@@ -142,7 +138,6 @@ export default {
       });
     },
     async cancelSubscription() {
-      console.log('cancelSubscription');
       this.resetModal();
 
       this.processing = true;
@@ -170,9 +165,6 @@ export default {
         // Reset user data for template
         this.getAccountData();
       }
-
-
-      console.log('cancel sub res', response);
     },
     confirmDeleteAccount() {
       this.resetModal();

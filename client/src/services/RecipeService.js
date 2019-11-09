@@ -36,7 +36,6 @@ export default {
 
     if (removeImage) {
       fd.append('removeImage', true);
-      console.log('removing image');
     }
 
     if (updateImage) {

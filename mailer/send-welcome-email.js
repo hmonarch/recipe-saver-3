@@ -17,8 +17,6 @@ module.exports = function sendWelcomeEmail(email) {
       `,
     }, 
     (error, response) => {
-      console.log('sendWelcomeEmail error', error);
-      console.log('sendWelcomeEmail response', response);
     }
   );
 }

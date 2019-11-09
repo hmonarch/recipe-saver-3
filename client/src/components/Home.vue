@@ -154,7 +154,6 @@ export default {
   },
   methods: {
     scrollToPlans() {
-      console.log('scrolling', document.querySelector('.plans'));
       document.querySelector('.plans').scrollIntoView({
         behavior: 'smooth'
       });
