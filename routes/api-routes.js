@@ -23,6 +23,7 @@ module.exports = function(app) {
 
   // Extension posts
   app.post('/api/extension', (req, res) => {
+    console.log('EXTENSION USER ID: ', req.body.user_id);
     User.findOne({ _id: req.body.user_id }, (err, user) => {
       if (!user) return res.sendStatus(401);
       Recipe.find({ user_id: req.body.user_id }, (err, recipes) => {
