@@ -1,6 +1,6 @@
 // Set dev or prod site
 // const mode = 'prod';
-const mode = 'prod';
+const mode = 'dev';
 const site = (mode === 'prod') ? 'https://www.recipesaver.me' : 'https://localhost:8080';
 
 // Get whitelisted sites
