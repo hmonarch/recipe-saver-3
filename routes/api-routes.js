@@ -33,32 +33,41 @@ module.exports = function(app) {
           return res.json({ message: 'Limit reached' });
         }
 
-        const options = {'url': req.body};
-        ogs(options, (error, results) => {
-          console.log('error:', error); // This is returns true for the error
-          console.log('results:', results);
-        });
-
         const data = req.body;
-        const newRecipe = new Recipe(data);
-    
-        // Give tags the default color
-        // Note: This will be overwritten client-side by the dynamicBackgroundColor utility
-        const coloredTags = data.tags.map(tag => {
-          return { name: tag, color: '#000000' };
-        });
-        newRecipe.tags = coloredTags;
-        newRecipe.favorite = false;
-    
-        if (data.image) {
-          cloudinary.uploader.upload(data.image, result => {
-            console.log('cloudinary upload:', result.secure_url);
-            newRecipe.image = result.secure_url;
+        let ogImage;
+
+        // If recipe was not scarped then check for og:image
+        if (!data.scraped !== 'true') { // Note that this value is a string
+          console.log('no scraped');
+          ogs({ 'url': req.body.url, 'timeout': 4500 }, (error, results) => {
+            ogImage = results.data && results.data.ogImage && results.data.ogImage.url;
+            processRecipe(ogImage);
+          });
+        } else processRecipe();
+
+        function processRecipe(ogImageToUpload) {
+          const newRecipe = new Recipe(data);
+          
+          // Give tags the default color
+          // Note: This will be overwritten client-side by the dynamicBackgroundColor utility
+          const coloredTags = data.tags.map(tag => {
+            return { name: tag, color: '#000000' };
+          });
+          newRecipe.tags = coloredTags;
+          newRecipe.favorite = false;
+        
+          console.log('ogImageToUpload', ogImageToUpload);
+          if (data.image || ogImageToUpload) {
+            cloudinary.uploader.upload(data.image || ogImageToUpload, result => {
+              console.log('cloudinary upload:', result.secure_url);
+              newRecipe.image = result.secure_url;
+              saveRecipe(newRecipe);
+            },
+            cloudinaryOptionsRecipe);
+          } else {
+            console.log('NO iamge');
             saveRecipe(newRecipe);
-          },
-          cloudinaryOptionsRecipe);
-        } else {
-          saveRecipe(newRecipe);
+          }
         }
       });
     });

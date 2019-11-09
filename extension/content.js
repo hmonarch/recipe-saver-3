@@ -38,6 +38,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			const scrape = await import(src);
 			// This returns a module - the default property is the actual function
 			const recipe = scrape.default();
+			recipe.scraped = true;
 			sendResponse(recipe);
 		})();
 	}

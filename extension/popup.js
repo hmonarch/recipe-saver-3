@@ -3,6 +3,8 @@
 const mode = 'prod';
 const site = (mode === 'prod') ? 'https://www.recipesaver.me' : 'https://localhost:8080';
 
+// Get whitelisted sites
+const whiteListedSites = getWhiteListedSites();
 
 // Declare elements
 const moreEl = document.querySelector('#more');
@@ -21,6 +23,7 @@ const myRecipesLink = document.querySelector('#my-recipes');
 const welcomeSignInLink = document.querySelector('#welcome-sign-in');
 const viewLink = document.querySelector('#view-link');
 const signInLink = document.querySelector('#sign-in');
+const scrapedEl = document.querySelector('#scraped');
 let rs_id = null;
 
 // Update link destinations based on site setting
@@ -50,9 +53,27 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     if (!rs_id) {
       showSignUpMessage();
     } else {
-      chrome.tabs.sendMessage(tabs[0].id, {rsAction: 'extract'}, function(response) {
-        console.info('Response', response);
-        processResponse(response);
+
+      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+        const currentTabData = tabs[0];
+        const a = document.createElement('a');
+        a.href = currentTabData.url;
+        const currentHost = a.host.replace(/^www\./, '');
+        const siteIsWhiteListed = whiteListedSites.indexOf(currentHost) > -1;
+
+        if (siteIsWhiteListed) {
+          chrome.tabs.sendMessage(tabs[0].id, {rsAction: 'extract'}, function(response) {
+            console.info('Response', response);
+            processResponse(response);
+          });
+        } else {
+          console.log('Not whitelisted');
+          processResponse({
+            url: currentTabData.url,
+            title: currentTabData.title,
+            scraped: false
+          });
+        }
       });
     }
   });
@@ -88,6 +109,9 @@ function processResponse(response) {
     descEl.innerText = `${ingredients}\n\n\n${description}`;
     moreEl.click();
   }
+
+  // Scraped
+  scrapedEl.value = response.scraped;
 }
 
 // Send data to server
@@ -98,6 +122,7 @@ function sendToRS() {
     description: descEl.innerHTML,
     url: urlInput.value,
     image: (imageEl.style.display === 'block') ? imageEl.getAttribute('src') : null,
+    scraped: scrapedEl.value
   };
 
   data.user_id = rs_id;
@@ -156,3 +181,88 @@ function updateLinks() {
   welcomeSignInLink.setAttribute('href', `${site}/login`);
   signInLink.setAttribute('href', `${site}/login`);
 }
+
+
+function getWhiteListedSites() {
+  return [
+    'allrecipes.com.au',
+    'allrecipes.com',
+    'parade.com',
+    'cooking.nytimes.com',
+    'emerils.com',
+    'food52.com',
+    'hugsandcookiesxoxo.com',
+    'recipes.sparkpeople.com',
+    'smittenkitchen.com',
+    'tastykitchen.com',
+    'thepioneerwoman.com',
+    'jenelizabethsjournals.com',
+    'whiteonricecouple.com',
+    'aspicyperspective.com',
+    'budgetbytes.com',
+    'chowhound.com',
+    'cooks.com',
+    'deliaonline.com',
+    'finecooking.com',
+    'foodrepublic.com',
+    'geniuskitchen.com',
+    'forkly.com',
+    'inspiredtaste.net',
+    'jamieoliver.com',
+    'justataste.com',
+    'kingarthurflour.com',
+    'myfoodandfamily.com',
+    'laaloosh.com',
+    'marthastewart.com',
+    'marthastewart.com',
+    'mrfood.com',
+    'pauladeen.com',
+    'ricekrispies.com',
+    'seriouseats.com',
+    'simplyrecipes.com',
+    'sixsistersstuff.com',
+    'skinnytaste.com',
+    'taste.com.au',
+    'tasteofhome.com',
+    'the-girl-who-ate-everything.com',
+    'themediterraneandish.com',
+    'thereciperebel.com',
+    'thespruceeats.com',
+    'twopeasandtheirpod.com',
+    'vegetariantimes.com',
+    'weightwatchers.com',
+    'wholefoodsmarket.com',
+    'williams-sonoma.com',
+    'foodnetwork.com',
+    'foodnetwork.ca',
+    'yummly.com',
+    'bonappetit.com',
+    'epicurious.com',
+    'bettycrocker.com',
+    'pillsbury.com',
+    'tablespoon.com',
+    'countryliving.com',
+    'delish.com',
+    'esquire.com',
+    'goodhousekeeping.com',
+    'womansday.com',
+    'bhg.com',
+    'eatingwell.com',
+    'rachaelraymag.com',
+    'cookingchanneltv.com',
+    'cookinglight.com',
+    'myrecipes.com',
+    'foodandwine.com',
+    'health.com',
+    'realsimple.com',
+    'southernliving.com',
+    'tasty.co',
+    'hellofresh.com',
+    'thekitchn.com',
+    'bbc.com',
+    'wellplated.com',
+    'pinchofyum.com',
+    'traderjoes.com'
+  ];
+}
+
