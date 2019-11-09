@@ -5,6 +5,7 @@ const User = require('../models/user');
 const cloudinary = require('cloudinary');
 const fs = require('fs');
 const loggedIn = require('../middleware/logged-in');
+const ogs = require('open-graph-scraper');
 
 // Config variables
 const cloudinarySecret = process.env.PORT ? process.env.CLOUDINARY_SECRET : fs.readFileSync(`${__dirname}/../private/cloudinary_secret.txt`).toString();
@@ -31,6 +32,12 @@ module.exports = function(app) {
         if (recipes.length >= recipeLimit && !hasPaidPlan(user)) {
           return res.json({ message: 'Limit reached' });
         }
+
+        const options = {'url': req.body};
+        ogs(options, (error, results) => {
+          console.log('error:', error); // This is returns true for the error
+          console.log('results:', results);
+        });
 
         const data = req.body;
         const newRecipe = new Recipe(data);
