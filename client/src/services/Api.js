@@ -3,7 +3,7 @@ import axios from 'axios';
 export default function() {
 
   const baseURL = (window.location.host.includes('recipesaver.me')) ? 
-  `https://www.${window.location.host}/api` : 'https://localhost:8081/api';
+  `https://${window.location.host}/api` : 'https://localhost:8081/api';
 
   axios.defaults.withCredentials = true;
 

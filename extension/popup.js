@@ -1,7 +1,7 @@
 // Set dev or prod site
 // const mode = 'prod';
 const mode = 'prod';
-const site = (mode === 'prod') ? 'https://recipesaver.me' : 'https://localhost:8080';
+const site = (mode === 'prod') ? 'https://www.recipesaver.me' : 'https://localhost:8080';
 
 
 // Declare elements

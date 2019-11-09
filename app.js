@@ -106,7 +106,7 @@ if (!process.env.PORT) {
 if (process.env.PORT) {
   app.use((req, res, next) => {
     if (req.header('x-forwarded-proto') !== 'https') {
-      res.redirect(`https://${req.header('host')}${req.url}`);
+      res.redirect(`https://www.${req.header('host').repace('www.', '')}${req.url}`);
     } else next();
   });
 }
