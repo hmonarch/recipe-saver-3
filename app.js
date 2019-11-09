@@ -103,10 +103,11 @@ if (!process.env.PORT) {
 }
 
 // Force HTTPS redirect
+// Always force "https://www."
 if (process.env.PORT) {
   app.use((req, res, next) => {
-    console.log('HEADER:::::', req.header('host'));
-    if (req.header('x-forwarded-proto') !== 'https') {
+    if (req.header('x-forwarded-proto') !== 'https' ||
+        !req.header('host').includes('www.') ) {
       res.redirect(`https://www.${req.header('host').replace('www.', '')}${req.url}`);
     } else next();
   });
