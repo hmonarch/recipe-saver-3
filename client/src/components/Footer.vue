@@ -20,6 +20,7 @@
               <span class="footer-social-label">Twitter</span>
             </a>
           </div>
+          <div id="footer-contact">contact@recipesaver.me</div>
         </div>
 
       </div>
@@ -113,28 +114,35 @@
 
         #footer-social-heading {
           font-size: 18px;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
         }
 
-        .footer-social-icon {
-          color: white;
-          text-decoration: none;
+        #footer-social-icons {
+          margin-bottom: 8px;
 
-          &:hover {
-            color: #23d82f;
-          }
+          .footer-social-icon {
+            color: white;
+            text-decoration: none;
 
-          img {
-            vertical-align: middle;
-          }
+            &:hover {
+              color: #23d82f;
+            }
 
-          .footer-social-label {
-            margin-right: 20px;
-            display: inline-block;
-            margin-left: 8px;
+            img {
+              vertical-align: middle;
+            }
+
+            .footer-social-label {
+              margin-right: 20px;
+              display: inline-block;
+              margin-left: 8px;
+            }
           }
         }
 
+        #footer-contact {
+          font-size: 14px;
+        }
       }
     }
 
