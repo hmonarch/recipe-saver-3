@@ -289,7 +289,7 @@ passport.use(new LocalStrategy(
         const newUser = new User({
           email,
           password: hash,
-          name: req.body.name,
+          name: req.body.fullName,
           subscription: 'Basic',
           profileImage: profileImageDefault
         });

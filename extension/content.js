@@ -22,7 +22,7 @@ if (window.location.hostname === 'recipe-saver-3.herokuapp.com' ||
 
 		function saveId(rs_id) {
 			chrome.storage.sync.set({ 'rs_id': rs_id }, () => {
-				console.log('rs_id saved', rs_id);
+				// console.log('rs_id saved', rs_id);
 			});
 		}
 }

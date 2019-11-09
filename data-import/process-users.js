@@ -7,6 +7,13 @@ console.log(users.length);
 
 users.forEach(user => {
   user.profileImage = 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png';
+
+  if (user.subscription === 'Full (Legacy)') {
+    user.appVersion = 1;
+  } else {
+    user.appVersion = 2;
+  }
+  user.appVersion
 });
 
 fs.writeFile('users_new.json', JSON.stringify(users), 'utf8', () => {

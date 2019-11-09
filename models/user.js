@@ -16,7 +16,8 @@ const UserSchema = new Schema({
 	subEnds: Number,
 
   creationDate: {type: Date, default: Date.now},
-  lastLogin: {type: Date, default: Date.now},
+	lastLogin: {type: Date, default: Date.now},
+	appVersion: {type: Number, default: 3},
   resetPasswordToken: String,
   resetPasswordExpires: String,
 });

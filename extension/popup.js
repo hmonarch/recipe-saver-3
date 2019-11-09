@@ -45,7 +45,7 @@ chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
   // Check for rs_id first, show login link if there's no id
   chrome.storage.sync.get('rs_id', storage =>  {
     rs_id = storage.rs_id;
-    console.log(rs_id);
+    // console.log(rs_id);
 
     if (!rs_id) {
       showSignUpMessage();
@@ -113,7 +113,7 @@ function sendToRS() {
 
 
   const xhr = new XMLHttpRequest();
-  xhr.open('POST', `${(mode === 'dev') ? 'https://localhost:8081' : 'https://recipesaver.me'}/api/extension`, true);
+  xhr.open('POST', `${(mode === 'dev') ? 'https://localhost:8081' : 'https://www.recipesaver.me'}/api/extension`, true);
   xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8',);
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
