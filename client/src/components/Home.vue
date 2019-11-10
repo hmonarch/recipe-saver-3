@@ -9,6 +9,10 @@
         <span class="logo-text">Recipe Saver</span>
       </div>
       <h1 class="headline">It's never been easier to save recipes online!</h1>
+
+      <div id="extension-message">
+        <b>Note to Chrome Extension users</b>: The new version update of our Chrome extension is still undergoing a routine Chrome Extension Store review which can take several hours to several days (it's out of our hands). During this transition, the old extension will not be able to post recipes until Google has finished the review. Once the review has completed your extension should update automatically to the new version or you can force extension updates in your browser settings. Thanks for you patience!
+      </div>
     </div>
 
     <div class="wrapper hero-wrapper">
@@ -198,6 +202,15 @@ export default {
 
     .headline {
       font-size: 28px;
+    }
+
+    #extension-message {
+      background-color: rgba(255, 255, 0, 0.35);
+      max-width: 1040px;
+      margin: 0 auto;
+      line-height: 20px;
+      margin-top: 40px;
+      padding: 20px;
     }
   }
 
