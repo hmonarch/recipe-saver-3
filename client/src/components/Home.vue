@@ -11,6 +11,7 @@
       <h1 class="headline">It's never been easier to save recipes online!</h1>
 
       <div id="extension-message">
+        <b>Update 11/14</b>: Google is still reviewing the extension update. It's taking a frustratingly long time so we're sorry for the downtime!<br><br>
         <b>Note to Chrome Extension users</b>: The new version update of our Chrome extension is still undergoing a routine Chrome Extension Store review which can take several hours to several days (it's out of our hands). During this transition, the old extension will not be able to post recipes until Google has finished the review. Once the review has completed your extension should update automatically to the new version or you can force extension updates in your browser settings. Thanks for your patience!
       </div>
     </div>
