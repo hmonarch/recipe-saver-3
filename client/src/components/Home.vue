@@ -10,9 +10,15 @@
       </div>
       <h1 class="headline">It's never been easier to save recipes online!</h1>
 
+
+
       <div id="extension-message">
-        <b>Update 11/14</b>: Google is still reviewing the extension update. It's taking a frustratingly long time so we're sorry for the downtime!<br><br>
-        <b>Note to Chrome Extension users</b>: The new version update of our Chrome extension is still undergoing a routine Chrome Extension Store review which can take several hours to several days (it's out of our hands). During this transition, the old extension will not be able to post recipes until Google has finished the review. Once the review has completed your extension should update automatically to the new version or you can force extension updates in your browser settings. Thanks for your patience!
+        <p>
+          <b>Note to Chrome Extension Users:</b> The new extension has finally passed Google's Review! To use the new extension, make sure you first sign in on this site to link your account then you'll be able to post directly to your recipe collection from any page!
+        </p>
+        <p>
+          If you're still seeing the old version you can force Chrome to update your extensions by going to <i>chrome://extensions</i> and clicking the "Update" button on the top bar. You can tell if you have the updated version if it looks like this:
+          <div><img src="https://res.cloudinary.com/dormh2fvt/image/upload/v1573833940/rs-site-images/extensions.jpg"></div>
       </div>
     </div>
 
@@ -206,12 +212,25 @@ export default {
     }
 
     #extension-message {
-      background-color: rgba(255, 255, 0, 0.35);
+      background-color: rgba(29, 232, 37, 0.11);
       max-width: 1040px;
       margin: 0 auto;
       line-height: 20px;
       margin-top: 40px;
       padding: 20px;
+      border: solid 1px #08d908;
+
+      i {
+        font-style: italic;
+      }
+
+      p {
+        margin-bottom: 10px;
+      }
+
+      img {
+        width: 240px;
+      }
     }
   }
 
