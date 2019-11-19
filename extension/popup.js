@@ -39,8 +39,7 @@ const dataInputs = [titleInput, urlInput, descEl, tagsInput];
 
 function saveDataToObj() {
   dataInputs.forEach(input => {
-    const value = (input.id === 'description') ? input.innerHTML : input.value;
-    recipeStorage[input.id] = value;
+    recipeStorage[input.id] = input.value;
   });
   if (imageEl.getAttribute('src') !== 'https://res.cloudinary.com/dormh2fvt/image/upload/v1527317481/placeholder_rjy55k.jpg') {
     recipeStorage.image = imageEl.getAttribute('src');
@@ -49,8 +48,7 @@ function saveDataToObj() {
 
 function populateInputs() {
   dataInputs.forEach(input => {
-    const prop = (input.id === 'description') ? 'innerHTML' : 'value';
-    input[prop] = recipeStorage[input.id] || '';
+    input.value = recipeStorage[input.id] || '';
   });
   if (recipeStorage.image) {
     imageEl.setAttribute('src', recipeStorage.image) 
@@ -170,11 +168,10 @@ function processResponse(response) {
   // Ingredients / Description
   if (response.desc && response.ing) {    
 
-    console.log(response.desc);
     const ingredients = response.ing.join('\n');
     const description = response.desc.join('\n\n');
 
-    descEl.innerText = `${ingredients}\n\n\n${description}`;
+    descEl.value = `${ingredients}\n\n\n${description}`;
     moreEl.click();
   }
 
@@ -187,7 +184,7 @@ function sendToRS() {
   const data = {
     user_id: null,
     title: titleInput.value,
-    description: descEl.innerHTML,
+    description: descEl.value.replace(/\n/g, '<br>'),
     url: urlInput.value,
     image: (imageEl.style.display === 'block') ? imageEl.getAttribute('src') : null,
     scraped: scrapedEl.value

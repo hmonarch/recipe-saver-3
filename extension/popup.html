@@ -112,9 +112,12 @@
       #description {
         box-sizing: border-box;
         padding: 5px;
-        min-height: 55px;
+        min-height: 225px;
         width: 100%;
         height: auto;
+        font-family: 'Source Sans Pro', Helvetica, sans-serif;
+        font-size: 14px;
+        line-height: 20px;
       }
       #tags {
         text-transform: lowercase;
@@ -194,7 +197,7 @@
 
           <div id="extra-data">
             <div class="field-title">Ingredients / Description</div>
-            <div type="text" id="description" class="field" contenteditable="true"></div>
+            <textarea type="text" id="description" class="field"></textarea>
 
             <div class="field-title">Tags <span class="field-title-small">(Comma Separated)</span></div>
             <input type="text" id="tags" class="field">
