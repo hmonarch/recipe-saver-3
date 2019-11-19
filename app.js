@@ -277,7 +277,13 @@ passport.use(new LocalStrategy(
         if (!user) {
           return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
         }
-        
+        if (!user.password) {
+          let errMessage = 'Hmm, we don\'t recognize that email. Please try again.';
+          if (email.indexOf('@gmail') > -1) {
+            errMessage += ' You may have registered with "Log In With Google.';
+          }
+          return done(null, { errMessage });
+        }
         if (!bcrypt.compareSync(password, user.password)) {
           return done(null, { errMessage: 'Incorrect password. Please try again.' });
         }
