@@ -9,17 +9,6 @@
         <span class="logo-text">Recipe Saver</span>
       </div>
       <h1 class="headline">It's never been easier to save recipes online!</h1>
-
-
-
-      <div id="extension-message">
-        <p>
-          <b>Note to Chrome Extension Users:</b> The new extension has finally passed Google's Review! To use the new extension, make sure you first sign in on this site to link your account then you'll be able to post directly to your recipe collection from any page!
-        </p>
-        <p>
-          If you're still seeing the old version you can force Chrome to update your extensions by going to <i>chrome://extensions</i> and clicking the "Update" button on the top bar. You can tell if you have the updated version if it looks like this:
-          <div><img src="https://res.cloudinary.com/dormh2fvt/image/upload/v1573833940/rs-site-images/extensions.jpg"></div>
-      </div>
     </div>
 
     <div class="wrapper hero-wrapper">
@@ -209,28 +198,6 @@ export default {
 
     .headline {
       font-size: 28px;
-    }
-
-    #extension-message {
-      background-color: rgba(29, 232, 37, 0.11);
-      max-width: 1040px;
-      margin: 0 auto;
-      line-height: 20px;
-      margin-top: 40px;
-      padding: 20px;
-      border: solid 1px #08d908;
-
-      i {
-        font-style: italic;
-      }
-
-      p {
-        margin-bottom: 10px;
-      }
-
-      img {
-        width: 240px;
-      }
     }
   }
 
