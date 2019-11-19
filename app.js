@@ -277,6 +277,7 @@ passport.use(new LocalStrategy(
         if (!user) {
           return done(null, { errMessage: 'Hmm, we don\'t recognize that email. Please try again.' });
         }
+        
         if (!bcrypt.compareSync(password, user.password)) {
           return done(null, { errMessage: 'Incorrect password. Please try again.' });
         }
