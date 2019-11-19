@@ -26,6 +26,42 @@ const signInLink = document.querySelector('#sign-in');
 const scrapedEl = document.querySelector('#scraped');
 let rs_id = null;
 
+
+let recipeStorage;
+chrome.storage.local.get('recipeStorage', storage => {
+  console.log('storage', storage);
+  if (isEmptyObj(storage)) recipeStorage = {};
+  else recipeStorage = storage.recipeStorage;
+  init();
+});
+
+const dataInputs = [titleInput, urlInput, descEl, tagsInput];
+
+function saveDataToObj() {
+  dataInputs.forEach(input => {
+    const value = (input.id === 'description') ? input.innerHTML : input.value;
+    recipeStorage[input.id] = value;
+  });
+  if (imageEl.getAttribute('src') !== 'https://res.cloudinary.com/dormh2fvt/image/upload/v1527317481/placeholder_rjy55k.jpg') {
+    recipeStorage.image = imageEl.getAttribute('src');
+  }
+}
+
+function populateInputs() {
+  dataInputs.forEach(input => {
+    const prop = (input.id === 'description') ? 'innerHTML' : 'value';
+    input[prop] = recipeStorage[input.id] || '';
+  });
+  if (recipeStorage.image) {
+    imageEl.setAttribute('src', recipeStorage.image) 
+  } else document.querySelector('#title-and-image').classList.add('no-image');
+}
+
+function isEmptyObj(obj) {
+  return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+
 // Update link destinations based on site setting
 updateLinks();
 
@@ -41,43 +77,73 @@ form.addEventListener('submit', e => {
   sendToRS();
 });
 
-// When popup.us opens, send message to content script to extract recipe data
-// On response, populate the extension form with the returned data
+// Send "opened" flag to background script
 chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-
-  // Check for rs_id first, show login link if there's no id
-  chrome.storage.sync.get('rs_id', storage =>  {
-    rs_id = storage.rs_id;
-    // console.log(rs_id);
-
-    if (!rs_id) {
-      showSignUpMessage();
-    } else {
-
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        const currentTabData = tabs[0];
-        const a = document.createElement('a');
-        a.href = currentTabData.url;
-        const currentHost = a.host.replace(/^www\./, '');
-        const siteIsWhiteListed = whiteListedSites.indexOf(currentHost) > -1;
-
-        if (siteIsWhiteListed) {
-          chrome.tabs.sendMessage(tabs[0].id, {rsAction: 'extract'}, function(response) {
-            console.info('Response', response);
-            processResponse(response);
-          });
-        } else {
-          console.log('Not whitelisted');
-          processResponse({
-            url: currentTabData.url,
-            title: currentTabData.title,
-            scraped: false
-          });
-        }
-      });
-    }
+  chrome.runtime.sendMessage({ 
+    category: 'track',
+    popupOpenedTab: tabs[0].id
   });
 });
+
+
+// When popup.us opens, send message to content script to extract recipe data
+// On response, populate the extension form with the returned data
+function init() {
+  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+
+
+    // Check for rs_id first, show login link if there's no id
+    chrome.storage.sync.get('rs_id', storage =>  {
+      rs_id = storage.rs_id;
+      // console.log(rs_id);
+
+      if (!rs_id) {
+        showSignUpMessage();
+      } else {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          const currentTabData = tabs[0];
+          const a = document.createElement('a');
+          a.href = currentTabData.url;
+          const currentHost = a.host.replace(/^www\./, '');
+          const siteIsWhiteListed = whiteListedSites.indexOf(currentHost) > -1;
+
+          // Save recipe data in storage
+          dataInputs.forEach(input => {
+            input.addEventListener('blur', e => {
+              saveDataToObj();
+              recipeStorage.tabID = currentTabData.id;
+              chrome.runtime.sendMessage({ 
+                category: 'saveStorage',
+                recipeStorage
+              });
+            });
+          });
+
+          // If there is storage data to populate do that instead of scraping
+          if (!isEmptyObj(recipeStorage) && recipeStorage.tabID === currentTabData.id) {
+            populateInputs();
+            moreEl.click();
+            return console.log('Populating from storage');
+          }
+
+          if (siteIsWhiteListed) {
+            chrome.tabs.sendMessage(tabs[0].id, {rsAction: 'extract'}, function(response) {
+              console.info('Response', response);
+              processResponse(response);
+            });
+          } else {
+            console.log('Not whitelisted');
+            processResponse({
+              url: currentTabData.url,
+              title: currentTabData.title,
+              scraped: false
+            });
+          }
+        });
+      }
+    });
+  });
+}
 
 
 function processResponse(response) {
@@ -103,6 +169,8 @@ function processResponse(response) {
 
   // Ingredients / Description
   if (response.desc && response.ing) {    
+
+    console.log(response.desc);
     const ingredients = response.ing.join('\n');
     const description = response.desc.join('\n\n');
 
@@ -143,6 +211,8 @@ function sendToRS() {
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log(xhr.responseText);
+      chrome.storage.local.set({ recipeStorage: {} });
+
       initialViewEl.style.display = 'none';
 
       if (JSON.parse(xhr.responseText) && JSON.parse(xhr.responseText).message === 'Limit reached') {

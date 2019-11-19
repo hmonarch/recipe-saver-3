@@ -3,7 +3,7 @@
 
   "name": "Recipe Saver Extension",
   "description": "This extension automatically saves a recipe to your Recipe Saver account.",
-  "version": "3.0.0.1",
+  "version": "3.0.0.2",
 
   "icons": { 
     "16": "icon16.png",
@@ -18,10 +18,15 @@
   },
 
   "permissions": [
-    "activeTab",
+    "tabs",
     "storage",
-    "https://ajax.googleapis.com/"
+    "https://ajax.googleapis.com/",
+    "background"
   ],
+
+  "background": {
+    "scripts":["background.js"]
+  },
 
  "content_scripts": [
     {

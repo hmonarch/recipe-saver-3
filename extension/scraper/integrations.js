@@ -468,14 +468,10 @@ var integrations = {
     }
   },
   'hellofresh.com': () => {
-    var recipeKey = Object.keys(window.rootInitialState.recipes)[0];
-    var recipe = window.rootInitialState.recipes[recipeKey];
-    var desc = recipe.steps.map(item => item.instructions.replace(/\n/g, ' '));
-
     return {
       img: $('meta[property=og\\:image]').attr('content'),
       ing: JSON.parse(document.querySelector('#schema-org').textContent).recipeIngredient,
-      desc
+      desc: JSON.parse(document.querySelector('#schema-org').textContent).recipeInstructions.map(item => item.text)
     }
   },
   'thekitchn.com': () => {
