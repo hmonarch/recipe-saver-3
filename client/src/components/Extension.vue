@@ -10,7 +10,7 @@
           <span>Simplified</span>
         </h1>
         <div class="ext-desc">
-          Save your favorite online recipes straight to your RecipeSaver.me account. Many top recipe sites are integrated already!
+          Save your favorite online recipes straight to your RecipeSaver.me account. Many top recipe sites are already integrated!
         </div>
         <a class="ext-cta" href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank">
           <span class="cta-text-large">Add to Chrome</span><span class="cta-text-small"> (It's free)</span>
