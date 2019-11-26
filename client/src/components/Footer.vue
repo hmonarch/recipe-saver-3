@@ -31,7 +31,7 @@
         <div id="footer-links-section">
           <ul class="footer-links">
             <li><router-link :to="{ path: '/recipes' }">My Recipes</router-link></li>
-            <li><a href="https://chrome.google.com/webstore/detail/recipe-saver/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a></li>
+            <li><router-link :to="{ path: '/extension' }">Chrome Extension</router-link></li>
             <li><router-link :to="{ path: '/terms' }">Terms &amp; Conditions</router-link></li>
           </ul>
           <ul class="footer-links">

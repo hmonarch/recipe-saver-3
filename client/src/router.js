@@ -56,6 +56,12 @@ export default new Router({
       meta: { title: 'Recipe Saver - Plans' }
     },
     {
+      path: '/extension',
+      name: 'Extension',
+      component: () => import('./components/Extension.vue'),
+      meta: { title: 'Recipe Saver - Chrome Extension' }
+    },
+    {
       path: '/password-recovery',
       name: 'PasswordRecovery',
       component: () => import('./components/PasswordRecovery.vue'),

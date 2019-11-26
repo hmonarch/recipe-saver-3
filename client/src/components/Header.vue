@@ -11,7 +11,9 @@
           </router-link>
         </li>
         <li class="extension">
-          <a href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank"><span class="chrome-ext-prefix">Chrome </span>Extension</a>
+          <router-link :to="{ path: '/extension' }">
+            <span class="chrome-ext-prefix">Chrome </span>Extension
+          </router-link>
         </li>
         <li class="search-container">
           <icon name="magnifyingGlass"/>

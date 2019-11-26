@@ -17,7 +17,7 @@
         <router-link :to="{ path: '/recipes' }">My Recipes</router-link>
       </div>
       <div class="nav-item">
-        <a href="https://chrome.google.com/webstore/detail/recipe-saver-extension/opemcijjekbnjccecheklfbflnkoacai" target="_blank">Chrome Extension</a>
+        <router-link :to="{ path: '/extension' }">Chrome Extension</router-link>
       </div>
       <div class="nav-item">
         <router-link :to="{ path: '/account' }">Account</router-link>
