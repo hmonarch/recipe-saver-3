@@ -332,8 +332,8 @@ export default {
             font-size: 12px;
             line-height: 20px;
             letter-spacing: 0.3px;
-            right: 1px;
-            top: 1px;
+            right: 0;
+            top: 0;
           }
         }
       }
