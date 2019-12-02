@@ -274,7 +274,7 @@ passport.use(new LocalStrategy(
     const { actionToTake } = req.params;
 
     if (actionToTake === 'login') {
-      User.findOne({ email }, (err, user) => {
+      User.findOne({ email, googleId: { $exists: false }, facebookId: { $exists: false } }, (err, user) => {
         if (err) {
           return done(null, { errMessage: 'Something went wrong. Please try again.' });
         }
