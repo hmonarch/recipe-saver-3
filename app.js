@@ -186,9 +186,7 @@ app.get('/auth/facebook/login/callback', passport.authenticate('facebook', { fai
   } else if (req.user.errMessage === 'Account already registered') {
     res.redirect('/login?login-reg-msg=fb-already-registered');
   } else {
-    if (req.user.creationDate && Date.now() - req.user.creationDate < 20000  && req.user.subscription === 'Basic') {
-      res.redirect('/plans');
-    } else res.redirect('/recipes');
+    res.redirect('/recipes');
   }
 });
 
@@ -259,9 +257,7 @@ app.get(['/auth/google/login/callback', '/auth/google/register/callback'], passp
   } else if (req.user.errMessage === 'Email already registered') {
     res.redirect('/login?login-reg-msg=already-registered');
   } else {
-    if (req.user.creationDate && Date.now() - req.user.creationDate < 20000 && req.user.subscription === 'Basic') {
-      res.redirect('/plans');
-    } else res.redirect('/recipes');
+    res.redirect('/recipes');
   }
 });
 
