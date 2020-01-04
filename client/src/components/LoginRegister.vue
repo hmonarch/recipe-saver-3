@@ -190,7 +190,7 @@ export default {
       });
       if (response.data.errMessage) this.message = response.data.errMessage;
       if (response.data.userID) {
-        this.$router.push('/plans');
+        this.$router.push('/recipes');
       }
     },
     checkQueryMessages(queryValue) {

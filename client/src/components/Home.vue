@@ -19,7 +19,6 @@
           </div>
         </div>
         <div class="ctas">
-          <a @click.prevent="scrollToPlans()" class="secondary-cta" href="#">See Plans</a>
           <router-link :to="{ path: '/login', query: { 'show-reg': 'true' } }" class="main-cta">Login / Register</router-link>
         </div>
       </div>
@@ -45,52 +44,26 @@
       <div class="plans">
 
         <div class="plans-headline">What's Included</div>
-        <div class="plans-subheadline">Choose just the basics or the get the full tool</div>
+        <div class="plans-subheadline">Everything you need for total organization</div>
 
-        <div class="plan lite">
+        <div class="plan full">
           <div class="plan-left">
-            <div class="plan-title">Lite</div>
+            <div class="plan-title">Your Plan</div>
             <div class="plan-subtitle">
               The best way to save and organize online recipes
             </div>
             <ul class="plan-benefits">
-              <li>Save up to 50 recipes</li>
               <li>Add custom notes, images, and tags</li>
+              <li>Save unlimited recipes</li>
+              <li>Share recipes with friends and family</li>
               <li>Recipe Saver Chrome extension</li>
             </ul>
           </div>
           <div class="plan-right">
             <div class="plan-cost">Free</div>
-            <div class="plan-cost-details">
-              Upgrade later to save 50+ recipes
-            </div>
+            <div class="plan-cost-details">Fast and free signup, start today</div>
             <router-link class="plan-cta" :to="{ path: '/login', query: { 'show-reg': 'true' } }">
               <span class="plan-cta-text">10 second sign up</span>
-              <Icon name="shortArrow"/>
-            </router-link>
-          </div>
-        </div>
-
-        <div class="plan full">
-          <div class="plan-left">
-            <div class="plan-title">Full</div>
-            <div class="plan-subtitle">
-              The ultimate recipe organization tool and more
-            </div>
-            <ul class="plan-benefits">
-              <li>All the benefits of the Lite plan</li>
-              <li>Save unlimited recipes</li>
-              <li>Share recipes with friends and family</li>
-              <li>Create grocery lists (coming soon!)</li>
-            </ul>
-          </div>
-          <div class="plan-right">
-            <div class="plan-cost">$9</div>
-            <div class="plan-cost-details">
-              Per month (cancel anytime)
-            </div>
-            <router-link class="plan-cta" :to="{ path: '/login', query: { 'show-reg': 'true' } }">
-              <span class="plan-cta-text">Get full plan</span>
               <Icon name="shortArrow"/>
             </router-link>
           </div>
@@ -153,11 +126,6 @@ export default {
     Footer
   },
   methods: {
-    scrollToPlans() {
-      document.querySelector('.plans').scrollIntoView({
-        behavior: 'smooth'
-      });
-    }
   },
   beforeCreate() {
     document.body.className = 'home';

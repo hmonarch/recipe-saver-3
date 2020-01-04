@@ -202,21 +202,21 @@ export default {
 			}
 		});
 
-    document.querySelector('.plan.full .plan-cta').addEventListener('click', e => {
-      e.preventDefault();
+    // document.querySelector('.plan.full .plan-cta').addEventListener('click', e => {
+    //   e.preventDefault();
       
-			handler.open({
-				name: 'Recipe Saver',
-				description: 'Full Plan',
-				amount: 900,
-				allowRememberMe: false,
-      });
+		// 	handler.open({
+		// 		name: 'Recipe Saver',
+		// 		description: 'Full Plan',
+		// 		amount: 900,
+		// 		allowRememberMe: false,
+    //   });
       
-      this.$ga.event({
-        eventCategory: 'Plans',
-        eventAction: 'full plan clicked'
-      });
-    });
+    //   this.$ga.event({
+    //     eventCategory: 'Plans',
+    //     eventAction: 'full plan clicked'
+    //   });
+    // });
 
   },
   beforeCreate() {
