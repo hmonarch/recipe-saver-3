@@ -56,6 +56,9 @@
           </ul>
         </div>
       </li>
+      <li class="srf-section">
+        <AffiliateAd></AffiliateAd>
+      </li>
 		</ul>
   </div>
 </template>
@@ -65,11 +68,13 @@ import EventBus from '@/EventBus';
 import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
 import Icon from '@/components/Icons';
+import AffiliateAd from '@/components/AffiliateAd';
 import AuthService from '@/services/AuthService';
 
 export default {
   components: {
-    Icon
+    Icon,
+    AffiliateAd
   },
   data() {
     return {
