@@ -4,7 +4,7 @@
       <Icon name="close"/>
     </span>
     <div class="srf-partner">Recipe Saver Partner</div>
-    <a class="srf-link" href="https://www.shareasale.com/m-pr.cfm?merchantID=51308&userID=2269612&productID=914293645" target="_blank">
+    <a class="srf-link" href="https://www.shareasale.com/m-pr.cfm?merchantID=51308&userID=2269612&productID=914293645" target="_blank" @click="trackClick()">
       <div class="srf-product-title">Dry-Aged American Wagyu Bone-In NY Strip</div>
       <div class="srf-biz-title">From Snake River Farms</div>
       <img class="srf-image" src="../assets/wagyu-ad.jpg">
@@ -28,6 +28,12 @@ export default {
     hideAd() {
       this.showAd = false;
       sessionStorage.showAd = false;
+    },
+    trackClick() {
+      this.$ga.event({
+        eventCategory: 'Ad Click',
+        eventAction: 'srf ad clicked'
+      });
     }
   },
   mounted() {
