@@ -45,7 +45,7 @@
     <div id="copyright">
       <div id="copyright-inner">
         <div id="all-rights-reserved">Let Recipe Saver be your saviour</div>
-        <div id="recipesaver">© 2019 Recipe Saver</div>
+        <div id="recipesaver">© 2020 Recipe Saver</div>
       </div>
     </div>
   </footer>
