@@ -25,7 +25,7 @@
 
       </div>
       <div id="footer-right">
-        <div id="footer-right-cta-title">Finally organize your recipes once and and for all!</div>
+        <div id="footer-right-cta-title">Finally organize your recipes once and for all!</div>
         <router-link id="footer-right-cta-button" :to="{ path: '/login', query: { 'show-reg': 'true' } }">Sign Up Free</router-link>
 
         <div id="footer-links-section">
