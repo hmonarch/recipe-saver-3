@@ -41,8 +41,9 @@ if (!process.env.PORT) {
 } else {
   console.log('App running in heroku'); 
 	const mongodbUri = process.env.DB_URI; 
-  // const mongooseUri = uriUtil.formatMongoose(mongodbUri);
+  const mongooseUri = uriUtil.formatMongoose(mongodbUri);
   console.log('mongodbUri', mongodbUri);
+
 
   mongoose.connect(mongodbUri, {
     useNewUrlParser: true, 
