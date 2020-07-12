@@ -39,7 +39,7 @@ if (!process.env.PORT) {
   mongoose.connect('mongodb://localhost:27017/recipe-saver-3',  { useNewUrlParser: true });
 } else {
   console.log('App running in heroku');
-	const mongodbUri = process.env.MONGODB_URI;
+	const mongodbUri = process.env.DB_URI;
   const mongooseUri = uriUtil.formatMongoose(mongodbUri);
   mongoose.connect(mongooseUri, { 
     useNewUrlParser: true, 
