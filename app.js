@@ -61,7 +61,7 @@ if (!process.env.PORT) {
   };
 } else {
 	mongoStoreOptions = {
-		url: process.env.MONGODB_URI,
+		url: process.env.DB_URI,
 		ttl: 365 * 24 * 60 * 60,
 	};
 }
