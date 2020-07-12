@@ -69,6 +69,7 @@ db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Mongo connection succeeded'));
 
 
+
 // Express app / Middleware
 const app = express();
 app.set('view engine', 'ejs');
