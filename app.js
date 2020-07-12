@@ -41,7 +41,6 @@ if (!process.env.PORT) {
 } else {
   console.log('App running in heroku'); 
 	const mongodbUri = process.env.DB_URI; 
-  const mongooseUri = uriUtil.formatMongoose(mongodbUri);
 
   mongoose.connect(mongodbUri, {
     useNewUrlParser: true, 
@@ -67,7 +66,6 @@ if (!process.env.PORT) {
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
 db.once('open', () => console.log('Mongo connection succeeded'));
-
 
 
 // Express app / Middleware
