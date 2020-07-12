@@ -44,7 +44,6 @@ if (!process.env.PORT) {
   const mongooseUri = uriUtil.formatMongoose(mongodbUri);
   console.log('mongodbUri', mongodbUri);
 
-
   mongoose.connect(mongodbUri, {
     useNewUrlParser: true, 
     server: { 
