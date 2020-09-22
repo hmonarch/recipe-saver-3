@@ -373,7 +373,7 @@ export default {
       if (response.data.message && response.data.message === 'Limit reached') {
         return EventBus.$emit('MESSAGE', {
           title: 'Paid Feature',
-          message: 'To save more than 50 recipes you\'ll need to upgrade your account on your Account page.',
+          message: 'To save more than 5 recipes you\'ll need to upgrade your account on your Account page.',
           isError: true,
           timeout: 40000
         });
