@@ -32,8 +32,8 @@
       </div>
 
       <div class="upgrade-downgrade-account">
-        <!-- Show the cancel option for Full monthly customers only -->
-        <a href="#" v-if="user.subscription === 'Full (9/monthly)'" @click.prevent="cancelSubscription()">Cancel Subscription</a>
+        <!-- Show the cancel option for Full yearly customers only -->
+        <a href="#" v-if="user.subscription === 'Full (20/yearly)'" @click.prevent="cancelSubscription()">Cancel Subscription</a>
         <router-link href="#" v-if="/Basic/.test(user.subscription)" :to="{ path: '/plans' }">Upgrade To Full Plan</router-link>
       </div>
       <div class="delete-account">

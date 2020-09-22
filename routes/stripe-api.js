@@ -44,13 +44,13 @@ module.exports = function(app, stripe) {
         stripe.subscriptions.create(
           {
             customer: customer.id,
-            plan: (process.env.PORT) ? 'plan_G7tN7JmiKciV1S' : 'plan_G2H0nkuuNFs2Vd', // Normal $9 / Month
+            plan: (process.env.PORT) ? 'price_1HUE1uCxrmaR5A0GqQF8594h' : 'price_1HUEBMCxrmaR5A0Gi5yzjwET',
           }, 
           (err, subscription) => {
             console.log('subscription created!~', subscription);
             User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
               if (err) throw err;
-              user.subscription = 'Full (9/monthly)';
+              user.subscription = 'Full (20/yearly)';
               user.stripeSubId = subscription.id;
               user.subActive = true;
 
@@ -131,7 +131,7 @@ module.exports = function(app, stripe) {
       User.findOne({ _id: req.session.passport.user._id }, (err, user) => {
 
         // If user has a paid subscription then cancel it first
-        if (user.subscription === 'Full (9/monthly)') {
+        if (user.subscription === 'Full (20/yearly)') {
           stripe.subscriptions.del(user.stripeSubId, (err, confirmation) => {
             console.log(`Subscription cancelled for ${req.session.passport.user._id}`, confirmation);
             deleteUser();

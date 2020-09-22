@@ -56,9 +56,6 @@
           </ul>
         </div>
       </li>
-      <li class="fat-cattitude-section">
-        <FatCattitudeAd></FatCattitudeAd>
-      </li>
 		</ul>
   </div>
 </template>
@@ -69,12 +66,10 @@ import RecipeService from '@/services/RecipeService';
 import utils from '@/mixins/utils';
 import Icon from '@/components/Icons';
 import AuthService from '@/services/AuthService';
-import FatCattitudeAd from '@/components/FatCattitudeAd';
 
 export default {
   components: {
-    Icon,
-    FatCattitudeAd
+    Icon
   },
   data() {
     return {
