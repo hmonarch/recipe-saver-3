@@ -17,3 +17,4 @@ When purchasing the Full plan subscription a new customer is created in Stripe e
 To check if a customer has a truly active subscription and may still use the Full plan features the following checks should be performed:
 `subscription` is either `Full` or `Basic (Subscription ended xxxx-xx-xx)` AND the current time is less than `subEnds`.
 
+
