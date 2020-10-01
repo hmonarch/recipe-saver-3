@@ -4,7 +4,7 @@
     <HeaderNonApp></HeaderNonApp>
 
     <div class="inner">
-      <h1>The Recipe Saver Privacy Policy</h1>
+      <h1>Recipe Saver Privacy Policy</h1>
       <p>Your privacy is important to us. It is Recipe Saver's policy to respect your privacy regarding any information we may collect while operating our website. Accordingly, we have developed this privacy policy in order for you to understand how we collect, use, communicate, disclose and otherwise make use of personal information. We have outlined our privacy policy below.</p>
 
       <h2>What data do we collect from you?</h2>
