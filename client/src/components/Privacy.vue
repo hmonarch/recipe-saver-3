@@ -13,7 +13,7 @@
       <h2>How do we use your personal data?</h2>
       <p>Your data is used for account management and service. Recipe Saver never supplies your personal information to any third party for advertising or promotional purposes. If you owe money to Recipe Saver and we are unable to collect it, we may need to give your contact information to a third party for collection purposes. We may occasionally use your email address to send you information regarding Recipe Saver and the services we provide.</p>
       
-      <h2>Is my personal information secure?</h2>
+      <h2>Is my information secure?</h2>
       <p>Your personal information is protected by your password. Never share this password with anyone. We have taken steps to ensure our databases are secure, and are confident in our ability to keep your information safe.</p>
       
       <h2>How are cookies or localStorage used?</h2>
