@@ -44,7 +44,7 @@ module.exports = function(app, stripe) {
         stripe.subscriptions.create(
           {
             customer: customer.id,
-            plan: (process.env.PORT) ? 'price_1HUE1uCxrmaR5A0GqQF8594h' : 'price_1HUEBMCxrmaR5A0Gi5yzjwET',
+            plan: (process.env.PORT) ? 'price_1Hbr3wD9ukuHTF1fMg5xF1Fz' : 'price_1HbpboD9ukuHTF1fNLGufj71', 
           }, 
           (err, subscription) => {
             console.log('subscription created!~', subscription);
