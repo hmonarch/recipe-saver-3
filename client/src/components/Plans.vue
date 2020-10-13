@@ -181,7 +181,7 @@ export default {
   mounted() {
 
     const component = this;
-    const publicKey = window.location.origin.includes('recipesaver.me') ? 'pk_live_ladU88gOOTUS87vjvXepHlUY' : 'pk_test_51HbpZpD9ukuHTF1fnM8DQHlp45Zqwl0lwDN5kiQiJOoHFhgRFr6KJbGRLDWmNz756fSBpVeNzU8n9mkvIaz4AzuB00bAeZKycE';
+    const publicKey = window.location.origin.includes('recipesaver.me') ? 'pk_live_51HbpZpD9ukuHTF1f3t6I6YWG0PPnQvyZUNQh802R9lmsqK1COMgHHfZRROfddXSdf1qrHSirIOUSrnq6AUDhtE0L002k9uY9Ls' : 'pk_test_51HbpZpD9ukuHTF1fnM8DQHlp45Zqwl0lwDN5kiQiJOoHFhgRFr6KJbGRLDWmNz756fSBpVeNzU8n9mkvIaz4AzuB00bAeZKycE';
 
     // Test CC #: 4242424242424242
 		const handler = StripeCheckout.configure({
