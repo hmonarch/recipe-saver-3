@@ -15,7 +15,7 @@
             <li v-show="editMode" @click="cancel()" class="action-cancel">Cancel</li>
             <li @click="toggleScreen()" class="action-toggle-screen">{{ screenModeText }}</li>
             <li v-show="!editMode" @click="shareRecipe()" class="action-share"><span>Share Recipe</span>
-              <!-- <span v-if="!isPaidPlan"><icon name="lock"/></span> -->
+              <span v-if="!isPaidPlan"><icon name="lock"/></span>
             </li>
             <li @click="print()" class="action-print">Print</li>
             <li v-if="!confirmActive" @click="confirmActive = true" class="action-delete">Delete Recipe</li>
@@ -254,14 +254,14 @@ export default {
       this.editor.setOptions({editable: true});
     },
     async shareRecipe() {
-      // if (!this.isPaidPlan) {
-      //   return EventBus.$emit('MESSAGE', {
-      //     title: 'Paid Feature',
-      //     message: 'To share recipes you\'ll need to upgrade your account on your Account page.',
-      //     isError: true,
-      //     timeout: 40000
-      //   });
-      // }
+      if (!this.isPaidPlan) {
+        return EventBus.$emit('MESSAGE', {
+          title: 'Paid Feature',
+          message: 'To share recipes you\'ll need to upgrade your account on your Account page.',
+          isError: true,
+          timeout: 40000
+        });
+      }
 
       const response = await RecipeService.shareRecipe(this.recipe._id);
       const origin = window.location.origin;
@@ -373,7 +373,7 @@ export default {
       if (response.data.message && response.data.message === 'Limit reached') {
         return EventBus.$emit('MESSAGE', {
           title: 'Paid Feature',
-          message: 'To save more than 50 recipes you\'ll need to upgrade your account on your Account page.',
+          message: 'To save more than 5 recipes you\'ll need to upgrade your account on your Account page.',
           isError: true,
           timeout: 40000
         });

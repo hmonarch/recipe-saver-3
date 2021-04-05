@@ -22,7 +22,7 @@
               <div class="plan-price">Free</div>
               <div class="plan-price-info">upgrade later</div>
               <ul class="plan-benefits">
-                <li>Save up to 50 recipes</li>
+                <li>Save up to 5 recipes</li>
                 <li>Recipe Saver Chrome extension</li>
                 <li>Add custom notes, images, and tags</li>
               </ul>
@@ -40,8 +40,8 @@
               <div class="plan-subtitle">
                 The ultimate recipe <br>organization tool and more
               </div>
-              <div class="plan-price">$9</div>
-              <div class="plan-price-info">per month</div>
+              <div class="plan-price">$20</div>
+              <div class="plan-price-info">per year</div>
               <ul class="plan-benefits">
                 <li>All the benefits of the Lite plan</li>
                 <li>Save unlimited recipes</li>
@@ -181,7 +181,7 @@ export default {
   mounted() {
 
     const component = this;
-    const publicKey = window.location.origin.includes('recipesaver.me') ? 'pk_live_ladU88gOOTUS87vjvXepHlUY' : 'pk_test_KmQZh5RXWtu0bnCzyOoFBn5A';
+    const publicKey = window.location.origin.includes('recipesaver.me') ? 'pk_live_51HbpZpD9ukuHTF1f3t6I6YWG0PPnQvyZUNQh802R9lmsqK1COMgHHfZRROfddXSdf1qrHSirIOUSrnq6AUDhtE0L002k9uY9Ls' : 'pk_test_51HbpZpD9ukuHTF1fnM8DQHlp45Zqwl0lwDN5kiQiJOoHFhgRFr6KJbGRLDWmNz756fSBpVeNzU8n9mkvIaz4AzuB00bAeZKycE';
 
     // Test CC #: 4242424242424242
 		const handler = StripeCheckout.configure({
@@ -202,21 +202,21 @@ export default {
 			}
 		});
 
-    // document.querySelector('.plan.full .plan-cta').addEventListener('click', e => {
-    //   e.preventDefault();
+    document.querySelector('.plan.full .plan-cta').addEventListener('click', e => {
+      e.preventDefault();
       
-		// 	handler.open({
-		// 		name: 'Recipe Saver',
-		// 		description: 'Full Plan',
-		// 		amount: 900,
-		// 		allowRememberMe: false,
-    //   });
+			handler.open({
+				name: 'Recipe Saver',
+				description: 'Full Plan',
+				amount: 2000,
+				allowRememberMe: false,
+      });
       
-    //   this.$ga.event({
-    //     eventCategory: 'Plans',
-    //     eventAction: 'full plan clicked'
-    //   });
-    // });
+      this.$ga.event({
+        eventCategory: 'Plans',
+        eventAction: 'full plan clicked'
+      });
+    });
 
   },
   beforeCreate() {

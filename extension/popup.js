@@ -215,7 +215,7 @@ function sendToRS() {
       if (JSON.parse(xhr.responseText) && JSON.parse(xhr.responseText).message === 'Limit reached') {
         errorEl.style.display = 'block';
         errorEl.querySelector('#error-title').textContent = 'Paid Feature';
-        errorEl.querySelector('#sign-in-error').innerHTML = 'To save more than 50 recipes you\'ll need to upgrade your account on your Account page.'
+        errorEl.querySelector('#sign-in-error').innerHTML = 'To save more than 5 recipes you\'ll need to upgrade your account on your Account page.'
       } else {
         successEl.style.display = 'block';
         viewLink.setAttribute('href', `${site}/recipes/all?id=${JSON.parse(xhr.responseText)._id}`);

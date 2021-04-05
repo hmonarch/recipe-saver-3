@@ -34,6 +34,7 @@ const baseCallbackURL = (process.env.PORT) ? 'https://www.recipesaver.me' : 'htt
 const profileImageDefault = 'https://res.cloudinary.com/dormh2fvt/image/upload/v1573001413/rs-site-images/default-profile.png';
 
 
+
 // DB setup
 mongoose.set('useUnifiedTopology', true)
 if (!process.env.PORT) {
@@ -186,7 +187,9 @@ app.get('/auth/facebook/login/callback', passport.authenticate('facebook', { fai
   } else if (req.user.errMessage === 'Account already registered') {
     res.redirect('/login?login-reg-msg=fb-already-registered');
   } else {
-    res.redirect('/recipes');
+    if (req.user.creationDate && Date.now() - req.user.creationDate < 20000  && req.user.subscription === 'Basic') {
+      res.redirect('/plans');	
+    } else res.redirect('/recipes');
   }
 });
 
@@ -257,7 +260,9 @@ app.get(['/auth/google/login/callback', '/auth/google/register/callback'], passp
   } else if (req.user.errMessage === 'Email already registered') {
     res.redirect('/login?login-reg-msg=already-registered');
   } else {
-    res.redirect('/recipes');
+    if (req.user.creationDate && Date.now() - req.user.creationDate < 20000 && req.user.subscription === 'Basic') {
+      res.redirect('/plans');	
+    } else res.redirect('/recipes');
   }
 });
 
